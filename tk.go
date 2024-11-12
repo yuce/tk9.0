@@ -5202,7 +5202,6 @@ func NewTicker(d time.Duration, handler func()) (r *Ticker, err error) {
 	return &Ticker{eh: eh}, nil
 }
 
-
 // ttk::checkbutton — On/off widget
 //
 // # Description

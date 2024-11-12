@@ -28,6 +28,7 @@
 // # In action
 //
 //   - [equ] A Plain TeX math editor.
+//   - [visualmd] A WYSIWYG markdown editor.
 //
 // # Debugging
 //
@@ -2360,4 +2361,5 @@
 // [tcl.tk site]: https://www.tcl.tk/man/tcl9.0/TkCmd/index.html
 // [tkinter.ttk site]: https://docs.python.org/3/library/tkinter.ttk.html
 // [tutorialspoint]: https://www.tutorialspoint.com/tcl-tk/tk_overview.htm
+// [visualmd]: https://pkg.go.dev/modernc.org/visualmd
 package tk9_0 // import "modernc.org/tk9.0"
