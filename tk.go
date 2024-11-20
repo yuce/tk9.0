@@ -1767,8 +1767,21 @@ func ClipboardGet(options ...Opt) string {
 	return evalErr(fmt.Sprintf("clipboard get %s", collect(options...)))
 }
 
+var onceForceInit bool
+
+func forceInit() {
+	if onceForceInit {
+		return
+	}
+
+	defer func() { onceForceInit = true }()
+
+	evalErr("#")
+}
+
 // ExitHandler returns a canned [Command] that destroys the [App].
 func ExitHandler() Opt {
+	forceInit()
 	return exitHandler
 }
 
