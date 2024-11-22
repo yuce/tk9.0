@@ -30,6 +30,15 @@
 //   - [equ] A Plain TeX math editor.
 //   - [visualmd] A WYSIWYG markdown editor.
 //
+// # Frequently Asked Questions
+//
+//   - Windows: How to build an executable that doesn't open a console window when run?
+//
+//     From the [documentation for cmd/link]: On Windows, -H windowsgui writes
+//     a "GUI binary" instead of a "console binary.". To pass the flag to the
+//     Go build system use 'go build -ldflags -H=windowsgui somefile.go', for
+//     example.
+//
 // # Debugging
 //
 // Consider this program in _examples/debugging.go:
@@ -2354,6 +2363,7 @@
 // [MVP]: https://en.wikipedia.org/wiki/Minimum_viable_product
 // [RERO]: https://en.wikipedia.org/wiki/Release_early,_release_often
 // [Tkinter]: https://en.wikipedia.org/wiki/Tkinter
+// [documentation for cmd/link]: https://pkg.go.dev/cmd/link
 // [equ]: https://pkg.go.dev/modernc.org/equ
 // [issue tracker]: https://gitlab.com/cznic/tk9.0/-/issues
 // [jnml's LiberaPay]: https://liberapay.com/jnml/donate
