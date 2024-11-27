@@ -442,11 +442,29 @@ Styling a button (_examples/tbutton.go). See the discussion at [Tutorial: Modify
     35		App.Wait()
     36	}
 
+
+![azure](_examples/azure.png "azure")
+
+Example usage of the theme register. (_examples/azure.go)
+
+     1	package main
+     2	
+     3	import . "modernc.org/tk9.0"
+     4	import _ "modernc.org/tk9.0/themes/azure"
+     5	
+     6	func main() {
+     7		Pack(TButton(Txt("Light"), Command(func() { ActivateTheme("azure light") })),
+     8			TButton(Txt("Dark"), Command(func() { ActivateTheme("azure dark") })),
+     9			TExit(),
+    10			Pady("2m"), Ipady("1m"))
+    11		App.Wait()
+    12	}
+
 ![b5](_examples/b5.png "b5")
 
 Technology preview of a Bootstrap 5-like theme buttons (_examples/b5.go). Only
 a partial prototype/problem study/work in progress at the moment. But it may
-get there, eventually.
+get there, eventually. (_examples/b5.go)
 
      1	package main
      2	

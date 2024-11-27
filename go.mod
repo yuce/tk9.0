@@ -46,6 +46,7 @@ require (
 	modernc.org/libxcb v0.11.0 // indirect
 	modernc.org/libz v0.16.4 // indirect
 	modernc.org/mathutil v1.6.0 // indirect
+	modernc.org/opt v0.1.3 // indirect
 	modernc.org/regexp v1.7.3 // indirect
 	modernc.org/sortutil v1.2.0 // indirect
 	modernc.org/strutil v1.2.0 // indirect

@@ -162,6 +162,18 @@
 // them separately is not always necessary in GUI code. But the explicit option
 // in the first example is still available when needed.
 //
+// # Themes
+//
+// There is a centralized theme register in [Themes]. Theme providers can opt
+// in to call [RegisterTheme] at package initialization to make themes
+// discoverable at run-time. Clients can use [ActivateTheme] to apply a theme
+// by name. Example in _examples/azure.go.
+//
+// # VNC server
+//
+// There is a VNC over wbesockets functionality available for X11 backed hosts.
+// See the [tk9.0/vnc package] for details.
+//
 // # Package initialization
 //
 // Package initialization is done lazily. This saves noticeable additional
@@ -2369,6 +2381,7 @@
 // [jnml's LiberaPay]: https://liberapay.com/jnml/donate
 // [modern-c.appspot.com]: https://modern-c.appspot.com/-/builder/?importpath=modernc.org%2ftk9.0
 // [tcl.tk site]: https://www.tcl.tk/man/tcl9.0/TkCmd/index.html
+// [tk9.0/vnc package]: https://pkg.go.dev/modernc.org/tk9.0/vnc
 // [tkinter.ttk site]: https://docs.python.org/3/library/tkinter.ttk.html
 // [tutorialspoint]: https://www.tutorialspoint.com/tcl-tk/tk_overview.htm
 // [visualmd]: https://pkg.go.dev/modernc.org/visualmd
