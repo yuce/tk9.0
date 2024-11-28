@@ -69,7 +69,7 @@ func setup(context ThemeContext) (err error) {
 	}
 
 	const azure = "azure.zip"
-	pth, err := mkzip(filepath.Join(root, "modernc.org", "tk9.0.0", "themes", "azure", version), azure, zip)
+	dir, err := mkzip(filepath.Join(root, "modernc.org", "tk9.0.0", "themes", "azure", version), azure, zip)
 	if err != nil {
 		return err
 	}
@@ -83,7 +83,7 @@ func setup(context ThemeContext) (err error) {
 		err = errors.Join(err, os.Chdir(wd))
 	}()
 
-	if err = os.Chdir(pth); err != nil {
+	if err = os.Chdir(dir); err != nil {
 		return
 	}
 
@@ -99,45 +99,45 @@ func setup(context ThemeContext) (err error) {
 	return nil
 }
 
-func mkzip(pth, base string, zip []byte) (dir string, err error) {
-	if _, err = os.Stat(pth); err != nil {
+func mkzip(dir, base string, zip []byte) (r string, err error) {
+	if _, err = os.Stat(dir); err != nil {
 		if !os.IsNotExist(err) {
 			return "", err
 		}
 
-		if err = os.MkdirAll(pth, 0770); err != nil {
+		if err = os.MkdirAll(dir, 0770); err != nil {
 			return "", err
 		}
 	}
 
-	full := filepath.Join(pth, base)
-	if _, err = os.Stat(full); err != nil {
+	path := filepath.Join(dir, base)
+	if _, err = os.Stat(path); err != nil {
 		if !os.IsNotExist(err) {
 			return "", err
 		}
 
-		return pth, os.WriteFile(full, zip, 0660)
+		return dir, os.WriteFile(path, zip, 0660)
 	}
 
-	b, err := os.ReadFile(full)
+	b, err := os.ReadFile(path)
 	if err == nil {
 		if bytes.Equal(b, zip) {
-			return pth, nil
+			return dir, nil
 		}
 	}
 
-	os.Remove(full)
-	if err := os.WriteFile(full, zip, 0660); err == nil {
-		return full, nil
+	os.Remove(path)
+	if err := os.WriteFile(path, zip, 0660); err == nil {
+		return dir, nil
 	}
 
-	pth, err = os.MkdirTemp("", "azure-theme")
+	dir, err = os.MkdirTemp("", "azure-theme")
 	if err != nil {
 		return "", err
 	}
 
-	full = filepath.Join(pth, base)
-	return pth, os.WriteFile(full, zip, 0660)
+	path = filepath.Join(dir, base)
+	return dir, os.WriteFile(path, zip, 0660)
 }
 
 type theme struct {
