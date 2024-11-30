@@ -87,6 +87,9 @@ var (
 	tooltip []byte
 
 	autocenterDisabled bool
+	appWithdrawn       bool
+	appIconified       bool
+	appDeiconified     bool
 	cleanupDirs        []string
 	exitHandler        Opt
 	finished           atomic.Int32
@@ -266,6 +269,9 @@ func tclSafeInBraces(s string) string {
 func setDefaults() {
 	windowIndex[""] = App
 	windowIndex["."] = App
+	if goos == "windows" {
+		wmWithdraw(App)
+	}
 	exitHandler = Command(func() {
 		Destroy(App)
 		for _, v := range Themes {
@@ -1170,9 +1176,16 @@ func (w *Window) Wait() {
 		case forcedX >= 0 && forcedY >= 0: // Behind TK9_DEMO=1.
 			evalErr(fmt.Sprintf("wm geometry . +%v+%v", forcedX, forcedY)) //TODO add API func
 			forcedX, forcedY = -1, -1                                      // Apply only the first time.
-		case !autocenterDisabled:
-			autocenterDisabled = true
-			w.Center()
+		default:
+			if goos == "windows" {
+				if !appWithdrawn && !appIconified {
+					WmDeiconify(App)
+				}
+			}
+			if autocenterDisabled {
+				autocenterDisabled = true
+				w.Center()
+			}
 		}
 	}
 	evalErr(fmt.Sprintf("tkwait window %s", w))
@@ -4712,7 +4725,7 @@ func StyleThemeUse(themeName ...string) string {
 
 // CourierFont returns "{courier new}" on Windows and "courier" elsewhere.
 func CourierFont() string {
-	if runtime.GOOS == "windows" {
+	if goos == "windows" {
 		return "courier new"
 	}
 
@@ -5200,6 +5213,82 @@ func WmProtocol(w *Window, name string, command any) string {
 	default:
 		return evalErr(fmt.Sprintf("wm protocol %s %s %s", w, tclSafeString(name), newEventHandler("", command).optionString(w)))
 	}
+}
+
+// wm — Communicate with window manager
+//
+// # Description
+//
+// Arrange for window to be iconified. It window has not yet been mapped for
+// the first time, this command will arrange for it to appear in the iconified
+// state when it is eventually mapped.
+//
+// More information might be available at the [Tcl/Tk wm] page.
+//
+// [Tcl/Tk wm]: https://www.tcl.tk/man/tcl9.0/TkCmd/wm.html
+func WmIconify(w *Window) {
+	if w == App {
+		appIconified = true
+		appDeiconified = false
+	}
+	wmIconify(w)
+}
+
+func wmIconify(w *Window) {
+	evalErr(fmt.Sprintf("wm iconify %s", w))
+}
+
+// wm — Communicate with window manager
+//
+// # Description
+//
+// Arrange for window to be displayed in normal (non-iconified) form. This is
+// done by mapping the window. If the window has never been mapped then this
+// command will not map the window, but it will ensure that when the window is
+// first mapped it will be displayed in de-iconified form. On Windows, a
+// deiconified window will also be raised and be given the focus (made the
+// active window). Returns an empty string.
+//
+// More information might be available at the [Tcl/Tk wm] page.
+//
+// [Tcl/Tk wm]: https://www.tcl.tk/man/tcl9.0/TkCmd/wm.html
+func WmDeiconify(w *Window) {
+	if w == App {
+		appDeiconified = true
+		appIconified = false
+	}
+	wmDeiconify(w)
+}
+
+func wmDeiconify(w *Window) {
+	evalErr(fmt.Sprintf("wm deiconify %s", w))
+}
+
+// wm — Communicate with window manager
+//
+// # Description
+//
+// Arranges for window to be withdrawn from the screen. This causes the window
+// to be unmapped and forgotten about by the window manager. If the window has
+// never been mapped, then this command causes the window to be mapped in the
+// withdrawn state. Not all window managers appear to know how to handle
+// windows that are mapped in the withdrawn state. Note that it sometimes seems
+// to be necessary to withdraw a window and then re-map it (e.g. with wm
+// deiconify) to get some window managers to pay attention to changes in window
+// attributes such as group.
+//
+// More information might be available at the [Tcl/Tk wm] page.
+//
+// [Tcl/Tk wm]: https://www.tcl.tk/man/tcl9.0/TkCmd/wm.html
+func WmWithdraw(w *Window) {
+	if w == App {
+		appWithdrawn = true
+	}
+	wmWithdraw(w)
+}
+
+func wmWithdraw(w *Window) {
+	evalErr(fmt.Sprintf("wm withdraw %s", w))
 }
 
 // wm — Communicate with window manager
