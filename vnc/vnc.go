@@ -334,6 +334,9 @@ func (f *flags) ServeHTTP(w http.ResponseWriter, rq *http.Request) {
 		return
 	}
 
+	if dbg {
+		trc("GET %q", rq.URL.Path)
+	}
 	switch {
 	case rq.URL.Path == "/":
 		f.connect(w)
@@ -342,7 +345,15 @@ func (f *flags) ServeHTTP(w http.ResponseWriter, rq *http.Request) {
 		strings.HasPrefix(rq.URL.Path, "/favicon"),
 		strings.HasPrefix(rq.URL.Path, "/vendor/"):
 
-		http.ServeFileFS(w, rq, assets, path.Join("embed", rq.URL.Path))
+		p := path.Join("embed", strings.ReplaceAll(rq.URL.Path, "/vendor/", "/vendor_/"))
+		if dbg {
+			f, err := assets.Open(p)
+			trc("%q -> (%p, %v)", p, f, err)
+			if err == nil {
+				f.Close()
+			}
+		}
+		http.ServeFileFS(w, rq, assets, p)
 	default:
 		a := strings.Split(rq.URL.Path, "_")
 		if len(a) != 3 {
