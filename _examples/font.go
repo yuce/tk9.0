@@ -3,6 +3,7 @@ package main
 import "fmt"
 import "slices"
 import . "modernc.org/tk9.0"
+import _ "modernc.org/tk9.0/themes/azure"
 
 func main() {
 	var scroll *TScrollbarWidget
@@ -25,5 +26,6 @@ func main() {
 		t.TagConfigure(tag, Font(NewFont(Family(font))))
 		t.Insert("end", font+": ", "", "Lorem ipsum dolor sit amet, consectetur adipiscing elit...\n", tag)
 	}
+	ActivateTheme("azure light")
 	App.Center().Wait()
 }
