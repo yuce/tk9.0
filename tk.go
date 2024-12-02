@@ -1182,7 +1182,7 @@ func (w *Window) Wait() {
 					WmDeiconify(App)
 				}
 			}
-			if autocenterDisabled {
+			if !autocenterDisabled {
 				autocenterDisabled = true
 				w.Center()
 			}
