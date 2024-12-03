@@ -109,6 +109,46 @@
 //     additional things the C code does not need to - with the respective
 //     performance penalties, now just in different places.
 //
+// # Widget catalogue
+//
+//  - [ButtonWidget]
+//  - [CanvasWidget]
+//  - [EntryWidget]
+//  - [FrameWidget]
+//  - [CheckbuttonWidget]
+//  - [LabelframeWidget]
+//  - [LabelWidget]
+//  - [ListboxWidget]
+//  - [MenubuttonWidget]
+//  - [MenuWidget]
+//  - [MessageWidget]
+//  - [OptionMenuWidget]
+//  - [PanedwindowWidget]
+//  - [RadiobuttonWidget]
+//  - [ScaleWidget]
+//  - [ScrollbarWidget]
+//  - [SpinboxWidget]
+//  - [TButtonWidget]
+//  - [TComboboxWidget]
+//  - [TEntryWidget]
+//  - [TextWidget]
+//  - [TFrameWidget]
+//  - [TCheckbuttonWidget]
+//  - [TLabelframeWidget]
+//  - [TLabelWidget]
+//  - [TMenubuttonWidget]
+//  - [TNotebookWidget]
+//  - [ToplevelWidget]
+//  - [TPanedwindowWidget]
+//  - [TProgressbarWidget]
+//  - [TRadiobuttonWidget]
+//  - [TScaleWidget]
+//  - [TScrollbarWidget]
+//  - [TSeparatorWidget]
+//  - [TSizegripWidget]
+//  - [TSpinboxWidget]
+//  - [TTreeviewWidget]
+//
 // # Debugging
 //
 // Consider this program in _examples/debugging.go:
