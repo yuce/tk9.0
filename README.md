@@ -30,42 +30,44 @@ Cascading menus (_examples/menu.go)
      3	import (
      4		"fmt"
      5		. "modernc.org/tk9.0"
-     6		"runtime"
-     7	)
-     8	
-     9	func main() {
-    10		menubar := Menu()
-    11	
-    12		fileMenu := menubar.Menu()
-    13		fileMenu.AddCommand(Lbl("New"), Underline(0), Accelerator("Ctrl+N"))
-    14		fileMenu.AddCommand(Lbl("Open..."), Underline(0), Accelerator("Ctrl+O"), Command(func() { GetOpenFile() }))
-    15		Bind(App, "<Control-o>", Command(func() { fileMenu.Invoke(1) }))
-    16		fileMenu.AddCommand(Lbl("Save"), Underline(0), Accelerator("Ctrl+S"))
-    17		fileMenu.AddCommand(Lbl("Save As..."), Underline(5))
-    18		fileMenu.AddCommand(Lbl("Close"), Underline(0), Accelerator("Crtl+W"))
-    19		fileMenu.AddSeparator()
-    20		fileMenu.AddCommand(Lbl("Exit"), Underline(1), Accelerator("Ctrl+Q"), ExitHandler())
-    21		Bind(App, "<Control-q>", Command(func() { fileMenu.Invoke(6) }))
-    22		menubar.AddCascade(Lbl("File"), Underline(0), Mnu(fileMenu))
-    23	
-    24		editMenu := menubar.Menu()
-    25		editMenu.AddCommand(Lbl("Undo"))
-    26		editMenu.AddSeparator()
-    27		editMenu.AddCommand(Lbl("Cut"))
-    28		editMenu.AddCommand(Lbl("Copy"))
-    29		editMenu.AddCommand(Lbl("Paste"))
-    30		editMenu.AddCommand(Lbl("Delete"))
-    31		editMenu.AddCommand(Lbl("Select All"))
-    32		menubar.AddCascade(Lbl("Edit"), Underline(0), Mnu(editMenu))
-    33	
-    34		helpMenu := menubar.Menu()
-    35		helpMenu.AddCommand(Lbl("Help Index"))
-    36		helpMenu.AddCommand(Lbl("About..."))
-    37		menubar.AddCascade(Lbl("Help"), Underline(0), Mnu(helpMenu))
-    38	
-    39		App.WmTitle(fmt.Sprintf("%s on %s", App.WmTitle(""), runtime.GOOS))
-    40		App.Configure(Mnu(menubar), Width("8c"), Height("6c")).Wait()
-    41	}
+     6		_ "modernc.org/tk9.0/themes/azure"
+     7		"runtime"
+     8	)
+     9	
+    10	func main() {
+    11		menubar := Menu()
+    12	
+    13		fileMenu := menubar.Menu()
+    14		fileMenu.AddCommand(Lbl("New"), Underline(0), Accelerator("Ctrl+N"))
+    15		fileMenu.AddCommand(Lbl("Open..."), Underline(0), Accelerator("Ctrl+O"), Command(func() { GetOpenFile() }))
+    16		Bind(App, "<Control-o>", Command(func() { fileMenu.Invoke(1) }))
+    17		fileMenu.AddCommand(Lbl("Save"), Underline(0), Accelerator("Ctrl+S"))
+    18		fileMenu.AddCommand(Lbl("Save As..."), Underline(5))
+    19		fileMenu.AddCommand(Lbl("Close"), Underline(0), Accelerator("Crtl+W"))
+    20		fileMenu.AddSeparator()
+    21		fileMenu.AddCommand(Lbl("Exit"), Underline(1), Accelerator("Ctrl+Q"), ExitHandler())
+    22		Bind(App, "<Control-q>", Command(func() { fileMenu.Invoke(6) }))
+    23		menubar.AddCascade(Lbl("File"), Underline(0), Mnu(fileMenu))
+    24	
+    25		editMenu := menubar.Menu()
+    26		editMenu.AddCommand(Lbl("Undo"))
+    27		editMenu.AddSeparator()
+    28		editMenu.AddCommand(Lbl("Cut"))
+    29		editMenu.AddCommand(Lbl("Copy"))
+    30		editMenu.AddCommand(Lbl("Paste"))
+    31		editMenu.AddCommand(Lbl("Delete"))
+    32		editMenu.AddCommand(Lbl("Select All"))
+    33		menubar.AddCascade(Lbl("Edit"), Underline(0), Mnu(editMenu))
+    34	
+    35		helpMenu := menubar.Menu()
+    36		helpMenu.AddCommand(Lbl("Help Index"))
+    37		helpMenu.AddCommand(Lbl("About..."))
+    38		menubar.AddCascade(Lbl("Help"), Underline(0), Mnu(helpMenu))
+    39	
+    40		App.WmTitle(fmt.Sprintf("%s on %s", App.WmTitle(""), runtime.GOOS))
+    41		ActivateTheme("azure light")
+    42		App.Configure(Mnu(menubar), Width("8c"), Height("6c")).Wait()
+    43	}
 
 Menus on darwin are now using the system-managed menu bar.    
 
