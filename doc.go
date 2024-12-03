@@ -67,7 +67,7 @@
 //
 //     There is an evironment variable defined, `CGO_ENABLED`. When the Go
 //     build system compiles Go code, it checks for the value of this env var.
-//     If it is not set or its valuue is "1", then CGo is enabled and used when
+//     If it is not set or its value is "1", then CGo is enabled and used when
 //     'import "C"' is encountered.  If the env var contains "0", CGo is
 //     disabled and programs using 'import "C"' will not compile.
 //
