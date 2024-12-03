@@ -32,12 +32,82 @@
 //
 // # Frequently Asked Questions
 //
+//   - Do I need to install the Tcl/Tk libraries on my system to use this
+//     package or programs that import it?
+//
+//     No. You still have to have a desktop environment installed on systems
+//     where that is not necessarily the case by default. That means some of
+//     the unix-like systems.  Usually installing any desktop environment, like
+//     Gnome, Xfce etc. provides all the required library (.so) files. The
+//     minimum is the [X Window System] and this package was tested to work
+//     there, although with all the limitations one can expect in this case.
+//
 //   - Windows: How to build an executable that doesn't open a console window when run?
 //
 //     From the [documentation for cmd/link]: On Windows, -H windowsgui writes
 //     a "GUI binary" instead of a "console binary.". To pass the flag to the
 //     Go build system use 'go build -ldflags -H=windowsgui somefile.go', for
 //     example.
+//
+//   - What does CGo-free really mean?
+//
+//     [cgo] is a tool used by the Go build system when Go code uses the
+//     pseudo-import "C". For technical details please see the link. For us it
+//     is important that using CGo ends up invoking a C compiler during
+//     building of a Go program/package.  The C compiler is used to determine
+//     exact, possibly locally dependent, values of C preprocessor constants
+//     and other defines, as well as the exact layout of C structs. This
+//     enables the Go compiler to correctly handle things like, schematically
+//     `C.someStruct.someField` appearing in Go code.
+//
+//     At runtime a Go program using CGo must switch stacks when calling into
+//     C. Additionally the runtime scheduler is made aware of such calls into
+//     C. The former is necessary, the later is not, but it is good to have as
+//     it improves performance and provides better resource management.
+//
+//     There is an evironment variable defined, `CGO_ENABLED`. When the Go
+//     build system compiles Go code, it checks for the value of this env var.
+//     If it is not set or its valuue is "1", then CGo is enabled and used when
+//     'import "C"' is encountered.  If the env var contains "0", CGo is
+//     disabled and programs using 'import "C"' will not compile.
+//
+//     After this longish intro we can finally get to the short answer:
+//     CGo-free means this package can be compiled with CGO_ENABLED=0. In other
+//     words, there's no 'import "C"' clause anywhere.
+//
+//     The consequences of being CGo-free follows from the above. The Go build system
+//     does not need to invoke a C compiler when compiling this package. Hence users
+//     doesn't have to have a C compiler installed in their machines.
+//
+//     There are advantages when a C compiler is not invoked during
+//     compilation/build of Go code.  Programs can be installed on all targets
+//     supported by this package the easy way: '$ go install
+//     example.com/foo@latest' and programs for all supported targets can be
+//     cross-compiled on all Go-supported targets just by setting the
+//     respective env vars, like performing '$ GOOS=darwin GOARCH=arm64 go
+//     build' on a Windows/AMD64 machine, for example.
+//
+//   - How does this package achieve being CGo-free?
+//
+//     The answer depends on the particular target in question. Targets
+//     supported by [purego] call into the Tcl/Tk C libraries without using
+//     CGo. See the source code at the link for how it is done.
+//
+//     On other targets CGo is avoided by transpiling all the C libraries and
+//     their transitive dependencies to Go.
+//
+//     In both cases the advantages are the same: CGo-free programs are
+//     go-installable and CGo-free programs can be cross-compiled without
+//     having a C compiler or a cross-C compiler tool chain installed.
+//
+//   - Does being CGo-free remove the overhead of crossing the Go-C boundary?
+//
+//     For the [purego] targets, no. Only the C compiler is not involved anymore.
+//
+//     For other supported targets the boundary for calling Tcl/Tk C API from
+//     Go is gone. No free lunches though, the transpilled code has to care about
+//     additional things the C code does not need to - with the respective
+//     performance penalties, now just in different places.
 //
 // # Debugging
 //
@@ -2375,11 +2445,14 @@
 // [MVP]: https://en.wikipedia.org/wiki/Minimum_viable_product
 // [RERO]: https://en.wikipedia.org/wiki/Release_early,_release_often
 // [Tkinter]: https://en.wikipedia.org/wiki/Tkinter
+// [X Window System]: https://en.wikipedia.org/wiki/X_Window_System
+// [cgo]: https://pkg.go.dev/cmd/cgo
 // [documentation for cmd/link]: https://pkg.go.dev/cmd/link
 // [equ]: https://pkg.go.dev/modernc.org/equ
 // [issue tracker]: https://gitlab.com/cznic/tk9.0/-/issues
 // [jnml's LiberaPay]: https://liberapay.com/jnml/donate
 // [modern-c.appspot.com]: https://modern-c.appspot.com/-/builder/?importpath=modernc.org%2ftk9.0
+// [purego]: https://github.com/ebitengine/purego
 // [tcl.tk site]: https://www.tcl.tk/man/tcl9.0/TkCmd/index.html
 // [tk9.0/vnc package]: https://pkg.go.dev/modernc.org/tk9.0/vnc
 // [tkinter.ttk site]: https://docs.python.org/3/library/tkinter.ttk.html
