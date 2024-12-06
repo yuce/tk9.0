@@ -1465,8 +1465,8 @@ func GridColumnConfigure(w Widget, index int, options ...Opt) {
 // Pad option.
 //
 // The -pad option specifies the number of screen units that will be added to
-// the largest window contained completely in that row when the grid geometry
-// manager requests a size from the containing window.
+// the largest window contained completely in that column/row when the grid
+// geometry manager requests a size from the containing window.
 //
 // Known uses:
 //   - [GridColumnConfigure] (command specific)
