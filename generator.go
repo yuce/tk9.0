@@ -276,15 +276,7 @@ var (
 			},
 		},
 		"grab": {
-			ignore: true, //MAYBE later
-			// commands: cmdOpts{
-			// 	"Grab": []string{
-			// 		"-global",
-			// 	},
-			// 	"GrabSet": []string{
-			// 		"-global",
-			// 	},
-			// },
+			manual: true, //done
 		},
 		"grid": {
 			manual: true, // done

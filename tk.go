@@ -1244,6 +1244,14 @@ func (w *Window) IconPhoto(options ...Opt) {
 	evalErr(fmt.Sprintf("wm iconphoto %s %s", w, collect(options...)))
 }
 
+// DefaultIcon option.
+//
+// Known uses:
+//   - [IconPhoto] (command specific)
+func DefaultIcon(val ...any) Opt {
+	return rawOption("-default")
+}
+
 // WmTitle — change the window manager title
 //
 // # Description
@@ -5232,6 +5240,32 @@ func WmProtocol(w *Window, name string, command any) string {
 //
 // # Description
 //
+// If container is specified, then the window manager is informed that window
+// is a transient window (e.g. pull-down menu) working on behalf of container
+// (where container is the path name for a top-level window). If container is
+// specified as an empty string then window is marked as not being a transient
+// window any more. Otherwise the command returns the path name of window's
+// current container, or an empty string if window is not currently a transient
+// window. A transient window will mirror state changes in the container and
+// inherit the state of the container when initially mapped. The directed graph
+// with an edge from each transient to its container must be acyclic. In
+// particular, it is an error to attempt to make a window a transient of
+// itself. The window manager may also decorate a transient window differently,
+// removing some features normally present (e.g., minimize and maximize
+// buttons) though this is entirely at the discretion of the window manager.
+//
+// More information might be available at the [Tcl/Tk wm] page.
+//
+// [Tcl/Tk wm]: https://www.tcl.tk/man/tcl9.0/TkCmd/wm.html
+func WmTransient(options ...Opt) string {
+	trc("`%s`", fmt.Sprintf("wm transient %s", collect(options...)))
+	return evalErr(fmt.Sprintf("wm transient %s", collect(options...)))
+}
+
+// wm — Communicate with window manager
+//
+// # Description
+//
 // Arrange for window to be iconified. It window has not yet been mapped for
 // the first time, this command will arrange for it to appear in the iconified
 // state when it is eventually mapped.
@@ -6270,4 +6304,87 @@ type OptionMenuWidget struct {
 // Name returns the menu name of 'w'.
 func (w *OptionMenuWidget) Name() string {
 	return w.name
+}
+
+// grab — Confine pointer and keyboard events to a window sub-tree
+//
+// # Description
+//
+// Same as GrabSet().
+//
+// More information might be available at the [Tcl/Tk grab] page.
+//
+// [Tcl/Tk grab]: https://tcl.tk/man/tcl9.0/TkCmd/grab.html
+func Grab(options ...Opt) {
+	GrabSet(options...)
+}
+
+// grab — Confine pointer and keyboard events to a window sub-tree
+//
+// # Description
+//
+// If window is specified, returns the name of the current grab window in this
+// application for window's display, or an empty string if there is no such
+// window. If window is omitted, the command returns a list whose elements are
+// all of the windows grabbed by this application for all displays, or an empty
+// string if the application has no grabs.
+//
+// More information might be available at the [Tcl/Tk grab] page.
+//
+// [Tcl/Tk grab]: https://tcl.tk/man/tcl9.0/TkCmd/grab.html
+func GrabCurrent(options ...Opt) []string {
+	return parseList(evalErr(fmt.Sprintf("grab current %s", collect(options...))))
+}
+
+// grab — Confine pointer and keyboard events to a window sub-tree
+//
+// # Description
+//
+// Releases the grab on window if there is one, otherwise does nothing.
+//
+// More information might be available at the [Tcl/Tk grab] page.
+//
+// [Tcl/Tk grab]: https://tcl.tk/man/tcl9.0/TkCmd/grab.html
+func GrabRelease(w Opt) {
+	evalErr(fmt.Sprintf("grab release %s", w))
+}
+
+// grab — Confine pointer and keyboard events to a window sub-tree
+//
+// # Description
+//
+// Sets a grab on window. If -global is specified then the grab is global,
+// otherwise it is local. If a grab was already in effect for this application
+// on window's display then it is automatically released. If there is already a
+// grab on window and it has the same global/local form as the requested grab,
+// then the command does nothing.
+//
+// More information might be available at the [Tcl/Tk grab] page.
+//
+// [Tcl/Tk grab]: https://tcl.tk/man/tcl9.0/TkCmd/grab.html
+func GrabSet(options ...Opt) {
+	evalErr(fmt.Sprintf("grab set %s", collect(options...)))
+}
+
+// grab — Confine pointer and keyboard events to a window sub-tree
+//
+// # Description
+//
+// Returns none if no grab is currently set on window, local if a local grab is
+// set on window, and global if a global grab is set.
+//
+// More information might be available at the [Tcl/Tk grab] page.
+//
+// [Tcl/Tk grab]: https://tcl.tk/man/tcl9.0/TkCmd/grab.html
+func GrabStatus(w Opt) string {
+	return evalErr(fmt.Sprintf("grab status %s", w))
+}
+
+// Global option.
+//
+// Known uses:
+//   - [Grab] (command specific)
+//   - [GrabSet] (command specific)
+func Global() Opt {
+	return rawOption("-global")
 }
