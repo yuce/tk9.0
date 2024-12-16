@@ -506,6 +506,14 @@ type Event struct {
 	// The number of the last client request processed by the server (the serial
 	// field from the event). Valid for all event types.
 	Serial int64
+	// The width field from the event. Indicates the new or requested width of the
+	// window. Valid only for Configure, ConfigureRequest, Create, ResizeRequest,
+	// and Expose events.
+	Width string
+	// The height field from the event. Valid for the Configure, ConfigureRequest,
+	// Create, ResizeRequest, and Expose events. Indicates the new or requested
+	// height of the window.
+	Height string
 
 	args []string
 }
@@ -533,6 +541,10 @@ func newEvent(arg1 string) (id int, e *Event, err error) {
 			e.EventWindow = windowIndex[v]
 		case 2: // %K
 			e.Keysym = v
+		case 3: // %w
+			e.Width = v
+		case 4: // %h
+			e.Height = v
 		}
 	}
 	return id, e, nil
@@ -638,7 +650,7 @@ func (e *eventHandler) optionString(w *Window) string {
 	e.w = w
 	switch {
 	case e.lateBind:
-		return fmt.Sprintf("%s {eventDispatcher {%v %%# %%W %%K}}", e.tcl, e.id)
+		return fmt.Sprintf("%s {eventDispatcher {%v %%# %%W %%K %%w %%h}}", e.tcl, e.id)
 	default:
 		return fmt.Sprintf("%s {eventDispatcher %v}", e.tcl, e.id)
 	}
