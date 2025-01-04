@@ -3,7 +3,7 @@ module modernc.org/tk9.0
 go 1.21
 
 require (
-	github.com/adrg/xdg v0.5.0
+	github.com/adrg/xdg v0.5.3
 	github.com/disintegration/imaging v1.6.2
 	github.com/ebitengine/purego v0.8.0
 	github.com/evilsocket/islazy v1.11.0
@@ -11,13 +11,13 @@ require (
 	github.com/mat/besticon/v3 v3.18.0
 	golang.org/x/image v0.20.0
 	golang.org/x/net v0.29.0
-	golang.org/x/sys v0.25.0
+	golang.org/x/sys v0.28.0
 	modernc.org/fileutil v1.3.0
 	modernc.org/knuth v0.5.3
 	modernc.org/libc v1.61.6
-	modernc.org/libtcl9.0 v0.14.0
+	modernc.org/libtcl9.0 v0.15.1
 	modernc.org/libtk9.0 v0.13.0
-	modernc.org/memory v1.8.0
+	modernc.org/memory v1.8.1
 	modernc.org/ngrab v0.1.0
 	modernc.org/rec v0.2.0
 	modernc.org/tcl9.0 v0.15.0
@@ -44,7 +44,7 @@ require (
 	modernc.org/libfreetype v0.9.1 // indirect
 	modernc.org/libmd v0.12.0 // indirect
 	modernc.org/libxcb v0.11.0 // indirect
-	modernc.org/libz v0.16.4 // indirect
+	modernc.org/libz v0.16.10 // indirect
 	modernc.org/mathutil v1.7.1 // indirect
 	modernc.org/opt v0.1.3 // indirect
 	modernc.org/regexp v1.7.3 // indirect
