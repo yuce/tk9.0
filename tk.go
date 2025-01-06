@@ -5780,6 +5780,28 @@ func Data(val any) Opt {
 //
 // # Description
 //
+// Returns a slice of all the children of window. Top-level windows are
+// returned as children of their logical parents. The list is in stacking
+// order, with the lowest window first, except for Top-level windows which are
+// not returned in stacking order. Use the wm stackorder command to query the
+// stacking order of Top-level windows.
+//
+// More information might be available at the [Tcl/Tk winfo] page.
+//
+// [Tcl/Tk winfo]: https://www.tcl.tk/man/tcl9.0/TkCmd/winfo.html
+func WinfoChildren(w *Window) (r []*Window) {
+	for _, v := range parseList(evalErr(fmt.Sprintf("winfo children %s", w))) {
+		if w := windowIndex[v]; w != nil {
+			r = append(r, w)
+		}
+	}
+	return r
+}
+
+// winfo — Return window-related information
+//
+// # Description
+//
 // Returns a decimal string giving the height of window's screen, in pixels.
 //
 // More information might be available at the [Tcl/Tk winfo] page.
