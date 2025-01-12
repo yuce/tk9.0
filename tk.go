@@ -6092,6 +6092,42 @@ func (w *TComboboxWidget) Current(newIndex any) (r string) {
 //
 // # Description
 //
+// Returns the integer index of item within its parent's list of children or -1
+// otherwise.
+//
+// More information might be available at the [Tcl/Tk treeview] page.
+//
+// [Tcl/Tk treeview]: https://tcl.tk/man/tcl9.0/TkCmd/ttk_treeview.html
+func (w *TTreeviewWidget) Index(item any) (r int) {
+	s := evalErr(fmt.Sprintf("%s index %s", w, tclSafeString(fmt.Sprint(item))))
+	if n, err := strconv.ParseInt(s, 10, 32); err == nil {
+		return int(n)
+	}
+
+	return -1
+}
+
+// ttk::treeview — hierarchical multicolumn data display widget
+//
+// # Description
+//
+// Returns the ID of the parent of item, or "" if item is at the top level of
+// the hierarchy.
+//
+// More information might be available at the [Tcl/Tk treeview] page.
+//
+// [Tcl/Tk treeview]: https://tcl.tk/man/tcl9.0/TkCmd/ttk_treeview.html
+func (w *TTreeviewWidget) Parent(item any) (r string) {
+	if r = evalErr(fmt.Sprintf("%s parent %s", w, tclSafeString(fmt.Sprint(item)))); r == "{}" {
+		r = ""
+	}
+	return r
+}
+
+// ttk::treeview — hierarchical multicolumn data display widget
+//
+// # Description
+//
 // Query or modify the options for the specified column. If no -option is
 // specified, returns a dictionary of option/value pairs. If a single -option
 // is specified, returns the value of that option. Otherwise, the options are
