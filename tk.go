@@ -514,6 +514,22 @@ type Event struct {
 	// Create, ResizeRequest, and Expose events. Indicates the new or requested
 	// height of the window.
 	Height string
+	// The x and y fields from the event. For Button, ButtonRelease, Motion, Key,
+	// KeyRelease, and MouseWheel events, X and Y indicate the position of the
+	// mouse pointer relative to the receiving window. For key events on the
+	// Macintosh these are the coordinates of the mouse at the moment when an X11
+	// KeyEvent is sent to Tk, which could be slightly later than the time of the
+	// physical press or release. For Enter and Leave events, the position where
+	// the mouse pointer crossed the window, relative to the receiving window. For
+	// Configure and Create requests, the x and y coordinates of the window
+	// relative to its parent window.
+	X, Y int
+	// The x_root and y_root fields from the event. If a virtual-root window
+	// manager is being used then the substituted values are the corresponding
+	// x-coordinate and y-coordinate in the virtual root. Valid only for Button,
+	// ButtonRelease, Enter, Key, KeyRelease, Leave and Motion events. Same meaning
+	// as X and Y, except relative to the (virtual) root window.
+	XRoot, YRoot int
 
 	args []string
 }
@@ -545,9 +561,25 @@ func newEvent(arg1 string) (id int, e *Event, err error) {
 			e.Width = v
 		case 4: // %h
 			e.Height = v
+		case 5: // %x
+			e.X = atoi(v)
+		case 6: // %y
+			e.Y = atoi(v)
+		case 7: // %X
+			e.XRoot = atoi(v)
+		case 8: // %Y
+			e.YRoot = atoi(v)
 		}
 	}
 	return id, e, nil
+}
+
+func atoi(s string) int {
+	if n, err := strconv.Atoi(s); err == nil {
+		return n
+	}
+
+	return 0
 }
 
 // SetReturnCodeOK sets return code of 'e' to TCL_OK.
@@ -650,7 +682,7 @@ func (e *eventHandler) optionString(w *Window) string {
 	e.w = w
 	switch {
 	case e.lateBind:
-		return fmt.Sprintf("%s {eventDispatcher {%v %%# %%W %%K %%w %%h}}", e.tcl, e.id)
+		return fmt.Sprintf("%s {eventDispatcher {%v %%# %%W %%K %%w %%h %%x %%y %%X %%Y}}", e.tcl, e.id)
 	default:
 		return fmt.Sprintf("%s {eventDispatcher %v}", e.tcl, e.id)
 	}
@@ -1913,7 +1945,7 @@ func forceInit() {
 
 	defer func() { onceForceInit = true }()
 
-	evalErr("#")
+	evalErr("# forceInit() executed")
 }
 
 // ExitHandler returns a canned [Command] that destroys the [App].
@@ -4029,6 +4061,29 @@ func (m *MenuItem) optionString(_ *Window) string {
 	}
 
 	return "mnu_non_existing"
+}
+
+// tk_popup — Post a popup menu
+//
+// # Description
+//
+// This procedure posts a menu at a given position on the screen and configures
+// Tk so that the menu and its cascaded children can be traversed with the
+// mouse or the keyboard. Menu is the name of a menu widget and x and y are the
+// root coordinates at which to display the menu. If entry is omitted or an
+// empty string, the menu's upper left corner is positioned at the given point.
+// Otherwise entry gives the index of an entry in menu and the menu will be
+// positioned so that the entry is positioned over the given point.
+//
+// Additional information might be available at the [Tcl/Tk popup] page.
+//
+// [Tcl/Tk popup]: https://www.tcl.tk/man/tk9.0/TkCmd/popup.htm
+func Popup(menu *Window, x, y int, entry any) {
+	var s string
+	if entry != nil && entry != "" {
+		s = collectAny(entry)
+	}
+	evalErr(fmt.Sprintf("tk_popup %s %v %v %s", menu, x, y, s))
 }
 
 // Menu — Create and manipulate 'menu' widgets and menubars

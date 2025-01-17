@@ -368,7 +368,7 @@ var (
 				"-y",
 			}},
 		},
-		"popup": {manual: true}, //TODO
+		"popup": {manual: true}, // done
 		"print": {manual: true}, //TODO
 		"raise": {manual: true}, // done
 		"selection": {
