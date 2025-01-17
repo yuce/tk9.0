@@ -6166,6 +6166,110 @@ func (w *TTreeviewWidget) Index(item any) (r int) {
 //
 // # Description
 //
+// Returns one of:
+//
+//   - heading
+//
+//     Tree heading area; use [pathname identify column x y] to determine the
+//     heading number.
+//
+//   - separator
+//
+//     Space between two column headings; [pathname identify column x y] will
+//     return the display column identifier of the heading to left of the
+//     separator.
+//
+//   - tree
+//
+//     The tree area.
+//
+//   - cell
+//
+//     A data cell.
+//
+// More information might be available at the [Tcl/Tk treeview] page.
+//
+// [Tcl/Tk treeview]: https://tcl.tk/man/tcl9.0/TkCmd/ttk_treeview.html
+func (w *TTreeviewWidget) IdentifyRegion(x, y int) (r string) {
+	return evalErr(fmt.Sprintf("%s identify region %v %v", w, x, y))
+}
+
+// ttk::treeview — hierarchical multicolumn data display widget
+//
+// # Description
+//
+// Returns the item ID of the item at position x y.
+//
+// More information might be available at the [Tcl/Tk treeview] page.
+//
+// [Tcl/Tk treeview]: https://tcl.tk/man/tcl9.0/TkCmd/ttk_treeview.html
+func (w *TTreeviewWidget) IdentifyItem(x, y int) (r string) {
+	return evalErr(fmt.Sprintf("%s identify item %v %v", w, x, y))
+}
+
+// ttk::treeview — hierarchical multicolumn data display widget
+//
+// # Description
+//
+// Returns the display column identifier of the cell at position x. The tree
+// column has ID #0.
+//
+// More information might be available at the [Tcl/Tk treeview] page.
+//
+// [Tcl/Tk treeview]: https://tcl.tk/man/tcl9.0/TkCmd/ttk_treeview.html
+func (w *TTreeviewWidget) IdentifyColumn(x, y int) (r string) {
+	return evalErr(fmt.Sprintf("%s identify column %v %v", w, x, y))
+}
+
+// ttk::treeview — hierarchical multicolumn data display widget
+//
+// # Description
+//
+// Returns the cell identifier of the cell at position x, y. A cell identifier
+// is a list of item ID and column ID.
+//
+// More information might be available at the [Tcl/Tk treeview] page.
+//
+// [Tcl/Tk treeview]: https://tcl.tk/man/tcl9.0/TkCmd/ttk_treeview.html
+func (w *TTreeviewWidget) IdentifyCell(x, y int) (r []string) {
+	return parseList(evalErr(fmt.Sprintf("%s identify cell %v %v", w, x, y)))
+}
+
+// ttk::treeview — hierarchical multicolumn data display widget
+//
+// # Description
+//
+// Returns the element at position x, y.
+//
+// More information might be available at the [Tcl/Tk treeview] page.
+//
+// [Tcl/Tk treeview]: https://tcl.tk/man/tcl9.0/TkCmd/ttk_treeview.html
+func (w *TTreeviewWidget) IdentifyElement(x, y int) (r string) {
+	return evalErr(fmt.Sprintf("%s identify element %v %v", w, x, y))
+}
+
+// ttk::treeview — hierarchical multicolumn data display widget
+//
+// # Description
+//
+// Deletes each of the items in itemList and all of their descendants. The root
+// item may not be deleted. See also: detach.
+//
+// More information might be available at the [Tcl/Tk treeview] page.
+//
+// [Tcl/Tk treeview]: https://tcl.tk/man/tcl9.0/TkCmd/ttk_treeview.html
+func (w *TTreeviewWidget) Delete(itemList ...any) {
+	if len(itemList) == 0 {
+		return
+	}
+
+	evalErr(fmt.Sprintf("%s delete %v", w, tclSafeList(itemList...)))
+}
+
+// ttk::treeview — hierarchical multicolumn data display widget
+//
+// # Description
+//
 // Returns the ID of the parent of item, or "" if item is at the top level of
 // the hierarchy.
 //

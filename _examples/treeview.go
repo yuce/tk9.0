@@ -74,6 +74,22 @@ func main() {
 		}
 		lbl.Configure(Txt(s))
 	}))
+	menu := Menu()
+	var deleteID string
+	menu.AddCommand(Lbl("Delete"), Command(func() {
+		defer func() {
+			deleteID = ""
+		}()
+
+		if deleteID != "" {
+			tv.Delete(deleteID)
+			lbl.Configure(Txt(fmt.Sprintf("deleted item %q", deleteID)))
+		}
+	}))
+	Bind(tv, "<Button-3>", Command(func(e *Event) {
+		deleteID = tv.IdentifyItem(e.X, e.Y)
+		Popup(menu.Window, e.XRoot, e.YRoot, nil)
+	}))
 	Pack(fr,
 		lbl,
 		TExit(),
