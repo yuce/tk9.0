@@ -17,8 +17,10 @@ require (
 	modernc.org/libc v1.61.6
 	modernc.org/libtcl9.0 v0.15.1
 	modernc.org/libtk9.0 v0.14.0
+	modernc.org/mathutil v1.7.1
 	modernc.org/memory v1.8.1
 	modernc.org/ngrab v0.1.0
+	modernc.org/opt v0.1.4
 	modernc.org/rec v0.2.0
 	modernc.org/tcl9.0 v0.15.0
 )
@@ -45,8 +47,6 @@ require (
 	modernc.org/libmd v0.12.0 // indirect
 	modernc.org/libxcb v0.11.0 // indirect
 	modernc.org/libz v0.16.10 // indirect
-	modernc.org/mathutil v1.7.1 // indirect
-	modernc.org/opt v0.1.3 // indirect
 	modernc.org/regexp v1.7.3 // indirect
 	modernc.org/sortutil v1.2.1 // indirect
 	modernc.org/strutil v1.2.0 // indirect
