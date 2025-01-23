@@ -5299,7 +5299,13 @@ func WmProtocol(w *Window, name string, command any) string {
 	case command == "":
 		return evalErr(fmt.Sprintf("wm protocol %s %s {}", w, tclSafeString(name)))
 	default:
-		return evalErr(fmt.Sprintf("wm protocol %s %s %s", w, tclSafeString(name), newEventHandler("", command).optionString(w)))
+		switch x := command.(type) {
+		case *eventHandler:
+			x.tcl = ""
+			return evalErr(fmt.Sprintf("wm protocol %s %s %s", w, tclSafeString(name), collect(x)))
+		default:
+			return evalErr(fmt.Sprintf("wm protocol %s %s %s", w, tclSafeString(name), newEventHandler("", command).optionString(w)))
+		}
 	}
 }
 
