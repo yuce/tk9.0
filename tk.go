@@ -5450,16 +5450,13 @@ func wmWithdraw(w *Window) {
 // More information might be available at the [Tcl/Tk wm] page.
 //
 // [Tcl/Tk wm]: https://www.tcl.tk/man/tcl9.0/TkCmd/wm.html
-func WmGeometry(w *Window, geometry string) string {
-	switch {
-	case geometry == "":
-		return evalErr(fmt.Sprintf("wm geometry %s", w))
-	default:
-		if w == App {
-			autocenterDisabled = true
-		}
-		return evalErr(fmt.Sprintf("wm geometry %s %s", w, tclSafeString(geometry)))
+func WmGeometry(w *Window, geometry any) string {
+	// https://gitlab.com/cznic/tk9.0/-/commit/12a3f299ffc44b5b7db4c29d61cb7fa05bec259b#note_2314118972
+	var arg string
+	if geometry != nil {
+		arg = tclSafeString(fmt.Sprint(geometry))
 	}
+	return evalErr(fmt.Sprintf("wm geometry %s %s", w, arg))
 }
 
 // wm — Communicate with window manager

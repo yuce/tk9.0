@@ -8,10 +8,13 @@ func main() {
 	in := TEntry()
 	Pack(in, style)
 	Pack(TButton(Txt("Get"), Command(func() {
-		in.Configure(Textvariable(WmGeometry(App, "")))
+		in.Configure(Textvariable(WmGeometry(App, nil)))
 	})), style)
 	Pack(TButton(Txt("Set"), Command(func() {
 		WmGeometry(App, in.Textvariable())
+	})), style)
+	Pack(TButton(Txt("Default"), Command(func() {
+		in.Configure(Textvariable(WmGeometry(App, "")))
 	})), style)
 	Pack(TExit(), style)
 	ActivateTheme("azure light")
