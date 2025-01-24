@@ -5451,10 +5451,15 @@ func wmWithdraw(w *Window) {
 //
 // [Tcl/Tk wm]: https://www.tcl.tk/man/tcl9.0/TkCmd/wm.html
 func WmGeometry(w *Window, geometry string) string {
-	if w == App {
-		autocenterDisabled = true
+	switch {
+	case geometry == "":
+		return evalErr(fmt.Sprintf("wm geometry %s", w))
+	default:
+		if w == App {
+			autocenterDisabled = true
+		}
+		return evalErr(fmt.Sprintf("wm geometry %s %s", w, tclSafeString(geometry)))
 	}
-	return evalErr(fmt.Sprintf("wm geometry %s %s", w, tclSafeString(geometry)))
 }
 
 // wm — Communicate with window manager
