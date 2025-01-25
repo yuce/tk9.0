@@ -8,7 +8,7 @@ func main() {
 	in := TEntry()
 	Pack(in, style)
 	Pack(TButton(Txt("Get"), Command(func() {
-		in.Configure(Textvariable(WmGeometry(App, nil)))
+		in.Configure(Textvariable(WmGeometry(App)))
 	})), style)
 	Pack(TButton(Txt("Set"), Command(func() {
 		WmGeometry(App, in.Textvariable())
