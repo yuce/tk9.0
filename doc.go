@@ -77,7 +77,7 @@
 //
 //     The consequences of being CGo-free follows from the above. The Go build system
 //     does not need to invoke a C compiler when compiling this package. Hence users
-//     doesn't have to have a C compiler installed in their machines.
+//     don't have to have a C compiler installed in their machines.
 //
 //     There are advantages when a C compiler is not invoked during
 //     compilation/build of Go code.  Programs can be installed on all targets
