@@ -5456,6 +5456,7 @@ func WmGeometry(w *Window, geometry ...string) string {
 	case len(geometry) == 0:
 		return evalErr(fmt.Sprintf("wm geometry %s", w))
 	default:
+		autocenterDisabled = true
 		return evalErr(fmt.Sprintf("wm geometry %s %s", w, tclSafeString(geometry[0])))
 	}
 }
