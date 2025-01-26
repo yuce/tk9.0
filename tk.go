@@ -1318,7 +1318,9 @@ func (w *Window) WmTitle(s string) string {
 
 // Center centers 'w' and returns 'w'.
 func (w *Window) Center() *Window {
-	autocenterDisabled = true
+	if w == App {
+		autocenterDisabled = true
+	}
 	evalErr(fmt.Sprintf("tk::PlaceWindow %s center", w))
 	return w
 }
@@ -5456,7 +5458,9 @@ func WmGeometry(w *Window, geometry ...string) string {
 	case len(geometry) == 0:
 		return evalErr(fmt.Sprintf("wm geometry %s", w))
 	default:
-		autocenterDisabled = true
+		if w == App {
+			autocenterDisabled = true
+		}
 		return evalErr(fmt.Sprintf("wm geometry %s %s", w, tclSafeString(geometry[0])))
 	}
 }
