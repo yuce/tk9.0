@@ -26,8 +26,51 @@ var (
 	currentThemeKey ThemeKey
 
 	_ Theme        = (*theme)(nil)
+	_ Theme        = (*builtinTheme)(nil)
 	_ ThemeContext = themeContext{}
 )
+
+// https://tkdocs.com/tutorial/styles.html
+//
+// Besides the built-in themes (alt, default, clam, and classic), macOS
+// includes a theme named aqua to match the system-wide style, while Windows
+// includes themes named vista, winxpnative, and winnative.
+func init() {
+	RegisterTheme("alt", &builtinTheme{"alt"})
+	RegisterTheme("default", &builtinTheme{"default"})
+	RegisterTheme("clam", &builtinTheme{"clam"})
+	RegisterTheme("classic", &builtinTheme{"classic"})
+	switch goos {
+	case "darwin":
+		RegisterTheme("aqua", &builtinTheme{"aqua"})
+	case "windows":
+		RegisterTheme("vista", &builtinTheme{"vista"})
+		RegisterTheme("winxpnative", &builtinTheme{"winxpnative"})
+		RegisterTheme("winnative", &builtinTheme{"winnative"})
+	}
+}
+
+type builtinTheme string
+	name string
+}
+
+func (t *builtinTheme) Activate(context ThemeContext) error {
+	StyleThemeUse(t.name)
+	return nil
+}
+
+func (t *builtinTheme) Deactivate(context ThemeContext) error {
+	StyleThemeUse("default")
+	return nil
+}
+
+func (t *builtinTheme) Finalize(context ThemeContext) error {
+	return nil
+}
+
+func (t *builtinTheme) Initialize(context ThemeContext) error {
+	return nil
+}
 
 // CurrentTheme returns the currently activated theme, if any.
 func CurrentTheme() Theme {

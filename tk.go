@@ -4803,6 +4803,9 @@ func StyleThemeStyles(themeName ...string) []string {
 // Additional information might be available at the [Tcl/Tk style] page.
 // There's also a [Styles and Themes] tutorial at tkdoc.com.
 //
+// This mechanism is separate from the RegisterTheme/ActivateTheme one.  Use of
+// this function is best suited for the built in themes like "clam" etc.
+//
 // [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
 // [Styles and Themes]: https://tkdocs.com/tutorial/styles.html
 func StyleThemeUse(themeName ...string) string {
