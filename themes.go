@@ -50,7 +50,7 @@ func init() {
 	}
 }
 
-type builtinTheme string
+type builtinTheme struct {
 	name string
 }
 
