@@ -6641,3 +6641,78 @@ func GrabStatus(w Opt) string {
 func Global() Opt {
 	return rawOption("-global")
 }
+
+// after — Execute a command after a time delay
+//
+// # Description
+//
+// If script is not specified, the command sleeps for duration 'ms' and then
+// returns. Negative duration 'ms' is treated as zero. While the command is
+// sleeping the application does not respond to events.
+//
+// If script is specified, the command returns immediately, but it arranges for
+// a Tcl command to be executed ms milliseconds later as an event handler. The
+// command will be executed exactly once, at the given time. The command will
+// be executed at global level (outside the context of any Tcl procedure). If
+// an error occurs while executing the delayed command then the background
+// error will be reported by the command registered with interp bgerror. The
+// after command returns an identifier that can be used to cancel the delayed
+// command using after cancel. A ms value of 0 (or negative) queues the event
+// immediately with priority over other event types (if not installed withn an
+// event proc, which will wait for next round of events).
+//
+// More information might be available at the [Tcl/Tk after] page.
+//
+// [Tcl/Tk grab]: https://tcl.tk/man/tcl9.0/TkCmd/after.html
+func TclAfter(ms time.Duration, script ...any) string {
+	switch {
+	case len(script) == 0:
+		return evalErr(fmt.Sprintf("after %v", optionString(ms)))
+	default:
+		return evalErr(fmt.Sprintf("after %v %s", optionString(ms), newEventHandler("", script[0])))
+	}
+}
+
+// after — Execute a command after a time delay
+//
+// # Description
+//
+// Cancels the execution of a delayed command that was previously scheduled. Id
+// indicates which command should be canceled; it must have been the return
+// value from a previous after command. If the command given by id has already
+// been executed then the after cancel command has no effect.
+//
+// More information might be available at the [Tcl/Tk after] page.
+//
+// [Tcl/Tk grab]: https://tcl.tk/man/tcl9.0/TkCmd/after.html
+func TclAfterCancel(id string) {
+	evalErr(fmt.Sprintf("after cancel %s", tclSafeString(id)))
+}
+
+// after — Execute a command after a time delay
+//
+// # Description
+//
+// Concatenates the script arguments together with space separators (just as in
+// the concat command), and arranges for the resulting script to be evaluated
+// later as an idle callback. The script will be run exactly once, the next
+// time the event loop is entered and there are no events to process. The
+// command returns an identifier that can be used to cancel the delayed command
+// using after cancel. If an error occurs while executing the script then the
+// background error will be reported by the command registered with interp
+// bgerror.
+//
+// More information might be available at the [Tcl/Tk after] page.
+//
+// [Tcl/Tk grab]: https://tcl.tk/man/tcl9.0/TkCmd/after.html
+func TclAfterIdle(script any) string {
+	switch x := script.(type) {
+	case nil:
+		return ""
+	case *eventHandler:
+		x.tcl = ""
+		return evalErr(fmt.Sprintf("after idle %s", collect(x)))
+	default:
+		return evalErr(fmt.Sprintf("after idle %s", newEventHandler("", script).optionString(nil)))
+	}
+}
