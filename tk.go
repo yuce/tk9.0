@@ -5270,6 +5270,13 @@ func Indicatorsize(val any) Opt {
 // window. The wm protocol command can be used to replace this default handler
 // by one which responds differently.
 //
+// A common requirement is to make sure that even if the user clicks the
+// application's close button (X) a close handling function will be
+// called (e.g., to prompt to save unsaved changes). For example, to
+// ensure a custom func onQuit() function is called use:
+//
+//	WmProtocol(App, "WM_DELETE_WINDOW", onQuit)
+//
 // The list of available window manager protocols depends on the window
 // manager, but all window managers supported by Tk provide WM_DELETE_WINDOW.
 // On the Windows platform, a WM_SAVE_YOURSELF message is sent on user logout
