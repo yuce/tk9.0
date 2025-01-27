@@ -6669,7 +6669,7 @@ func TclAfter(ms time.Duration, script ...any) string {
 	case len(script) == 0:
 		return evalErr(fmt.Sprintf("after %v", optionString(ms)))
 	default:
-		return evalErr(fmt.Sprintf("after %v %s", optionString(ms), newEventHandler("", script[0])))
+		return evalErr(fmt.Sprintf("after %v %s", optionString(ms), newEventHandler("", script[0]).optionString(nil)))
 	}
 }
 
