@@ -288,7 +288,7 @@
 //
 // Package initialization is done lazily. This saves noticeable additional
 // startup time and avoids screen flicker in hybrid programs that use the GUI
-// only on demand.
+// only on demand. (For a hybrid example see _examples/ring.go.)
 //
 // Early package initialization can be enforced by [Initialize].
 //
