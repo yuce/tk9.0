@@ -9,14 +9,16 @@ import (
 )
 
 func main() {
-	lbl := TLabel()
-	Pack(TButton(Txt("Sleep 1 sec"), Command(func() {
+	lbl := TLabel(Txt("Wide Awake!"))
+	Pack(TButton(Txt("Click to Sleep for 2 sec"), Command(func() {
+		lbl.Configure(Txt("Sleeping …"))
+		Update()
 		t := time.Now()
 		TclAfterIdle(func() {
 			lbl.Configure(Txt(fmt.Sprintf("Started sleeping at %s.\nBecome idle at %s",
 				t.Format(time.DateTime), time.Now().Format(time.DateTime))))
 		})
-		TclAfter(time.Second)
+		TclAfter(time.Second * 2)
 	})),
 		lbl,
 		TExit(),
