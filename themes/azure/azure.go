@@ -26,7 +26,7 @@ import (
 )
 
 const (
-	// Update when azure.zip file is change.
+	// Update when azure.zip file changed.
 	version = "v0.1.0"
 )
 
