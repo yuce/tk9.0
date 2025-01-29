@@ -6716,3 +6716,20 @@ func TclAfterIdle(script any) string {
 		return evalErr(fmt.Sprintf("after idle %s", newEventHandler("", script).optionString(nil)))
 	}
 }
+
+// A helper for ActivateTheme/ActivateExtension.
+func isCalledFromMain() bool {
+	pcs := make([]uintptr, 20)
+	n := runtime.Callers(3, pcs)
+	frames := runtime.CallersFrames(pcs[:n])
+	for {
+		frame, more := frames.Next()
+		if strings.HasPrefix(frame.Function, "main.") {
+			return true
+		}
+
+		if !more {
+			return false
+		}
+	}
+}

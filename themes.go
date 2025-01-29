@@ -86,7 +86,14 @@ func CurrentThemeName() (r string) {
 // call its Activate method. The search is case insensitive, using
 // strings.ToLower, and white space is normalized. If there's no match,
 // ActivateTheme returns [NotFound].
+//
+// Any package can register themes but only the main package can activate a
+// theme.
 func ActivateTheme(name string) (err error) {
+	if !isCalledFromMain() {
+		return NotActivated
+	}
+
 	var keys []ThemeKey
 	for k := range Themes {
 		keys = append(keys, k)
@@ -109,7 +116,7 @@ func ActivateTheme(name string) (err error) {
 			return Themes[k].Activate(nil)
 		}
 	}
-	return NotActivated
+	return NotFound
 }
 
 func matchName(s string) string {
@@ -274,7 +281,7 @@ func (t *theme) Initialize(context ThemeContext) (err error) {
 	return err
 }
 
-func typeName(th Theme) string {
+func typeName(th any) string {
 	t := reflect.TypeOf(th)
 	if t.Kind() == reflect.Pointer {
 		t = t.Elem()
