@@ -85,17 +85,17 @@ func NewApp(when time.Time, message string) *App {
 	tk.App.IconPhoto(tk.NewPhoto(tk.Data(ICON_SVG)))
 	tk.App.WmTitle(APPNAME)
 	tk.App.Configure(tk.Background(tk.LightYellow), tk.Pady(0), tk.Padx(0))
-	tk.WmProtocol(tk.App, "WM_DELETE_WINDOW", app.onQuit)
+	tk.WmProtocol(tk.App, tk.WM_DELETE_WINDOW, app.onQuit)
 	for _, key := range []string{"<Escape>", "<q>", "<Return>"} {
 		tk.Bind(tk.App, key, tk.Command(app.onQuit))
 	}
-	tk.StyleConfigure("TButton", tk.Font("helvetica", 36, "bold"),
+	tk.StyleConfigure("TButton", tk.Font(tk.HELVETICA, 36, tk.BOLD),
 		tk.Background(tk.LightYellow), tk.Foreground(tk.Red))
 	app.button = tk.TButton(tk.Txt(app.getMesage()), tk.Command(app.onQuit),
-		tk.Justify("center"))
+		tk.Justify(tk.CENTER))
 	app.update()
-	tk.Pack(app.button, tk.Fill("both"), tk.Expand(true), tk.Ipadx(15),
-		tk.Ipady(15))
+	tk.Pack(app.button, tk.Fill(tk.FILL_BOTH), tk.Expand(true),
+		tk.Ipadx(15), tk.Ipady(15))
 	return app
 }
 

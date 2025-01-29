@@ -954,3 +954,72 @@ const (
 	SystemHighlight  = "systemHighlight"
 	SystemMenu       = "systemMenu"
 )
+
+// Common Tk-specific words.
+//
+// Although Go's style guide recommends MixedCase, these are all in ALL_CAPS
+// to avoid namespace collisions. For the pack fill options a prefix is used
+// to avoid colliding with the X() and Y() option functions.
+//
+// See https://gitlab.com/cznic/tk9.0/-/issues/25
+const (
+	// Font attributes
+	NORMAL     = "normal"
+	BOLD       = "bold"
+	ITALIC     = "italic"
+	ROMAN      = "roman"
+	UNDERLINE  = "underline"
+	OVERSTRIKE = "overstrike"
+	// Common font names (for Courier use the CourierFont() function)
+	HELVETICA = "helvetica"
+	TIMES     = "times"
+	// Text justify attributes (also used in other contexts)
+	CENTER = "center" // also used as an anchor
+	LEFT   = "left"   // also used as a pack side option
+	RIGHT  = "right"  // also used as a pack side option
+	// Text wrapping
+	NONE = "none" // Also used as a Treeview select mode
+	CHAR = "char"
+	WORD = "word"
+	// Text end position
+	END = "end"
+	// MessageBox icon names
+	INFO     = "info"
+	QUESTION = "question"
+	WARNING  = "warning"
+	ERROR    = "error"
+	// Anchor and sticky options (CENTER is also an anchor option)
+	N    = "n"
+	S    = "s"
+	W    = "w"
+	E    = "e"
+	NEWS = "nswe"
+	WE   = "we"
+	NS   = "ns"
+	// Pack fill options
+	FILL_X    = "x"
+	FILL_Y    = "y"
+	FILL_BOTH = "both"
+	// Pack side options (can also use LEFT and RIGHT)
+	TOP    = "top"
+	BOTTOM = "bottom"
+	// Orientation (e.g., for TPanedWindow)
+	VERTICAL   = "vertical"
+	HORIZONTAL = "horizontal"
+	// Select mode
+	EXTENDED = "extended"
+	BROWSE   = "browse"
+	// Select type
+	CELL = "cell"
+	ITEM = "item"
+	// Relief
+	FLAT   = "flat"
+	GROOVE = "groove"
+	RAISED = "raised"
+	RIDGE  = "ridge"
+	SOLID  = "solid"
+	SUNKEN = "sunken"
+	// Window Manager protocols
+	WM_TAKE_FOCUS    = "WM_TAKE_FOCUS"
+	WM_DELETE_WINDOW = "WM_DELETE_WINDOW"
+)
