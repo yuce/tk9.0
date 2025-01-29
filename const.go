@@ -981,6 +981,8 @@ const (
 	NONE = "none" // Also used as a Treeview select mode
 	CHAR = "char"
 	WORD = "word"
+	// Text end position
+	END = "end"
 	// MessageBox icon names
 	INFO     = "info"
 	QUESTION = "question"
