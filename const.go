@@ -960,6 +960,8 @@ const (
 // Although Go's style guide recommends MixedCase, these are all in ALL_CAPS
 // to avoid namespace collisions. For the pack fill options a prefix is used
 // to avoid colliding with the X() and Y() option functions.
+//
+// See https://gitlab.com/cznic/tk9.0/-/issues/25
 const (
 	// Font attributes
 	NORMAL     = "normal"
