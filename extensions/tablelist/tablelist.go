@@ -15,26 +15,18 @@
 package tablelist // import "modernc.org/tk9.0/extensions/tablelist"
 
 import (
-	"bytes"
 	_ "embed"
-	"errors"
 	"fmt"
-	"os"
-	"path/filepath"
+	"strings"
 
 	. "modernc.org/tk9.0"
-)
-
-const (
-	// Update when tablelist.zip file changed.
-	version = "v0.1.0"
 )
 
 var (
 	_ Extension = (*extension)(nil)
 
 	//go:embed embed/tablelist.zip
-	zip []byte
+	zip string
 
 	ctx         ExtensionContext
 	initialized bool
@@ -48,6 +40,15 @@ func init() {
 	RegisterExtension("tablelist", newExtension())
 }
 
+func tclBinaryString(s string) string {
+	var b strings.Builder
+	for i := 0; i < len(s); i++ {
+		fmt.Fprintf(&b, "\\x%02x", s[i])
+	}
+	s = b.String()
+	return s
+}
+
 func setup(context ExtensionContext) (err error) {
 	defer func() {
 		initialized = true
@@ -57,81 +58,13 @@ func setup(context ExtensionContext) (err error) {
 		return nil
 	}
 
-	ctx = context
-	root, err := os.UserCacheDir()
-	if err != nil {
-		return err
-	}
-
-	const tablelist = "tablelist.zip"
-	dir, err := mkzip(filepath.Join(root, "modernc.org", "tk9.0.0", "extensions", "tablelist", version), tablelist, zip)
-	if err != nil {
-		return err
-	}
-
-	var wd string
-	if wd, err = os.Getwd(); err != nil {
-		return err
-	}
-
-	defer func() {
-		err = errors.Join(err, os.Chdir(wd))
-	}()
-
-	if err = os.Chdir(dir); err != nil {
-		return
-	}
-
+	ctx = context // initialize the "global" context
 	mount := "/extensions/tablelist"
-	if Version, err = ctx.Eval(fmt.Sprintf(`
-lappend auto_path [zipfs mount %s %s]
+	Version, err = ctx.Eval(fmt.Sprintf(`
+lappend auto_path [zipfs mountdata %s %s]
 package require tablelist_tile
-`, tablelist, mount)); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func mkzip(dir, base string, zip []byte) (r string, err error) {
-	if _, err = os.Stat(dir); err != nil {
-		if !os.IsNotExist(err) {
-			return "", err
-		}
-
-		if err = os.MkdirAll(dir, 0o770); err != nil {
-			return "", err
-		}
-	}
-
-	path := filepath.Join(dir, base)
-	if _, err = os.Stat(path); err != nil {
-		if !os.IsNotExist(err) {
-			return "", err
-		}
-
-		return dir, os.WriteFile(path, zip, 0o660)
-	}
-
-	b, err := os.ReadFile(path)
-	if err == nil {
-		if bytes.Equal(b, zip) {
-			return dir, nil
-		}
-	}
-
-	os.Remove(path)
-	if err := os.WriteFile(path, zip, 0o660); err == nil {
-		return dir, nil
-	}
-
-	dir, err = os.MkdirTemp("", "tablelist-extension")
-	if err != nil {
-		return "", err
-	}
-
-	path = filepath.Join(dir, base)
-	return dir, os.WriteFile(path, zip, 0o660)
+`, tclBinaryString(zip), mount))
+	return err
 }
 
 type extension struct{}
