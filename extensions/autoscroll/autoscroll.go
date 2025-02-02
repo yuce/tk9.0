@@ -4,6 +4,22 @@
 
 // Package autoscroll provides the [tklib autoscroll].
 //
+// This package allows scrollbars to be mapped and unmapped as needed depending
+// on the size and content of the scrollbars scrolled widget. The scrollbar
+// must be managed by either pack or grid, other geometry managers are not
+// supported.
+// 
+// When managed by pack, any geometry changes made in the scrollbars parent
+// between the time a scrollbar is unmapped, and when it is mapped will be
+// lost. It is an error to destroy any of the scrollbars siblings while the
+// scrollbar is unmapped. When managed by grid, if anything becomes gridded in
+// the same row and column the scrollbar occupied it will be replaced by the
+// scrollbar when remapped.
+// 
+// This package may be used on any scrollbar-like widget as long as it supports
+// the set subcommand in the same style as scrollbar. If the set subcommand is
+// not used then this package will have no effect.
+//
 // To make the extension available in an application:
 //
 //	import "modernc.org/tk9.0/extension/autoscroll"
