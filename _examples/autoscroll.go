@@ -2,13 +2,13 @@ package main
 
 import . "modernc.org/tk9.0"
 import _ "modernc.org/tk9.0/themes/azure"
-import "modernc.org/tk9.0/extensions/autoscroll"
+import . "modernc.org/tk9.0/extensions/autoscroll"
 
 func main() {
 	InitializeExtension("autoscroll")
 	var yscroll *Window
 	t := Text(Font("helvetica", 10), Yscrollcommand(func(e *Event) { e.ScrollSet(yscroll) }), Setgrid(true), Wrap("word"), Padx("2m"), Pady("2m"))
-	yscroll = autoscroll.Autoscroll(TScrollbar(Command(func(e *Event) { e.Yview(t) })).Window)
+	yscroll = Autoscroll(TScrollbar(Command(func(e *Event) { e.Yview(t) })).Window)
 	Grid(t, Sticky("news"), Pady("2m"))
 	Grid(yscroll, Row(0), Column(1), Sticky("nes"), Pady("2m"))
 	GridRowConfigure(App, 0, Weight(1))
