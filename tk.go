@@ -6741,6 +6741,8 @@ func isCalledFromMain() bool {
 // Arrange for the insertion cursor to be displayed just before the character
 // given by index. Returns an empty string.
 //
+// More information might be available at the [Tcl/Tk entry] page.
+//
 // [Tcl/Tk entry]: https://www.tcl.tk/man/tcl9.0/TkCmd/entry.html
 func (w *EntryWidget) Icursor(index any) (r string) {
 	return evalErr(fmt.Sprintf("%s icursor %s", w, tclSafeString(fmt.Sprint(index))))
@@ -6753,7 +6755,9 @@ func (w *EntryWidget) Icursor(index any) (r string) {
 // Arrange for the insertion cursor to be displayed just before the character
 // given by index. Returns an empty string.
 //
-// [Tcl/Tk entry]: https://www.tcl.tk/man/tcl9.0/TkCmd/entry.html
+// More information might be available at the [Tcl/Tk ttk_entry] page.
+//
+// [Tcl/Tk ttk_entry]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_entry.html
 func (w *TEntryWidget) Icursor(index any) (r string) {
 	return evalErr(fmt.Sprintf("%s icursor %s", w, tclSafeString(fmt.Sprint(index))))
 }
