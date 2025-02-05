@@ -6733,3 +6733,27 @@ func isCalledFromMain() bool {
 		}
 	}
 }
+
+// Entry — Create and manipulate 'entry' one-line text entry widgets
+//
+// # Description
+//
+// Arrange for the insertion cursor to be displayed just before the character
+// given by index. Returns an empty string.
+//
+// [Tcl/Tk entry]: https://www.tcl.tk/man/tcl9.0/TkCmd/entry.html
+func (w *EntryWidget) Icursor(index any) (r string) {
+	return evalErr(fmt.Sprintf("%s icursor %s", w, tclSafeString(fmt.Sprint(index))))
+}
+
+// TEntry — Editable text field widget
+//
+// # Description
+//
+// Arrange for the insertion cursor to be displayed just before the character
+// given by index. Returns an empty string.
+//
+// [Tcl/Tk entry]: https://www.tcl.tk/man/tcl9.0/TkCmd/entry.html
+func (w *TEntryWidget) Icursor(index any) (r string) {
+	return evalErr(fmt.Sprintf("%s icursor %s", w, tclSafeString(fmt.Sprint(index))))
+}
