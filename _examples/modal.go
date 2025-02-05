@@ -2,6 +2,7 @@ package main
 
 import (
 	_ "embed"
+	"fmt"
 	"strconv"
 
 	tk "modernc.org/tk9.0"
@@ -72,7 +73,8 @@ func (me *App) onConfig() {
 	dlg := NewConfigDialog(&data)
 	dlg.ShowModal()
 	if data.Ok {
-		tk.TkScaling(data.Scale)
+		tk.TkScaling(data.Scale) // FIXME Doesn't work
+		tk.Update()
 	}
 }
 
@@ -88,6 +90,7 @@ type ConfigDialog struct {
 	win          *tk.ToplevelWidget
 	scaleLabel   *tk.TLabelWidget
 	scaleSpinbox *tk.TSpinboxWidget
+	buttonFrame  *tk.TFrameWidget
 	okButton     *tk.TButtonWidget
 	cancelButton *tk.TButtonWidget
 }
@@ -99,22 +102,29 @@ func NewConfigDialog(data *ConfigDialogData) *ConfigDialog {
 	// NOTE below doesn't work - BUG?
 	// tk.WmProtocol(dlg.win, tk.WM_DELETE_WINDOW, dlg.onCancel)
 	dlg.scaleLabel = dlg.win.TLabel(tk.Txt("Application Scale"))
-	// TODO set initial value to 1.0
 	dlg.scaleSpinbox = dlg.win.TSpinbox(tk.Format("%.1f"),
-		tk.Increment(0.1), tk.From(0.5), tk.To(5.0))
-	dlg.okButton = dlg.win.TButton(tk.Txt("OK"), tk.Command(dlg.onOk))
-	dlg.cancelButton = dlg.win.TButton(tk.Txt("Cancel"),
+		tk.Increment(0.1), tk.From(0.5), tk.To(5.0),
+		tk.Textvariable(fmt.Sprintf("%f", tk.TkScaling())))
+	dlg.buttonFrame = dlg.win.TFrame()
+	dlg.okButton = dlg.buttonFrame.TButton(tk.Txt("OK"),
+		tk.Command(dlg.onOk))
+	dlg.cancelButton = dlg.buttonFrame.TButton(tk.Txt("Cancel"),
 		tk.Command(dlg.onCancel))
-	tk.Grid(dlg.scaleLabel, tk.Row(0), tk.Column(0), tk.Sticky(tk.W))
-	tk.Grid(dlg.scaleSpinbox, tk.Row(0), tk.Column(1), tk.Sticky(tk.WE))
-	tk.Grid(dlg.okButton, tk.Row(1), tk.Column(0), tk.Sticky(tk.E))
-	tk.Grid(dlg.cancelButton, tk.Row(1), tk.Column(1), tk.Sticky(tk.W))
+	opts := tk.Opts{tk.Padx(3), tk.Pady(3)}
+	tk.Grid(dlg.scaleLabel, tk.Row(0), tk.Column(0), tk.Sticky(tk.W), opts)
+	tk.Grid(dlg.scaleSpinbox, tk.Row(0), tk.Column(1), tk.Sticky(tk.WE),
+		opts)
+	tk.Grid(dlg.buttonFrame, tk.Row(1), tk.Column(0), tk.Columnspan(2),
+		opts)
+	tk.Grid(dlg.okButton, tk.Row(0), tk.Column(0), tk.Sticky(tk.E), opts)
+	tk.Grid(dlg.cancelButton, tk.Row(0), tk.Column(1), tk.Sticky(tk.E),
+		opts)
 	tk.GridColumnConfigure(dlg.win, 1, tk.Weight(1))
 	return dlg
 }
 
 func (me *ConfigDialog) onOk() {
-	text := "1.2" // me.scaleSpinbox.Get() // FIXME how to get text?
+	text := me.scaleSpinbox.Textvariable()
 	if scale, err := strconv.ParseFloat(text, 64); err == nil {
 		me.data.Scale = scale
 		me.data.Ok = true

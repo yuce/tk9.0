@@ -2,6 +2,7 @@ package main
 
 import (
 	_ "embed"
+	"fmt"
 	"strconv"
 
 	tk "modernc.org/tk9.0"
@@ -92,9 +93,9 @@ func NewConfigDialog() *ConfigDialog {
 	// NOTE below doesn't work - BUG?
 	// tk.WmProtocol(dlg.win, tk.WM_DELETE_WINDOW, dlg.onHide)
 	dlg.scaleLabel = dlg.win.TLabel(tk.Txt("Application Scale"))
-	// TODO set initial value to 1.0
 	dlg.scaleSpinbox = dlg.win.TSpinbox(tk.Format("%.1f"),
 		tk.Increment(0.1), tk.From(0.5), tk.To(5.0),
+		tk.Textvariable(fmt.Sprintf("%f", tk.TkScaling())),
 		tk.Command(dlg.onScaleChange))
 	dlg.closeButton = dlg.win.TButton(tk.Txt("Close"),
 		tk.Command(dlg.onHide))
@@ -105,9 +106,10 @@ func NewConfigDialog() *ConfigDialog {
 }
 
 func (me *ConfigDialog) onScaleChange() {
-	text := "1.2" // me.scaleSpinbox.Get() // FIXME how to get text?
+	text := me.scaleSpinbox.Textvariable()
 	if scale, err := strconv.ParseFloat(text, 64); err == nil {
-		tk.TkScaling(scale) // Live update
+		tk.TkScaling(scale) // Live update FIXME Doesn't work
+		tk.Update()
 	}
 }
 
