@@ -105,7 +105,7 @@ func NewConfigDialog() *ConfigDialog {
 }
 
 func (me *ConfigDialog) onScaleChange() {
-	text := "1.2" // me.scaleSpinbox.Get() // how to get text?
+	text := "1.2" // me.scaleSpinbox.Get() // FIXME how to get text?
 	if scale, err := strconv.ParseFloat(text, 64); err == nil {
 		tk.TkScaling(scale) // Live update
 	}

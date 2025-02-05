@@ -114,7 +114,7 @@ func NewConfigDialog(data *ConfigDialogData) *ConfigDialog {
 }
 
 func (me *ConfigDialog) onOk() {
-	text := "1.2" // me.scaleSpinbox.Get() // how to get text?
+	text := "1.2" // me.scaleSpinbox.Get() // FIXME how to get text?
 	if scale, err := strconv.ParseFloat(text, 64); err == nil {
 		me.data.Scale = scale
 		me.data.Ok = true
