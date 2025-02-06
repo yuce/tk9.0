@@ -26,10 +26,10 @@ import (
 	"sync"
 	"time"
 
+	"github.com/mileusna/useragent"
 	"modernc.org/mathutil"
 	"modernc.org/opt"
 	"modernc.org/tk9.0"
-	"github.com/mileusna/useragent"
 )
 
 func init() {

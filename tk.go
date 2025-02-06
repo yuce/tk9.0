@@ -5276,6 +5276,115 @@ func Indicatorsize(val any) Opt {
 	return rawOption(fmt.Sprintf(`-indicatorsize %s`, optionString(val)))
 }
 
+// Topmost option.
+//
+// Known uses:
+//   - [WmAttributes] (command specific)
+func Topmost(v bool) Opt {
+	return rawOption(fmt.Sprintf(`-topmost %s`, optionString(v)))
+}
+
+// Type option.
+//
+// Known uses:
+//   - [ClipboardAppend] (command specific)
+//   - [ClipboardGet] (command specific)
+//   - [Menu] (widget specific)
+//   - [MessageBox] (command specific)
+//   - [WmAttributes] (command specific)
+func Type(val any) Opt {
+	return rawOption(fmt.Sprintf(`-type %s`, optionString(val)))
+}
+
+// Type — Get the configured option value.
+//
+// Known uses:
+//   - [Menu] (widget specific)
+//   - [WmAttributes] (command specific)
+func (w *Window) Type() string {
+	return evalErr(fmt.Sprintf(`%s cget -type`, w))
+}
+
+// wm — Communicate with window manager
+//
+// # Description
+//
+//   - wm attributes window
+//   - wm attributes window ?option?
+//   - wm attributes window ?option value option value...?
+//
+// This subcommand returns or sets platform specific attributes associated with
+// a window. The first form returns a list of the platform specific flags and
+// their values. The second form returns the value for the specific option. The
+// third form sets one or more of the values. The values are as follows:
+//
+// [Topmost]: Specifies whether this is a topmost window (displays above all other windows).
+//
+// [Type]: Requests that the window should be interpreted by the window manager
+// as being of the specified type(s). This may cause the window to be decorated
+// in a different way or otherwise managed differently, though exactly what
+// happens is entirely up to the window manager. A list of types may be used,
+// in order of preference. The following values are mapped to constants defined
+// in the EWMH specification (using others is possible, but not advised):
+//
+//   - "desktop"
+//     Indicates a desktop feature.
+//   - "dock"
+//     Indicates a dock/panel feature.
+//   - "toolbar"
+//     Indicates a toolbar window that should be acting on behalf of another
+//     window, as indicated with wm transient.
+//   - "menu"
+//     Indicates a torn-off menu that should be acting on behalf of another
+//     window, as indicated with wm transient.
+//   - "utility"
+//     Indicates a utility window (e.g., palette or toolbox) that should be acting
+//     on behalf of another window, as indicated with wm transient.
+//   - "splash"
+//     Indicates a splash screen, displayed during application start up.
+//   - "dialog"
+//     Indicates a general dialog window, that should be acting on behalf of
+//     another window, as indicated with wm transient.
+//   - "dropdownMenu"
+//     Indicates a menu summoned from a menu bar, which should usually also be set
+//     to be override-redirected (with wm overrideredirect).
+//   - "popupMenu"
+//     Indicates a popup menu, which should usually also be set to be
+//     override-redirected (with wm overrideredirect).
+//   - "tooltip"
+//     Indicates a tooltip window, which should usually also be set to be
+//     override-redirected (with wm overrideredirect).
+//   - "notification"
+//     Indicates a window that provides a background notification of some event,
+//     which should usually also be set to be override-redirected (with wm
+//     overrideredirect).
+//   - "combo"
+//     Indicates the drop-down list of a combobox widget, which should usually
+//     also be set to be override-redirected (with wm overrideredirect).
+//   - "dnd"
+//     Indicates a window that represents something being dragged, which should
+//     usually also be set to be override-redirected (with wm overrideredirect).
+//   - "normal"
+//     Indicates a window that has no special interpretation.
+//
+// More information might be available at the [Tcl/Tk wm] page.
+//
+// [Tcl/Tk wm]: https://www.tcl.tk/man/tcl9.0/TkCmd/wm.html
+func WmAttributes(w *Window, options ...any) string {
+	switch len(options) {
+	case 0:
+		return evalErr(fmt.Sprintf("wm attributes %s", w))
+	case 1:
+		if s := funcToTclOption(options[0]); s != "" {
+			return evalErr(fmt.Sprintf("wm attributes %s %s", w, s))
+		}
+
+		fallthrough
+	default:
+		return evalErr(fmt.Sprintf("wm attributes %s %s", w, collectAny(options...)))
+	}
+}
+
 // wm — Communicate with window manager
 //
 // # Description

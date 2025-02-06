@@ -505,6 +505,7 @@ var (
 		"Font": true,
 		"From": true,
 		"To":   true,
+		"Type": true,
 	}
 
 	hideOptMethods = map[string]bool{

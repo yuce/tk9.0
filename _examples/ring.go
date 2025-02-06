@@ -82,6 +82,7 @@ func NewApp(when time.Time, message string) *App {
 	app := &App{when: when, message: message}
 	tk.StyleThemeUse("clam")
 	tk.WmWithdraw(tk.App)
+	tk.WmAttributes(tk.App, tk.Topmost(true))
 	tk.App.IconPhoto(tk.NewPhoto(tk.Data(ICON_SVG)))
 	tk.App.WmTitle(APPNAME)
 	tk.App.Configure(tk.Background(tk.LightYellow), tk.Pady(0), tk.Padx(0))

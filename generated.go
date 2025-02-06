@@ -1200,7 +1200,7 @@ type ListboxWidget struct {
 // the other entries will number starting at 1.  The default menu
 // bindings arrange for the menu to be torn off when the tear-off entry
 // is invoked.
-// This option is ignored under Aqua/MacOS, where menus cannot
+// This option is ignored under Aqua/macOS, where menus cannot
 // be torn off.
 //
 // [Tearoffcommand]
@@ -1214,7 +1214,7 @@ type ListboxWidget struct {
 // and menu .x.y is torn off to
 // create a new menu .x.tearoff1, then the command
 // will be invoked.
-// This option is ignored under Aqua/MacOS, where menus cannot
+// This option is ignored under Aqua/macOS, where menus cannot
 // be torn off.
 //
 // [Title]
@@ -8302,25 +8302,6 @@ func Troughcolor(val any) Opt {
 //   - [Scrollbar]
 func (w *Window) Troughcolor() string {
 	return evalErr(fmt.Sprintf(`%s cget -troughcolor`, w))
-}
-
-// Type option.
-//
-// Known uses:
-//   - [ClipboardAppend] (command specific)
-//   - [ClipboardGet] (command specific)
-//   - [Menu] (widget specific)
-//   - [MessageBox] (command specific)
-func Type(val any) Opt {
-	return rawOption(fmt.Sprintf(`-type %s`, optionString(val)))
-}
-
-// Type — Get the configured option value.
-//
-// Known uses:
-//   - [Menu] (widget specific)
-func (w *Window) Type() string {
-	return evalErr(fmt.Sprintf(`%s cget -type`, w))
 }
 
 // Underline option.
