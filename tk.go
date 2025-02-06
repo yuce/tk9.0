@@ -136,7 +136,7 @@ var (
 	}
 
 	//TODO remove the associated tcl var on window destroy event both from the
-	//interp and this map.
+	// interp and this map.
 	textVariables = map[*Window]string{} // : tclName
 	variables     = map[*Window]*VariableOpt{}
 	windowIndex   = map[string]*Window{}
@@ -448,6 +448,16 @@ func collect(options ...Opt) string {
 		a = append(a, v.optionString(nil))
 	}
 	return strings.Join(a, " ")
+}
+
+func collectOne(name string, options ...Opt) string {
+	for _, v := range options {
+		opt := v.optionString(nil)
+		if strings.HasPrefix(opt, name) {
+			return strings.TrimSpace(opt[len(name):])
+		}
+	}
+	return ""
 }
 
 // Opts is a list of options. It implements Opt.
@@ -2300,13 +2310,25 @@ func (f *FontFace) String() string {
 // [Tcl/Tk font]: https://www.tcl.tk/man/tcl9.0/TkCmd/font.html
 func NewFont(options ...Opt) *FontFace {
 	nm := fmt.Sprintf("font%v", id.Add(1))
-	code := fmt.Sprintf("font create %s %s", nm, collect(options...))
+	code := ""
+	configure := false
+	if name := collectOne("-family", options...); name != "" &&
+		strings.HasPrefix(name, "Tk") {
+		code = "font actual " + name
+		nm = name
+		configure = true
+	} else {
+		code = fmt.Sprintf("font create %s %s", nm, collect(options...))
+	}
 	r, err := eval(code)
+	if err == nil && configure {
+		code := fmt.Sprintf("font configure %s %s", nm, collect(options...))
+		r, err = eval(code)
+	}
 	if err != nil {
 		fail(fmt.Errorf("code=%s -> r=%s err=%v", code, r, err))
 		return nil
 	}
-
 	return &FontFace{name: nm}
 }
 
@@ -4036,7 +4058,7 @@ func gnuplot(script string) (out []byte, err error) {
 
 	defer os.Remove(f.Name())
 
-	if err := os.WriteFile(f.Name(), []byte(script), 0660); err != nil {
+	if err := os.WriteFile(f.Name(), []byte(script), 0o660); err != nil {
 		return nil, err
 	}
 
