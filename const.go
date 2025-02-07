@@ -955,6 +955,19 @@ const (
 	SystemMenu       = "systemMenu"
 )
 
+// Default generic font names
+const (
+	DefaultFont      = "TkDefaultFont"      // Default for items not otherwise specified.
+	TextFont         = "TkTextFont"         // Used for entry widgets, listboxes, etc.
+	FixedFont        = "TkFixedFont"        // A standard fixed-width font.
+	MenuFont         = "TkMenuFont"         // The font used for menu items.
+	HeadingFont      = "TkHeadingFont"      // Font for column headings in lists and tables.
+	CaptionFont      = "TkCaptionFont"      // A font for window and dialog caption bars.
+	SmallCaptionFont = "TkSmallCaptionFont" // A smaller caption font for tool dialogs.
+	IconFont         = "TkIconFont"         // A font for icon captions.
+	TooltipFont      = "TkTooltipFont"      // A font for tooltips.
+)
+
 // Common Tk-specific words.
 //
 // Although Go's style guide recommends MixedCase, these are all in ALL_CAPS

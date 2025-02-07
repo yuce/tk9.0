@@ -505,6 +505,7 @@ var (
 		"Font": true,
 		"From": true,
 		"To":   true,
+		"Type": true,
 	}
 
 	hideOptMethods = map[string]bool{
@@ -1048,8 +1049,15 @@ func (j *job) widgetStdStyles(doc *document) (r []string) {
 }
 
 func (j *job) widgetSpecificOpts(xref string, doc *document) (r []*option) {
+	ok := false
 	walk(0, doc.root, func(n *html.Node) (dive bool) {
-		if nodeIs(n, "OP") {
+		if nodeIs(n, "SH") {
+			s := strings.ToLower(n.FirstChild.Data)
+			// Reject options within section headings like "TAB OPTIONS".
+			ok = strings.Contains(s, "widget") && strings.Contains(s, "specific") && strings.Contains(s, "options")
+		}
+
+		if ok && nodeIs(n, "OP") {
 			tclName := strings.TrimSpace(n.FirstChild.Data)
 			a := strings.Fields(tclName)
 			tclName = strings.TrimLeft(a[0], `"\`)

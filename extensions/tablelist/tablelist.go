@@ -11,6 +11,7 @@
 // See the [modernc.org/tk9.0.Extension] documentation for information about
 // initalizing extensions at runtime.
 //
+// [modernc.org/tk9.0.Extension]: https://pkg.go.dev/modernc.org/tk9.0#Extension
 // [tklib tablelist]: https://github.com/tcltk/tklib/tree/master/modules/tablelist
 package tablelist // import "modernc.org/tk9.0/extensions/tablelist"
 

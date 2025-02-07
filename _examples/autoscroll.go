@@ -1,36 +1,36 @@
 package main
 
 import . "modernc.org/tk9.0"
-import _ "modernc.org/tk9.0/themes/azure"
 import . "modernc.org/tk9.0/extensions/autoscroll"
+import _ "modernc.org/tk9.0/themes/azure"
 
 func main() {
 	InitializeExtension("autoscroll")
 	var yscroll *Window
-	t := Text(Font("helvetica", 10), Yscrollcommand(func(e *Event) { e.ScrollSet(yscroll) }), Setgrid(true), Wrap("word"), Padx("2m"), Pady("2m"))
+	t := Text(Font(HELVETICA, 10), Yscrollcommand(func(e *Event) { e.ScrollSet(yscroll) }), Setgrid(true), Wrap(WORD), Padx("2m"), Pady("2m"))
 	yscroll = Autoscroll(TScrollbar(Command(func(e *Event) { e.Yview(t) })).Window)
-	Grid(t, Sticky("news"), Pady("2m"))
-	Grid(yscroll, Row(0), Column(1), Sticky("nes"), Pady("2m"))
+	Grid(t, Sticky(NEWS), Pady("2m"))
+	Grid(yscroll, Row(0), Column(1), Sticky(NS+E), Pady("2m"))
 	GridRowConfigure(App, 0, Weight(1))
 	GridColumnConfigure(App, 0, Weight(1))
 	Grid(TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
 	t.TagConfigure("bgstipple", Background(Black), Borderwidth(0), Bgstipple(Gray12))
-	t.TagConfigure("big", Font("helvetica", 12, "bold"))
-	t.TagConfigure("bold", Font("helvetica", 10, "bold", "italic"))
-	t.TagConfigure("center", Justify("center"))
+	t.TagConfigure("big", Font(HELVETICA, 12, BOLD))
+	t.TagConfigure(BOLD, Font(HELVETICA, 10, BOLD, ITALIC))
+	t.TagConfigure(CENTER, Justify(CENTER))
 	t.TagConfigure("color1", Background("#a0b7ce"))
 	t.TagConfigure("color2", Foreground(Red))
 	t.TagConfigure("margins", Lmargin1("12m"), Lmargin2("6m"), Rmargin("10m"))
-	t.TagConfigure("overstrike", Overstrike(1))
-	t.TagConfigure("raised", Relief("raised"), Borderwidth(1))
-	t.TagConfigure("right", Justify("right"))
+	t.TagConfigure(OVERSTRIKE, Overstrike(1))
+	t.TagConfigure(RAISED, Relief(RAISED), Borderwidth(1))
+	t.TagConfigure(RIGHT, Justify(RIGHT))
 	t.TagConfigure("spacing", Spacing1("10p"), Spacing2("2p"), Lmargin1("12m"), Lmargin2("6m"), Rmargin("10m"))
-	t.TagConfigure("sub", Offset("-2p"), Font("helvetica", 8))
-	t.TagConfigure("sunken", Relief("sunken"), Borderwidth(1))
-	t.TagConfigure("super", Offset("4p"), Font("helvetica", 8))
-	t.TagConfigure("tiny", Font("times", 8, "bold"))
-	t.TagConfigure("underline", Underline(1))
-	t.TagConfigure("verybig", Font(CourierFont(), 22, "bold"))
+	t.TagConfigure("sub", Offset("-2p"), Font(HELVETICA, 8))
+	t.TagConfigure(SUNKEN, Relief(SUNKEN), Borderwidth(1))
+	t.TagConfigure("super", Offset("4p"), Font(HELVETICA, 8))
+	t.TagConfigure("tiny", Font(TIMES, 8, BOLD))
+	t.TagConfigure(UNDERLINE, Underline(1))
+	t.TagConfigure("verybig", Font(CourierFont(), 22, BOLD))
 	t.InsertML(`Text widgets like this one allow you to display information in a variety of styles. Display styles are controlled
 using a mechanism called <bold>tags</bold>. Tags are just textual names that you can apply to one or more ranges of characters within a
 text widget. You can configure tags with various display styles. If you do this, then the tagged characters will be displayed with the

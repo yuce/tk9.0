@@ -136,7 +136,7 @@ var (
 	}
 
 	//TODO remove the associated tcl var on window destroy event both from the
-	//interp and this map.
+	// interp and this map.
 	textVariables = map[*Window]string{} // : tclName
 	variables     = map[*Window]*VariableOpt{}
 	windowIndex   = map[string]*Window{}
@@ -448,6 +448,16 @@ func collect(options ...Opt) string {
 		a = append(a, v.optionString(nil))
 	}
 	return strings.Join(a, " ")
+}
+
+func collectOne(name string, options ...Opt) string {
+	for _, v := range options {
+		opt := v.optionString(nil)
+		if strings.HasPrefix(opt, name) {
+			return strings.TrimSpace(opt[len(name):])
+		}
+	}
+	return ""
 }
 
 // Opts is a list of options. It implements Opt.
@@ -2300,13 +2310,25 @@ func (f *FontFace) String() string {
 // [Tcl/Tk font]: https://www.tcl.tk/man/tcl9.0/TkCmd/font.html
 func NewFont(options ...Opt) *FontFace {
 	nm := fmt.Sprintf("font%v", id.Add(1))
-	code := fmt.Sprintf("font create %s %s", nm, collect(options...))
+	code := ""
+	configure := false
+	if name := collectOne("-family", options...); name != "" &&
+		strings.HasPrefix(name, "Tk") {
+		code = "font actual " + name
+		nm = name
+		configure = true
+	} else {
+		code = fmt.Sprintf("font create %s %s", nm, collect(options...))
+	}
 	r, err := eval(code)
+	if err == nil && configure {
+		code := fmt.Sprintf("font configure %s %s", nm, collect(options...))
+		r, err = eval(code)
+	}
 	if err != nil {
 		fail(fmt.Errorf("code=%s -> r=%s err=%v", code, r, err))
 		return nil
 	}
-
 	return &FontFace{name: nm}
 }
 
@@ -4036,7 +4058,7 @@ func gnuplot(script string) (out []byte, err error) {
 
 	defer os.Remove(f.Name())
 
-	if err := os.WriteFile(f.Name(), []byte(script), 0660); err != nil {
+	if err := os.WriteFile(f.Name(), []byte(script), 0o660); err != nil {
 		return nil, err
 	}
 
@@ -5254,6 +5276,115 @@ func Indicatorsize(val any) Opt {
 	return rawOption(fmt.Sprintf(`-indicatorsize %s`, optionString(val)))
 }
 
+// Topmost option.
+//
+// Known uses:
+//   - [WmAttributes] (command specific)
+func Topmost(v bool) Opt {
+	return rawOption(fmt.Sprintf(`-topmost %s`, optionString(v)))
+}
+
+// Type option.
+//
+// Known uses:
+//   - [ClipboardAppend] (command specific)
+//   - [ClipboardGet] (command specific)
+//   - [Menu] (widget specific)
+//   - [MessageBox] (command specific)
+//   - [WmAttributes] (command specific)
+func Type(val any) Opt {
+	return rawOption(fmt.Sprintf(`-type %s`, optionString(val)))
+}
+
+// Type — Get the configured option value.
+//
+// Known uses:
+//   - [Menu] (widget specific)
+//   - [WmAttributes] (command specific)
+func (w *Window) Type() string {
+	return evalErr(fmt.Sprintf(`%s cget -type`, w))
+}
+
+// wm — Communicate with window manager
+//
+// # Description
+//
+//   - wm attributes window
+//   - wm attributes window ?option?
+//   - wm attributes window ?option value option value...?
+//
+// This subcommand returns or sets platform specific attributes associated with
+// a window. The first form returns a list of the platform specific flags and
+// their values. The second form returns the value for the specific option. The
+// third form sets one or more of the values. The values are as follows:
+//
+// [Topmost]: Specifies whether this is a topmost window (displays above all other windows).
+//
+// [Type]: Requests that the window should be interpreted by the window manager
+// as being of the specified type(s). This may cause the window to be decorated
+// in a different way or otherwise managed differently, though exactly what
+// happens is entirely up to the window manager. A list of types may be used,
+// in order of preference. The following values are mapped to constants defined
+// in the EWMH specification (using others is possible, but not advised):
+//
+//   - "desktop"
+//     Indicates a desktop feature.
+//   - "dock"
+//     Indicates a dock/panel feature.
+//   - "toolbar"
+//     Indicates a toolbar window that should be acting on behalf of another
+//     window, as indicated with wm transient.
+//   - "menu"
+//     Indicates a torn-off menu that should be acting on behalf of another
+//     window, as indicated with wm transient.
+//   - "utility"
+//     Indicates a utility window (e.g., palette or toolbox) that should be acting
+//     on behalf of another window, as indicated with wm transient.
+//   - "splash"
+//     Indicates a splash screen, displayed during application start up.
+//   - "dialog"
+//     Indicates a general dialog window, that should be acting on behalf of
+//     another window, as indicated with wm transient.
+//   - "dropdownMenu"
+//     Indicates a menu summoned from a menu bar, which should usually also be set
+//     to be override-redirected (with wm overrideredirect).
+//   - "popupMenu"
+//     Indicates a popup menu, which should usually also be set to be
+//     override-redirected (with wm overrideredirect).
+//   - "tooltip"
+//     Indicates a tooltip window, which should usually also be set to be
+//     override-redirected (with wm overrideredirect).
+//   - "notification"
+//     Indicates a window that provides a background notification of some event,
+//     which should usually also be set to be override-redirected (with wm
+//     overrideredirect).
+//   - "combo"
+//     Indicates the drop-down list of a combobox widget, which should usually
+//     also be set to be override-redirected (with wm overrideredirect).
+//   - "dnd"
+//     Indicates a window that represents something being dragged, which should
+//     usually also be set to be override-redirected (with wm overrideredirect).
+//   - "normal"
+//     Indicates a window that has no special interpretation.
+//
+// More information might be available at the [Tcl/Tk wm] page.
+//
+// [Tcl/Tk wm]: https://www.tcl.tk/man/tcl9.0/TkCmd/wm.html
+func WmAttributes(w *Window, options ...any) string {
+	switch len(options) {
+	case 0:
+		return evalErr(fmt.Sprintf("wm attributes %s", w))
+	case 1:
+		if s := funcToTclOption(options[0]); s != "" {
+			return evalErr(fmt.Sprintf("wm attributes %s %s", w, s))
+		}
+
+		fallthrough
+	default:
+		return evalErr(fmt.Sprintf("wm attributes %s %s", w, collectAny(options...)))
+	}
+}
+
 // wm — Communicate with window manager
 //
 // # Description
@@ -6190,6 +6321,29 @@ func (w *TTreeviewWidget) Index(item any) (r int) {
 //
 // # Description
 //
+// If newchildren is not specified, returns the list of children belonging to
+// item.
+//
+// If newchildren is specified, replaces item's child list with newchildren.
+// Items in the old child list not present in the new child list are detached
+// from the tree. None of the items in newchildren may be an ancestor of item.
+//
+// More information might be available at the [Tcl/Tk treeview] page.
+//
+// [Tcl/Tk treeview]: https://tcl.tk/man/tcl9.0/TkCmd/ttk_treeview.html
+func (w *TTreeviewWidget) Children(item any, newChildren ...any) (r []string) {
+	switch {
+	case len(newChildren) == 0:
+		return parseList(evalErr(fmt.Sprintf("%s children %s", w, tclSafeString(fmt.Sprint(item)))))
+	default:
+		return parseList(evalErr(fmt.Sprintf("%s children %s {%s}", w, tclSafeString(fmt.Sprint(item)), tclSafeList(flat(newChildren...)))))
+	}
+}
+
+// ttk::treeview — hierarchical multicolumn data display widget
+//
+// # Description
+//
 // Returns one of:
 //
 //   - heading
@@ -6283,11 +6437,30 @@ func (w *TTreeviewWidget) IdentifyElement(x, y int) (r string) {
 //
 // [Tcl/Tk treeview]: https://tcl.tk/man/tcl9.0/TkCmd/ttk_treeview.html
 func (w *TTreeviewWidget) Delete(itemList ...any) {
+	itemList = flat(itemList...)
 	if len(itemList) == 0 {
 		return
 	}
 
-	evalErr(fmt.Sprintf("%s delete %v", w, tclSafeList(itemList...)))
+	evalErr(fmt.Sprintf("%s delete {%v}", w, tclSafeList(itemList...)))
+}
+
+func flat(list ...any) (r []any) {
+	for _, v := range list {
+		switch x := v.(type) {
+		case []string:
+			for _, v := range x {
+				r = append(r, v)
+			}
+		case []any:
+			for _, v := range x {
+				r = append(r, flat(v))
+			}
+		default:
+			r = append(r, v)
+		}
+	}
+	return r
 }
 
 // ttk::treeview — hierarchical multicolumn data display widget
@@ -6732,4 +6905,32 @@ func isCalledFromMain() bool {
 			return false
 		}
 	}
+}
+
+// Entry — Create and manipulate 'entry' one-line text entry widgets
+//
+// # Description
+//
+// Arrange for the insertion cursor to be displayed just before the character
+// given by index. Returns an empty string.
+//
+// More information might be available at the [Tcl/Tk entry] page.
+//
+// [Tcl/Tk entry]: https://www.tcl.tk/man/tcl9.0/TkCmd/entry.html
+func (w *EntryWidget) Icursor(index any) (r string) {
+	return evalErr(fmt.Sprintf("%s icursor %s", w, tclSafeString(fmt.Sprint(index))))
+}
+
+// TEntry — Editable text field widget
+//
+// # Description
+//
+// Arrange for the insertion cursor to be displayed just before the character
+// given by index. Returns an empty string.
+//
+// More information might be available at the [Tcl/Tk ttk_entry] page.
+//
+// [Tcl/Tk ttk_entry]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_entry.html
+func (w *TEntryWidget) Icursor(index any) (r string) {
+	return evalErr(fmt.Sprintf("%s icursor %s", w, tclSafeString(fmt.Sprint(index))))
 }
