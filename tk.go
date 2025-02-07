@@ -6321,6 +6321,29 @@ func (w *TTreeviewWidget) Index(item any) (r int) {
 //
 // # Description
 //
+// If newchildren is not specified, returns the list of children belonging to
+// item.
+//
+// If newchildren is specified, replaces item's child list with newchildren.
+// Items in the old child list not present in the new child list are detached
+// from the tree. None of the items in newchildren may be an ancestor of item.
+//
+// More information might be available at the [Tcl/Tk treeview] page.
+//
+// [Tcl/Tk treeview]: https://tcl.tk/man/tcl9.0/TkCmd/ttk_treeview.html
+func (w *TTreeviewWidget) Children(item any, newChildren ...any) (r []string) {
+	switch {
+	case len(newChildren) == 0:
+		return parseList(evalErr(fmt.Sprintf("%s children %s", w, tclSafeString(fmt.Sprint(item)))))
+	default:
+		return parseList(evalErr(fmt.Sprintf("%s children %s {%s}", w, tclSafeString(fmt.Sprint(item)), tclSafeList(flat(newChildren...)))))
+	}
+}
+
+// ttk::treeview — hierarchical multicolumn data display widget
+//
+// # Description
+//
 // Returns one of:
 //
 //   - heading
@@ -6414,11 +6437,30 @@ func (w *TTreeviewWidget) IdentifyElement(x, y int) (r string) {
 //
 // [Tcl/Tk treeview]: https://tcl.tk/man/tcl9.0/TkCmd/ttk_treeview.html
 func (w *TTreeviewWidget) Delete(itemList ...any) {
+	itemList = flat(itemList...)
 	if len(itemList) == 0 {
 		return
 	}
 
-	evalErr(fmt.Sprintf("%s delete %v", w, tclSafeList(itemList...)))
+	evalErr(fmt.Sprintf("%s delete {%v}", w, tclSafeList(itemList...)))
+}
+
+func flat(list ...any) (r []any) {
+	for _, v := range list {
+		switch x := v.(type) {
+		case []string:
+			for _, v := range x {
+				r = append(r, v)
+			}
+		case []any:
+			for _, v := range x {
+				r = append(r, flat(v))
+			}
+		default:
+			r = append(r, v)
+		}
+	}
+	return r
 }
 
 // ttk::treeview — hierarchical multicolumn data display widget
