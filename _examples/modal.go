@@ -1,9 +1,9 @@
 package main
 
 import (
-	_ "embed"
 	"fmt"
 	"strconv"
+	"strings"
 
 	tk "modernc.org/tk9.0"
 )
@@ -11,6 +11,7 @@ import (
 const APPNAME = "Modal"
 
 type App struct {
+	percent      float64
 	label        *tk.TLabelWidget
 	entry        *tk.TEntryWidget
 	buttonFrame  *tk.TFrameWidget
@@ -23,7 +24,7 @@ func main() {
 }
 
 func NewApp() *App {
-	app := &App{}
+	app := &App{percent: 50}
 	tk.StyleThemeUse("clam")
 	tk.WmWithdraw(tk.App)
 	tk.App.WmTitle(APPNAME)
@@ -37,8 +38,7 @@ func NewApp() *App {
 func (me *App) makeWidgets() {
 	me.label = tk.TLabel(tk.Txt("This is modal.go; see also modeless.go"),
 		tk.Relief(tk.GROOVE), tk.Background(tk.LightYellow))
-	me.entry = tk.TEntry(
-		tk.Textvariable("Cannot get focus when Config visible"))
+	me.entry = tk.TEntry(tk.Textvariable(fmt.Sprintf("%.0f%%", me.percent)))
 	me.buttonFrame = tk.TFrame()
 	me.configButton = me.buttonFrame.TButton(tk.Txt("Config…"),
 		tk.Command(me.onConfig))
@@ -69,50 +69,51 @@ func (me *App) Run() {
 }
 
 func (me *App) onConfig() {
-	data := ConfigDialogData{Scale: tk.TkScaling()}
+	data := ConfigDialogData{Percent: me.percent}
 	dlg := NewConfigDialog(&data)
 	dlg.ShowModal()
 	if data.Ok {
-		tk.TkScaling(data.Scale) // FIXME Doesn't work
-		tk.Update()
+		me.percent = data.Percent
+		me.entry.Configure(tk.Textvariable(fmt.Sprintf("%.0f%%",
+			me.percent)))
 	}
 }
 
 func (me *App) onQuit() { tk.Destroy(tk.App) }
 
 type ConfigDialogData struct {
-	Ok    bool
-	Scale float64
+	Ok      bool
+	Percent float64
 }
 
 type ConfigDialog struct {
-	data         *ConfigDialogData
-	win          *tk.ToplevelWidget
-	scaleLabel   *tk.TLabelWidget
-	scaleSpinbox *tk.TSpinboxWidget
-	buttonFrame  *tk.TFrameWidget
-	okButton     *tk.TButtonWidget
-	cancelButton *tk.TButtonWidget
+	data           *ConfigDialogData
+	win            *tk.ToplevelWidget
+	percentLabel   *tk.TLabelWidget
+	percentSpinbox *tk.TSpinboxWidget
+	buttonFrame    *tk.TFrameWidget
+	okButton       *tk.TButtonWidget
+	cancelButton   *tk.TButtonWidget
 }
 
 func NewConfigDialog(data *ConfigDialogData) *ConfigDialog {
 	dlg := &ConfigDialog{data: data}
 	dlg.win = tk.App.Toplevel()
-	dlg.win.WmTitle("Config")
-	// NOTE below doesn't work - BUG?
-	// tk.WmProtocol(dlg.win, tk.WM_DELETE_WINDOW, dlg.onCancel)
-	dlg.scaleLabel = dlg.win.TLabel(tk.Txt("Application Scale"))
-	dlg.scaleSpinbox = dlg.win.TSpinbox(tk.Format("%.1f"),
-		tk.Increment(0.1), tk.From(0.5), tk.To(5.0),
-		tk.Textvariable(fmt.Sprintf("%f", tk.TkScaling())))
+	dlg.win.WmTitle("Modal — Config")
+	tk.WmProtocol(dlg.win.Window, tk.WM_DELETE_WINDOW, dlg.onCancel)
+	dlg.percentLabel = dlg.win.TLabel(tk.Txt("Percent"))
+	dlg.percentSpinbox = dlg.win.TSpinbox(tk.Format("%.0f%%"),
+		tk.Increment(1), tk.From(0), tk.To(100),
+		tk.Textvariable(fmt.Sprintf("%.0f%%", data.Percent)))
 	dlg.buttonFrame = dlg.win.TFrame()
 	dlg.okButton = dlg.buttonFrame.TButton(tk.Txt("OK"),
 		tk.Command(dlg.onOk))
 	dlg.cancelButton = dlg.buttonFrame.TButton(tk.Txt("Cancel"),
 		tk.Command(dlg.onCancel))
 	opts := tk.Opts{tk.Padx(3), tk.Pady(3)}
-	tk.Grid(dlg.scaleLabel, tk.Row(0), tk.Column(0), tk.Sticky(tk.W), opts)
-	tk.Grid(dlg.scaleSpinbox, tk.Row(0), tk.Column(1), tk.Sticky(tk.WE),
+	tk.Grid(dlg.percentLabel, tk.Row(0), tk.Column(0), tk.Sticky(tk.W),
+		opts)
+	tk.Grid(dlg.percentSpinbox, tk.Row(0), tk.Column(1), tk.Sticky(tk.WE),
 		opts)
 	tk.Grid(dlg.buttonFrame, tk.Row(1), tk.Column(0), tk.Columnspan(2),
 		opts)
@@ -124,9 +125,9 @@ func NewConfigDialog(data *ConfigDialogData) *ConfigDialog {
 }
 
 func (me *ConfigDialog) onOk() {
-	text := me.scaleSpinbox.Textvariable()
-	if scale, err := strconv.ParseFloat(text, 64); err == nil {
-		me.data.Scale = scale
+	text := strings.TrimSuffix(me.percentSpinbox.Textvariable(), "%")
+	if percent, err := strconv.ParseFloat(text, 64); err == nil {
+		me.data.Percent = percent
 		me.data.Ok = true
 	}
 	tk.Destroy(me.win)
@@ -137,7 +138,7 @@ func (me *ConfigDialog) onCancel() { tk.Destroy(me.win) }
 func (me *ConfigDialog) ShowModal() {
 	me.win.Raise(tk.App)
 	tk.Focus(me.win)
-	tk.Focus(me.scaleSpinbox)
+	tk.Focus(me.percentSpinbox)
 	tk.GrabSet(me.win)
 	me.win.Wait()
 }
