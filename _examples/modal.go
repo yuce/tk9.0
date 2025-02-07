@@ -141,5 +141,5 @@ func (me *ConfigDialog) ShowModal() {
 	tk.Focus(me.win)
 	tk.Focus(me.percentSpinbox)
 	tk.GrabSet(me.win)
-	me.win.Wait()
+	me.win.Center().Wait()
 }

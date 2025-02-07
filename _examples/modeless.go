@@ -80,6 +80,7 @@ func (me *App) onConfig() {
 func (me *App) onQuit() { tk.Destroy(tk.App) }
 
 type ConfigDialog struct {
+	notFirstUse    bool
 	percent        *float64
 	entry          *tk.TEntryWidget
 	win            *tk.ToplevelWidget
@@ -124,6 +125,10 @@ func (me *ConfigDialog) onHide() {
 func (me *ConfigDialog) Show() {
 	tk.WmDeiconify(me.win.Window)
 	me.win.Raise(tk.App)
+	if me.notFirstUse {
+		me.notFirstUse = true
+		me.win.Center()
+	}
 	tk.Focus(me.win)
 	tk.Focus(me.percentSpinbox)
 }
