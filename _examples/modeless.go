@@ -93,6 +93,7 @@ func NewConfigDialog(entry *tk.TEntryWidget,
 	dlg := &ConfigDialog{entry: entry, percent: percent}
 	dlg.win = tk.App.Toplevel()
 	dlg.win.WmTitle("Modeless — Config")
+	// tk.WmAttributes(dlg.win, tk.Type("dialog")) // TODO
 	tk.WmProtocol(dlg.win.Window, tk.WM_DELETE_WINDOW, dlg.onHide)
 	dlg.percentLabel = dlg.win.TLabel(tk.Txt("Percent"))
 	dlg.percentSpinbox = dlg.win.TSpinbox(tk.Format("%.0f%%"),
