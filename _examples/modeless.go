@@ -1,9 +1,9 @@
 package main
 
 import (
-	_ "embed"
 	"fmt"
 	"strconv"
+	"strings"
 
 	tk "modernc.org/tk9.0"
 )
@@ -11,6 +11,7 @@ import (
 const APPNAME = "Modeless"
 
 type App struct {
+	percent      float64
 	label        *tk.TLabelWidget
 	entry        *tk.TEntryWidget
 	buttonFrame  *tk.TFrameWidget
@@ -24,7 +25,7 @@ func main() {
 }
 
 func NewApp() *App {
-	app := &App{}
+	app := &App{percent: 50}
 	tk.StyleThemeUse("clam")
 	tk.WmWithdraw(tk.App)
 	tk.App.WmTitle(APPNAME)
@@ -38,8 +39,7 @@ func NewApp() *App {
 func (me *App) makeWidgets() {
 	me.label = tk.TLabel(tk.Txt("This is modeless.go; see also modal.go"),
 		tk.Relief(tk.GROOVE), tk.Background(tk.LightYellow))
-	me.entry = tk.TEntry(
-		tk.Textvariable("Can get focus when Config visible"))
+	me.entry = tk.TEntry(tk.Textvariable(fmt.Sprintf("%.0f%%", me.percent)))
 	me.buttonFrame = tk.TFrame()
 	me.configButton = me.buttonFrame.TButton(tk.Txt("Config…"),
 		tk.Command(me.onConfig))
@@ -72,7 +72,7 @@ func (me *App) Run() {
 
 func (me *App) onConfig() {
 	if me.configDialog == nil {
-		me.configDialog = NewConfigDialog()
+		me.configDialog = NewConfigDialog(me.entry, &me.percent)
 	}
 	me.configDialog.Show()
 }
@@ -80,49 +80,49 @@ func (me *App) onConfig() {
 func (me *App) onQuit() { tk.Destroy(tk.App) }
 
 type ConfigDialog struct {
-	win          *tk.ToplevelWidget
-	scaleLabel   *tk.TLabelWidget
-	scaleSpinbox *tk.TSpinboxWidget
-	closeButton  *tk.TButtonWidget
+	percent        *float64
+	entry          *tk.TEntryWidget
+	win            *tk.ToplevelWidget
+	percentLabel   *tk.TLabelWidget
+	percentSpinbox *tk.TSpinboxWidget
+	closeButton    *tk.TButtonWidget
 }
 
-func NewConfigDialog() *ConfigDialog {
-	dlg := &ConfigDialog{}
+func NewConfigDialog(entry *tk.TEntryWidget,
+	percent *float64) *ConfigDialog {
+	dlg := &ConfigDialog{entry: entry, percent: percent}
 	dlg.win = tk.App.Toplevel()
-	dlg.win.WmTitle("Config")
-	// NOTE below doesn't work - BUG?
-	// tk.WmProtocol(dlg.win, tk.WM_DELETE_WINDOW, dlg.onHide)
-	dlg.scaleLabel = dlg.win.TLabel(tk.Txt("Application Scale"))
-	dlg.scaleSpinbox = dlg.win.TSpinbox(tk.Format("%.1f"),
-		tk.Increment(0.1), tk.From(0.5), tk.To(5.0),
-		tk.Textvariable(fmt.Sprintf("%f", tk.TkScaling())),
-		tk.Command(dlg.onScaleChange))
+	dlg.win.WmTitle("Modeless — Config")
+	tk.WmProtocol(dlg.win.Window, tk.WM_DELETE_WINDOW, dlg.onHide)
+	dlg.percentLabel = dlg.win.TLabel(tk.Txt("Percent"))
+	dlg.percentSpinbox = dlg.win.TSpinbox(tk.Format("%.0f%%"),
+		tk.Increment(1), tk.From(0), tk.To(100),
+		tk.Textvariable(fmt.Sprintf("%.0f%%", *percent)),
+		tk.Command(dlg.onPercentChange))
 	dlg.closeButton = dlg.win.TButton(tk.Txt("Close"),
 		tk.Command(dlg.onHide))
-	tk.Grid(dlg.scaleLabel, tk.Row(0), tk.Column(0), tk.Sticky(tk.W))
-	tk.Grid(dlg.scaleSpinbox, tk.Row(0), tk.Column(1), tk.Sticky(tk.WE))
+	tk.Grid(dlg.percentLabel, tk.Row(0), tk.Column(0), tk.Sticky(tk.W))
+	tk.Grid(dlg.percentSpinbox, tk.Row(0), tk.Column(1), tk.Sticky(tk.WE))
 	tk.Grid(dlg.closeButton, tk.Row(1), tk.Column(0), tk.Columnspan(2))
 	return dlg
 }
 
-func (me *ConfigDialog) onScaleChange() {
-	text := me.scaleSpinbox.Textvariable()
-	if scale, err := strconv.ParseFloat(text, 64); err == nil {
-		tk.TkScaling(scale) // Live update FIXME Doesn't work
-		tk.Update()
+func (me *ConfigDialog) onPercentChange() {
+	text := strings.TrimSuffix(me.percentSpinbox.Textvariable(), "%")
+	if percent, err := strconv.ParseFloat(text, 64); err == nil {
+		*me.percent = percent
+		me.entry.Configure(tk.Textvariable(fmt.Sprintf("%.0f%%", percent)))
 	}
 }
 
 func (me *ConfigDialog) onHide() {
-	// FIXME doesn't work
-	// tk.WmWithdraw(me.win)
+	tk.WmWithdraw(me.win.Window)
 	tk.GrabRelease(me.win)
 }
 
 func (me *ConfigDialog) Show() {
-	// FIXME doesn't work
-	// tk.WmDeiconify(me.win)
+	tk.WmDeiconify(me.win.Window)
 	me.win.Raise(tk.App)
 	tk.Focus(me.win)
-	tk.Focus(me.scaleSpinbox)
+	tk.Focus(me.percentSpinbox)
 }
