@@ -1339,6 +1339,70 @@ func (w *Window) Center() *Window {
 //
 // # Description
 //
+// Removes each of the windows from grid for its container and unmaps their
+// windows. The content will no longer be managed by the grid geometry manager.
+// The configuration options for that window are forgotten, so that if the
+// window is managed once more by the grid geometry manager, the initial
+// default settings are used.
+//
+// If the last content window of the container becomes unmanaged, this will
+// also send the virtual event <<NoManagedChild>> to the container; the
+// container may choose to resize itself (or otherwise respond) to such a
+// change.
+//
+// More information might be available at the [Tcl/Tk grid] page.
+//
+// [Tcl/Tk grid]: https://www.tcl.tk/man/tcl9.0/TkCmd/grid.html
+func GridForget(w ...*Window) {
+	if len(w) == 0 {
+		return
+	}
+
+	var a []string
+	for _, v := range w {
+		if v != nil {
+			a = append(a, v.String())
+		}
+	}
+	evalErr(fmt.Sprintf("grid forget %s", strings.Join(a, " ")))
+}
+
+// Grid — Geometry manager that arranges widgets in a grid
+//
+// # Description
+//
+// Removes each of the windows from grid for its container and unmaps their
+// windows. The content will no longer be managed by the grid geometry manager.
+// However, the configuration options for that window are remembered, so that
+// if the content window is managed once more by the grid geometry manager, the
+// previous values are retained.
+//
+// If the last content window of the container becomes unmanaged, this will
+// also send the virtual event <<NoManagedChild>> to the container; the
+// container may choose to resize itself (or otherwise respond) to such a
+// change.
+//
+// More information might be available at the [Tcl/Tk grid] page.
+//
+// [Tcl/Tk grid]: https://www.tcl.tk/man/tcl9.0/TkCmd/grid.html
+func GridRemove(w ...*Window) {
+	if len(w) == 0 {
+		return
+	}
+
+	var a []string
+	for _, v := range w {
+		if v != nil {
+			a = append(a, v.String())
+		}
+	}
+	evalErr(fmt.Sprintf("grid remove %s", strings.Join(a, " ")))
+}
+
+// Grid — Geometry manager that arranges widgets in a grid
+//
+// # Description
+//
 // The arguments consist of the names of one or more content windows followed
 // by pairs of arguments that specify how to manage the content. The characters
 // -, x and ^, can be specified instead of a window name to alter the default
