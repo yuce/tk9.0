@@ -38,7 +38,7 @@ func NewApp() *App {
 	app := &App{}
 	tk.StyleThemeUse("clam")
 	tk.WmWithdraw(tk.App)
-	//	tk.WmMinSize(tk.Height(240), tk.Width(320)) // TODO won't compile
+	tk.WmMinSize(tk.App, 240, 320)
 	tk.App.WmTitle(APPNAME)
 	tk.WmProtocol(tk.App, tk.WM_DELETE_WINDOW, app.onQuit)
 	app.makeWidgets()
