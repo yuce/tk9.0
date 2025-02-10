@@ -12,7 +12,7 @@ func main() {
 	Pack(sb, Side("right"), Fill("y"))
 
 	// Treeview
-	tv := fr.TTreeview(Selectmode("browse"), Columns("1 2"), Height(10),
+	tv := fr.TTreeview(Selectmode("extended"), Columns("1 2"), Height(10),
 		Yscrollcommand(func(e *Event) { e.ScrollSet(sb) }))
 	Pack(tv, Expand(true), Fill("both"))
 	sb.Configure(Command(func(e *Event) { e.Yview(tv) }))
@@ -103,10 +103,21 @@ func main() {
 	Pack(fr,
 		lbl,
 		del,
+		TButton(Txt("Select All"), Command(func() { tv.Selection("set", all(tv, "")) })),
 		TButton(Txt("Clear"), Command(func() { tv.Delete(tv.Children("")) })),
 		TExit(),
 		Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
 	ActivateTheme("azure light")
 	App.SetResizable(false, false)
 	App.Wait()
+}
+
+func all(t *TTreeviewWidget, root any) (r []string) {
+	for _, v := range t.Children(root) {
+		if s := fmt.Sprint(v); s != "" {
+			r = append(r, s)
+			r = append(r, all(t, s)...)
+		}
+	}
+	return r
 }

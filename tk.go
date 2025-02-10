@@ -6634,11 +6634,15 @@ func (w *TTreeviewWidget) Item(item any, options ...Opt) (r string) {
 //
 // [Tcl/Tk treeview]: https://tcl.tk/man/tcl9.0/TkCmd/ttk_treeview.html
 func (w *TTreeviewWidget) Selection(selop string, itemList ...any) (r []string) {
+	var s string
+	if len(itemList) != 0 {
+		s = fmt.Sprintf("{%s}", tclSafeList(flat(itemList...)...))
+	}
 	if selop == "" {
-		return parseList(evalErr(fmt.Sprintf("%s selection %s", w, collectAny(itemList...))))
+		return parseList(evalErr(fmt.Sprintf("%s selection %s", w, s)))
 	}
 
-	evalErr(fmt.Sprintf("%s selection %s %s", w, tclSafeString(fmt.Sprint(selop)), collectAny(itemList...)))
+	evalErr(fmt.Sprintf("%s selection %s %s", w, tclSafeString(fmt.Sprint(selop)), s))
 	return nil
 }
 
