@@ -6,7 +6,9 @@ package tk9_0 // import "modernc.org/tk9.0"
 
 import (
 	"errors"
+	"fmt"
 	"sort"
+	"strings"
 )
 
 var (
@@ -52,12 +54,19 @@ type ExtensionContext interface {
 	// [ErrorMode].
 	EvalErr(tcl string) (r string)
 	RegisterWindow(path string) *Window
+	Collect(w *Window, options ...any) string
+	// Returns a single Tcl string, no braces, except "{}" is returned for s == "".
+	TclSafeString(string) string
 }
 
 type extensionContext struct{}
 
 func newExtensionContext() (r extensionContext) {
 	return r
+}
+
+func (extensionContext) TclSafeString(s string) (r string) {
+	return tclSafeString(s)
 }
 
 func (extensionContext) Eval(tcl string) (r string, err error) {
@@ -72,6 +81,19 @@ func (extensionContext) RegisterWindow(path string) (w *Window) {
 	w = &Window{path}
 	windowIndex[path] = w
 	return w
+}
+
+func (extensionContext) Collect(w *Window, options ...any) string {
+	var a []string
+	for _, v := range options {
+		switch x := v.(type) {
+		case Opt:
+			a = append(a, x.optionString(w))
+		default:
+			a = append(a, tclSafeString(fmt.Sprint(x)))
+		}
+	}
+	return strings.Join(a, " ")
 }
 
 // Extension handles Tk extensions. When calling Extension methods registered

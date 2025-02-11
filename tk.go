@@ -186,7 +186,7 @@ func checkSig(dir string, sig map[string]string) (r bool) {
 	return true
 }
 
-// Returns a single Tcl string, no braces, except {} if returned for s == "".
+// Returns a single Tcl string, no braces, except "{}" is returned for s == "".
 func tclSafeString(s string) string {
 	if s == "" {
 		return "{}"
