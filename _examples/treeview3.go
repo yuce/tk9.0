@@ -83,11 +83,11 @@ func main() {
 			s = fmt.Sprintf(`selected=%q parent=%q index=%v
 children=%v
 text=%q values=%q
-tag("blue", Foreground)=%s`,
+tag("blue", Foreground)=%s focus=%v`,
 				sel, tv.Parent(sel), tv.Index(sel),
 				children,
 				tv.Item(sel, Txt), tv.Item(sel, Values),
-				tv.TagConfigure("blue", Foreground))
+				tv.TagConfigure("blue", Foreground), tv.Focus())
 		}
 		lbl.Configure(Txt(s))
 		del.Configure(Txt(fmt.Sprintf("Delete %v", children)))
@@ -113,6 +113,10 @@ tag("blue", Foreground)=%s`,
 		del,
 		TButton(Txt("Select All"), Command(func() { tv.Selection("set", all(tv, "")) })),
 		TButton(Txt("Clear"), Command(func() { tv.Delete(tv.Children("")) })),
+		TButton(Txt("Focus 2"), Command(func() {
+			tv.Focus(2) 
+			Focus(tv)
+		})),
 		TExit(),
 		Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
 	ActivateTheme("azure light")

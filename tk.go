@@ -6761,6 +6761,25 @@ func (w *TTreeviewWidget) TagAdd(tag string, items ...any) {
 //
 // # Description
 //
+// If item is specified, sets the focus item to item. Otherwise, returns the
+// current focus item, or {} if there is none.
+//
+// More information might be available at the [Tcl/Tk treeview] page.
+//
+// [Tcl/Tk treeview]: https://tcl.tk/man/tcl9.0/TkCmd/ttk_treeview.html
+func (w *TTreeviewWidget) Focus(item ...any) (r string) {
+	switch len(item) {
+	case 0:
+		return evalErr(fmt.Sprintf("%s focus", w))
+	default:
+		return evalErr(fmt.Sprintf("%s focus %s", w, tclSafeString(fmt.Sprint(item[0]))))
+	}
+}
+
+// ttk::treeview — hierarchical multicolumn data display widget
+//
+// # Description
+//
 // Query or modify the options for the specified tagName. If one or more
 // option/value pairs are specified, sets the value of those options for the
 // specified tag. If a single option is specified, returns the value of that
