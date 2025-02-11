@@ -7125,3 +7125,40 @@ func (w *EntryWidget) Icursor(index any) (r string) {
 func (w *TEntryWidget) Icursor(index any) (r string) {
 	return evalErr(fmt.Sprintf("%s icursor %s", w, tclSafeString(fmt.Sprint(index))))
 }
+
+// listbox — Create and manipulate 'listbox' item list widgets
+//
+// # Description
+//
+// If last is omitted, returns the contents of the listbox element indicated by
+// first, or an empty string if first refers to a non-existent element. If last
+// is specified, the command returns a list whose elements are all of the
+// listbox elements between first and last, inclusive. Both first and last may
+// have any of the standard forms for indices.
+//
+// More information might be available at the [Tcl/Tk listbox] page.
+//
+// [Tcl/Tk listbox]: https://www.tcl.tk/man/tcl9.0/TkCmd/listbox.html
+func (w *ListboxWidget) Get(first any, last ...any) (r []string) {
+	switch len(last) {
+	case 0:
+		return []string{evalErr(fmt.Sprintf("%s get %s", w, tclSafeString(fmt.Sprint(first))))}
+	default:
+		return parseList(evalErr(fmt.Sprintf("%s get %s %s", w, tclSafeString(fmt.Sprint(first)), tclSafeString(fmt.Sprint(last[0])))))
+	}
+}
+
+// listbox — Create and manipulate 'listbox' item list widgets
+//
+// # Description
+//
+// Inserts zero or more new elements in the list just before the element given
+// by index. If index is specified as end then the new elements are added to
+// the end of the list.
+//
+// More information might be available at the [Tcl/Tk listbox] page.
+//
+// [Tcl/Tk listbox]: https://www.tcl.tk/man/tcl9.0/TkCmd/listbox.html
+func (w *ListboxWidget) Insert(index any, elements ...any) {
+	evalErr(fmt.Sprintf("%s insert %s %s", w, tclSafeString(fmt.Sprint(index)), tclSafeList(elements...)))
+}
