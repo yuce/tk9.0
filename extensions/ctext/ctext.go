@@ -45,7 +45,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 // [modernc.org/tk9.0.Extension]: https://pkg.go.dev/modernc.org/tk9.0#Extension
 // [tklib ctext]: https://github.com/tcltk/tklib/tree/master/modules/ctext
-package tablelist // import "modernc.org/tk9.0/extensions/tablelist"
+package ctext // import "modernc.org/tk9.0/extensions/ctext"
 
 import (
 	_ "embed"
