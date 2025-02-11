@@ -114,7 +114,7 @@ tag("blue", Foreground)=%s focus=%v`,
 		TButton(Txt("Select All"), Command(func() { tv.Selection("set", all(tv, "")) })),
 		TButton(Txt("Clear"), Command(func() { tv.Delete(tv.Children("")) })),
 		TButton(Txt("Focus 2"), Command(func() {
-			tv.Focus(2) 
+			tv.Focus(2)
 			Focus(tv)
 		})),
 		TExit(),
