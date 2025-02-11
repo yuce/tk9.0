@@ -6747,6 +6747,44 @@ func (w *TTreeviewWidget) Item(item any, options ...any) (r string) {
 //
 // # Description
 //
+// Adds the specified tag to each of the listed items. If tag is already
+// present for a particular item, then the -tags for that item are unchanged.
+//
+// More information might be available at the [Tcl/Tk treeview] page.
+//
+// [Tcl/Tk treeview]: https://tcl.tk/man/tcl9.0/TkCmd/ttk_treeview.html
+func (w *TTreeviewWidget) TagAdd(tag string, items ...any) {
+	evalErr(fmt.Sprintf("%s tag add %s %s", w, tclSafeString(tag), collectAny(items...)))
+}
+
+// ttk::treeview — hierarchical multicolumn data display widget
+//
+// # Description
+//
+// Query or modify the options for the specified tagName. If one or more
+// option/value pairs are specified, sets the value of those options for the
+// specified tag. If a single option is specified, returns the value of that
+// option (or the empty string if the option has not been specified for
+// tagName). With no additional arguments, returns a dictionary of the option
+// settings for tagName. See TAG OPTIONS for the list of available options.
+//
+// More information might be available at the [Tcl/Tk treeview] page.
+//
+// [Tcl/Tk treeview]: https://tcl.tk/man/tcl9.0/TkCmd/ttk_treeview.html
+func (w *TTreeviewWidget) TagConfigure(tag string, options ...any) (r string) {
+	if len(options) == 1 {
+		if s := funcToTclOption(options[0]); s != "" {
+			return evalErr(fmt.Sprintf("%s tag configure %s %s", w, tclSafeString(fmt.Sprint(tag)), s))
+		}
+	}
+
+	return evalErr(fmt.Sprintf("%s tag configure %s %s", w, tclSafeString(tag), collectAny(options...)))
+}
+
+// ttk::treeview — hierarchical multicolumn data display widget
+//
+// # Description
+//
 // Manages item selection. Item selection is independent from cell selection
 // handled by the cellselection command. If selop is not specified, returns the
 // list of selected items. Otherwise, selop is one of the following:

@@ -64,6 +64,8 @@ func main() {
 		}
 	}
 
+	tv.TagAdd("blue", "7")
+	tv.TagConfigure("blue", Foreground(Blue))
 	lbl := TLabel(Txt("Select a treeview item"))
 	var children []string
 	var del *TButtonWidget
@@ -78,10 +80,14 @@ func main() {
 		if len(list) != 0 {
 			sel := list[0]
 			children = tv.Children(sel)
-			s = fmt.Sprintf("selected=%q parent=%q index=%v\nchildren=%v\ntext=%q values=%q",
+			s = fmt.Sprintf(`selected=%q parent=%q index=%v
+children=%v
+text=%q values=%q
+tag("blue", Foreground)=%s`,
 				sel, tv.Parent(sel), tv.Index(sel),
 				children,
-				tv.Item(sel, Txt), tv.Item(sel, Values))
+				tv.Item(sel, Txt), tv.Item(sel, Values),
+				tv.TagConfigure("blue", Foreground))
 		}
 		lbl.Configure(Txt(s))
 		del.Configure(Txt(fmt.Sprintf("Delete %v", children)))
