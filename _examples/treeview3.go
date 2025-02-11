@@ -78,8 +78,10 @@ func main() {
 		if len(list) != 0 {
 			sel := list[0]
 			children = tv.Children(sel)
-			s = fmt.Sprintf("selected=%q parent=%q index=%v\nchildren=%v",
-				sel, tv.Parent(sel), tv.Index(sel), children)
+			s = fmt.Sprintf("selected=%q parent=%q index=%v\nchildren=%v\ntext=%q values=%q",
+				sel, tv.Parent(sel), tv.Index(sel),
+				children,
+				tv.Item(sel, Txt), tv.Item(sel, Values))
 		}
 		lbl.Configure(Txt(s))
 		del.Configure(Txt(fmt.Sprintf("Delete %v", children)))

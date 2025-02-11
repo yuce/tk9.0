@@ -6733,8 +6733,14 @@ func Open(val bool) Opt {
 // More information might be available at the [Tcl/Tk treeview] page.
 //
 // [Tcl/Tk treeview]: https://tcl.tk/man/tcl9.0/TkCmd/ttk_treeview.html
-func (w *TTreeviewWidget) Item(item any, options ...Opt) (r string) {
-	return evalErr(fmt.Sprintf("%s item %s %s", w, tclSafeString(fmt.Sprint(item)), collect(options...)))
+func (w *TTreeviewWidget) Item(item any, options ...any) (r string) {
+	if len(options) == 1 {
+		if s := funcToTclOption(options[0]); s != "" {
+			return evalErr(fmt.Sprintf("%s item %s %s", w, tclSafeString(fmt.Sprint(item)), s))
+		}
+	}
+
+	return evalErr(fmt.Sprintf("%s item %s %s", w, tclSafeString(fmt.Sprint(item)), collectAny(options...)))
 }
 
 // ttk::treeview — hierarchical multicolumn data display widget
