@@ -7,7 +7,7 @@ import _ "modernc.org/tk9.0/themes/azure"
 func main() {
 	myList := Listbox()
 	label := TLabel(Txt("No choice selected"))
-	Bind(myList, "<<ListboxSelect>>", Command(func(){
+	Bind(myList, "<<ListboxSelect>>", Command(func() {
 		label.Configure(Txt(myList.Get("active")))
 	}))
 	style := Opts{Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m")}

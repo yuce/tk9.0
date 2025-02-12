@@ -124,9 +124,16 @@ func id() string {
 	return fmt.Sprintf(".ctext%v", id0)
 }
 
-// Ctext returns a newly created CtextWidget.
+// Ctext returns a newly created CtextWidget. Pass the parent *Window as the
+// first argument to make the widget parented.
 func Ctext(options ...any) (r *CtextWidget) {
 	path := id()
+	if len(options) != 0 {
+		if x, ok := options[0].(*Window); ok {
+			path = x.String() + path
+			options = options[1:]
+		}
+	}
 	w := ctx.RegisterWindow(path)
 	ctx.EvalErr(fmt.Sprintf("ctext %s %s", path, ctx.Collect(w, options...)))
 	return &CtextWidget{Window: w, TextWidget: &TextWidget{Window: w}}
