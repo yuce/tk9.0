@@ -51,7 +51,13 @@ func lazyInit() {
 
 	initialized = true
 
-	defer commonLazyInit()
+	defer func() {
+		// make sure we do not clobber global Error value.
+		if Error != nil {
+			return
+		}
+		commonLazyInit()
+	}()
 
 	var cacheDir string
 	if cacheDir, Error = getCacheDir(); Error != nil {
