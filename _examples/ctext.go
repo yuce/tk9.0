@@ -1,7 +1,10 @@
 // ctext demo
 
-/* See https://core.tcl-lang.org/tklib/doc/trunk/embedded/md/tklib/files/modules/ctext/ctext.md
-   Using color scheme derived from https://github.com/berni23/berni-dark */
+/*
+See https://core.tcl-lang.org/tklib/doc/trunk/embedded/md/tklib/files/modules/ctext/ctext.md
+
+	Using color scheme derived from https://github.com/berni23/berni-dark
+*/
 package main
 
 import (

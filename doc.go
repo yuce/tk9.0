@@ -350,6 +350,12 @@
 // When passing an argument of type [time.Durarion] to a function accepting
 // 'any', the duration is converted to an integer number of milliseconds.
 //
+//   - [image.Image]
+//
+// When passing an argument of type image.Image to a function accepting 'any',
+// the image is converted to a [encoding/base64] encoded string of the PNG
+// representation of the image.
+//
 //   - []byte
 //
 // When passing an argument of type []byte to a function accepting 'any', the

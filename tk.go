@@ -12,6 +12,7 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"image"
 	"image/png"
 	"io/fs"
 	"os"
@@ -704,6 +705,15 @@ func optionString(v any) string {
 		return fmt.Sprint(int64((x + time.Millisecond/2) / time.Millisecond))
 	case []byte:
 		return base64.StdEncoding.EncodeToString(x)
+	case image.Image:
+		var buf bytes.Buffer
+		err := png.Encode(&buf, x)
+		if err != nil {
+			fail(err)
+			return ""
+		}
+
+		return base64.StdEncoding.EncodeToString(buf.Bytes())
 	case []FileType:
 		var a []string
 		for _, v := range x {
