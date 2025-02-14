@@ -4770,6 +4770,11 @@ func StyleLookup(style string, options ...any) string {
 //   - readonly - Widget should not allow user modification
 //   - selected - “On”, “true”, or “current” for things like Checkbuttons and
 //     radiobuttons
+//   - hover - The mouse cursor is within the widget. This is similar to the
+//     active state; it is used in some themes for widgets that provide distinct
+//     visual feedback for the active widget in addition to the active element
+//     within the widget.
+//   - user1-user6 - Freely usable for other purposes
 //
 // A state specification is a sequence of state names, optionally prefixed with
 // an exclamation point indicating that the bit is off.
@@ -4841,6 +4846,7 @@ func parseStyleMapOpts(in ...any) (r []string, err error) {
 	return r, nil
 }
 
+// https://www.tcl-lang.org/man/tcl9.0/TkCmd/ttk_widget.html#M34
 func isState(s string) bool {
 	if len(s) == 0 {
 		return false
@@ -4853,14 +4859,21 @@ func isState(s string) bool {
 	switch s {
 	case
 		"active",
-		"alternate",
-		"background",
 		"disabled",
 		"focus",
-		"invalid",
 		"pressed",
+		"selected",
+		"background",
 		"readonly",
-		"selected":
+		"alternate",
+		"invalid",
+		"hover",
+		"user1",
+		"user2",
+		"user3",
+		"user4",
+		"user5",
+		"user6":
 
 		return true
 	default:
