@@ -7185,3 +7185,53 @@ func (w *ListboxWidget) Get(first any, last ...any) (r []string) {
 func (w *ListboxWidget) Insert(index any, elements ...any) {
 	evalErr(fmt.Sprintf("%s insert %s %s", w, tclSafeString(fmt.Sprint(index)), tclSafeList(elements...)))
 }
+
+// ttk::progressbar — Provide progress feedback
+//
+// # Description
+//
+// Begin autoincrement mode: schedules a recurring timer event that calls step
+// every interval milliseconds. If omitted, interval defaults to 50
+// milliseconds (20 steps/second).
+//
+// More information might be available at the [Tcl/Tk progressbar] page.
+//
+// [Tcl/Tk progressbar]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_progressbar.html
+func (w *TProgressbarWidget) Start(interval ...time.Duration) {
+	s := ""
+	if len(interval) != 0 {
+		s = fmt.Sprint(int(interval[0] / time.Millisecond))
+	}
+	evalErr(fmt.Sprintf("%s start %s", w, s))
+}
+
+// ttk::progressbar — Provide progress feedback
+//
+// # Description
+//
+// Increments the -value by amount. amount defaults to 1.0 if omitted.
+//
+// More information might be available at the [Tcl/Tk progressbar] page.
+//
+// [Tcl/Tk progressbar]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_progressbar.html
+func (w *TProgressbarWidget) Step(amount ...float64) {
+	s := ""
+	if len(amount) != 0 {
+		s = fmt.Sprint(amount[0])
+	}
+	evalErr(fmt.Sprintf("%s step %s", w, s))
+}
+
+// ttk::progressbar — Provide progress feedback
+//
+// # Description
+//
+// Stop autoincrement mode: cancels any recurring timer event initiated by
+// pathName start.
+//
+// More information might be available at the [Tcl/Tk progressbar] page.
+//
+// [Tcl/Tk progressbar]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_progressbar.html
+func (w *TProgressbarWidget) Stop() {
+	evalErr(fmt.Sprintf("%s stop", w))
+}
