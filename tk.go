@@ -3470,26 +3470,12 @@ func (w *TextWidget) SelectAll() {
 // file or index2 is less than or equal to index1) then the command has no
 // effect.
 //
-// The function returns the new tag name.
-//
 // Additional information might be available at the [Tcl/Tk text] page.
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
-func (w *TextWidget) TagAdd(options ...any) string {
-	tag := fmt.Sprintf("tag%d", id.Add(1))
-	var a []Opt
-	for _, v := range options {
-		switch x := v.(type) {
-		case Opts:
-			a = append(a, x)
-		case Opt:
-			a = append(a, x)
-		default:
-			a = append(a, stringOption(fmt.Sprint(x)))
-		}
-	}
-	evalErr(fmt.Sprintf("%s tag add %s %s", w, tag, collect(a...)))
-	return tag
+func (w *TextWidget) TagAdd(tagName string, indexes ...any) string {
+	evalErr(fmt.Sprintf("%s tag add %s %s", w, tclSafeString(tagName), collectAny(indexes...)))
+	return tagName
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
