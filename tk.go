@@ -3482,6 +3482,25 @@ func (w *TextWidget) TagAdd(tagName string, indexes ...any) string {
 //
 // # Description
 //
+// Remove the tag tagName from all of the characters starting at index1 and
+// ending just before index2 (the character at index2 is not affected). A single
+// command may contain any number of index1-index2 pairs. If the last index2 is
+// omitted then the tag is removed from the single character at index1. If there
+// are no characters in the specified range (e.g. index1 is past the end of the
+// file or index2 is less than or equal to index1) then the command has no effect.
+// This command returns an empty string.
+//
+// Additional information might be available at the [Tcl/Tk text] page.
+//
+// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
+func (w *TextWidget) TagRemove(tagName string, indexes ...any) string {
+	return evalErr(fmt.Sprintf("%s tag remove %s %s", w, tclSafeString(tagName), collectAny(indexes...)))
+}
+
+// Text — Create and manipulate 'text' hypertext editing widgets
+//
+// # Description
+//
 // Delete a range of characters from the text. If both index1 and index2 are
 // specified, then delete all the characters starting with the one given by
 // index1 and stopping just before index2 (i.e. the character at index2 is not
