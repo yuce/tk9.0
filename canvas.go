@@ -1144,3 +1144,14 @@ func (w *CanvasWidget) CreateWindow(x, y any, options ...any) (r string) {
 func ItemWindow(w *Window) Opt {
 	return rawOption(fmt.Sprintf(`-window %s`, w))
 }
+
+// Canvas — Create and manipulate 'canvas' hypergraphics drawing surface widgets
+//
+// # Description
+//
+// More information might be available at the [Tcl/Tk canvas] page.
+//
+// [Tcl/Tk canvas]: https://www.tcl.tk/man/tcl9.0/TkCmd/canvas.html
+func (w *CanvasWidget) Delete(tagOrId ...any) (r string) {
+	return evalErr(fmt.Sprintf("%s delete {%s}", w, tclSafeList(tagOrId...)))
+}
