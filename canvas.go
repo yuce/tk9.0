@@ -909,3 +909,59 @@ func (w *CanvasWidget) CreateOval(x1, y1, x2, y2 any, options ...any) (r string)
 func (w *CanvasWidget) CreatePolygon(x1, y1 any, options ...any) (r string) {
 	return w.create("polygon", append([]any{x1, y1}, options...)...)
 }
+
+// Canvas — Create and manipulate 'canvas' hypergraphics drawing surface widgets
+//
+// # Description
+//
+// Items of type rectangle appear as rectangular regions on the display. Each
+// rectangle may have an outline, a fill, or both. Rectangles are created with
+// widget commands of the following form:
+//
+//	pathName create rectangle x1 y1 x2 y2 ?option value ...?
+//
+// The arguments x1, y1, x2, and y2 or coordList (which must have four
+// elements) give the coordinates of two diagonally opposite corners of the
+// rectangle (the rectangle will include its upper and left edges but not its
+// lower or right edges). After the coordinates there may be any number of
+// option-value pairs, each of which sets one of the configuration options for
+// the item. These same option-value pairs may be used in itemconfigure widget
+// commands to change the item's configuration. A rectangle item becomes the
+// current item when the mouse pointer is over any part that is painted or
+// (when fully transparent) that would be painted if both the -fill and
+// -outline options were non-empty.
+//
+// The following standard options are supported by rectangles:
+//
+//   - [Dash]
+//   - [Activedash]
+//   - [Disableddash]
+//   - [Dashoffset]
+//   - [Fill]
+//   - [Activefill]
+//   - [Disabledfill]
+//   - [Offset]
+//   - [Outline]
+//   - [Activeoutline]
+//   - [Disabledoutline]
+//   - [Outlineoffset]
+//   - [Outlinestipple]
+//   - [Activeoutlinestipple]
+//   - [Disabledoutlinestipple]
+//   - [Stipple]
+//   - [Activestipple]
+//   - [Disabledstipple]
+//   - [State]
+//   - [Tags]
+//   - [Width]
+//   - [Activewidth]
+//   - [Disabledwidth]
+//
+// There are no rectangle-specific options.
+//
+// More information might be available at the [Tcl/Tk canvas] page.
+//
+// [Tcl/Tk canvas]: https://www.tcl.tk/man/tcl9.0/TkCmd/canvas.html
+func (w *CanvasWidget) CreateRectangle(x1, y1, x2, y2 any, options ...any) (r string) {
+	return w.create("rectangle", append([]any{x1, y1, x2, y2}, options...)...)
+}
