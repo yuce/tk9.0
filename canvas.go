@@ -1155,3 +1155,22 @@ func ItemWindow(w *Window) Opt {
 func (w *CanvasWidget) Delete(tagOrId ...any) (r string) {
 	return evalErr(fmt.Sprintf("%s delete {%s}", w, tclSafeList(tagOrId...)))
 }
+
+// Canvas — Create and manipulate 'canvas' hypergraphics drawing surface widgets
+//
+// # Description
+//
+// Returns a list with four elements giving an approximate bounding box for all
+// the items named by the tagOrId arguments. The list has the form “x1 y1 x2 y2”
+// such that the drawn areas of all the named elements are within the region
+// bounded by x1 on the left, x2 on the right, y1 on the top, and y2 on the bottom.
+// The return value may overestimate the actual bounding box by a few pixels. If
+// no items match any of the tagOrId arguments or if the matching items have empty
+// bounding boxes (i.e. they have nothing to display) then an empty string is returned.
+//
+// More information might be available at the [Tcl/Tk canvas] page.
+//
+// [Tcl/Tk canvas]: https://www.tcl.tk/man/tcl9.0/TkCmd/canvas.html
+func (w *CanvasWidget) Bbox(tagIds ...string) []string {
+	return parseList(evalErr(fmt.Sprintf("%s bbox %s", w, tclSafeStrings(tagIds...))))
+}
