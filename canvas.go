@@ -554,8 +554,6 @@ func Activebitmap(bitmap any) Opt {
 func Disabledbitmap(bitmap any) Opt {
 	return rawOption(fmt.Sprintf(`-disabledbitmap %s`, tclSafeString(fmt.Sprint(bitmap))))
 }
-<<<<<<< HEAD
-=======
 
 // Canvas — Create and manipulate 'canvas' hypergraphics drawing surface widgets
 //
@@ -620,4 +618,3 @@ func Activeimage(val any) Opt {
 func Disabledimage(val any) Opt {
 	return rawOption(fmt.Sprintf(`-disabledimage %s`, optionString(val)))
 }
->>>>>>> ok
