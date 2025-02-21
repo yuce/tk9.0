@@ -572,13 +572,13 @@ func Disabledbitmap(bitmap any) Opt {
 // the item's configuration. An image item becomes the current item when the
 // mouse pointer is over any part of its bounding box.
 //
-// The following standard options are supported by bitmaps:
+// The following standard options are supported by images:
 //
 //   - [Anchor]
 //   - [State]
 //   - [Tags]
 //
-// The following extra options are supported for bitmaps:
+// The following extra options are supported for images:
 //
 //   - [Image] name
 //
@@ -628,9 +628,9 @@ func Disabledimage(val any) Opt {
 // the dchars, index and insert widget commands. Lines are created with widget
 // commands of the following form:
 //
-//	pathName create image x y ?option value ...?
+//	pathName create line x1 y1... xn yn ?option value ...?
 //
-// The following standard options are supported by bitmaps:
+// The following standard options are supported by lines:
 //
 //   - [Dash]
 //   - [Activedash]
@@ -648,7 +648,7 @@ func Disabledimage(val any) Opt {
 //   - [Activewidth]
 //   - [Disabledwidth]
 //
-// The following extra options are supported for bitmaps:
+// The following extra options are supported for lines:
 //
 //   - [Linearrow] where
 //   - [Arrowshape] shape
@@ -660,8 +660,8 @@ func Disabledimage(val any) Opt {
 // More information might be available at the [Tcl/Tk canvas] page.
 //
 // [Tcl/Tk canvas]: https://www.tcl.tk/man/tcl9.0/TkCmd/canvas.html
-func (w *CanvasWidget) CreateLine(x, y any, options ...any) (r string) {
-	return w.create("line", append([]any{x, y}, options...)...)
+func (w *CanvasWidget) CreateLine(x1, y1 any, options ...any) (r string) {
+	return w.create("line", append([]any{x1, y1}, options...)...)
 }
 
 // Linearrow option.
@@ -765,4 +765,49 @@ func Smooth(smoothMethod any) Opt {
 //   - [CanvasWidget.CreateLine] (widget specific)
 func Splinesteps(number any) Opt {
 	return rawOption(fmt.Sprintf(`-splinesteps %s`, tclSafeString(fmt.Sprint(number))))
+}
+
+// Canvas — Create and manipulate 'canvas' hypergraphics drawing surface widgets
+//
+// # Description
+//
+// Items of type oval appear as circular or oval regions on the display. Each
+// oval may have an outline, a fill, or both. Ovals are created with widget
+// commands of the following form:
+//
+//	pathName create oval x1 y1 x2 y2 ?option value ...?
+//
+// The following standard options are supported by ovals:
+//
+//   - [Dash]
+//   - [Activedash]
+//   - [Disableddash]
+//   - [Dashoffset]
+//   - [Fill]
+//   - [Activefill]
+//   - [Disabledfill]
+//   - [Offset]
+//   - [Outline]
+//   - [Activeoutline]
+//   - [Disabledoutline]
+//   - [Outlineoffset]
+//   - [Outlinestipple]
+//   - [Activeoutlinestipple]
+//   - [Disabledoutlinestipple]
+//   - [Stipple]
+//   - [Activestipple]
+//   - [Disabledstipple]
+//   - [State]
+//   - [Tags]
+//   - [Width]
+//   - [Activewidth]
+//   - [Disabledwidth]
+//
+// There are no oval-specific options.
+//
+// More information might be available at the [Tcl/Tk canvas] page.
+//
+// [Tcl/Tk canvas]: https://www.tcl.tk/man/tcl9.0/TkCmd/canvas.html
+func (w *CanvasWidget) CreateOval(x1, y1, x2, y2 any, options ...any) (r string) {
+	return w.create("oval", append([]any{x1, y1, x2, y2}, options...)...)
 }
