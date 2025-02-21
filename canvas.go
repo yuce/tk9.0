@@ -811,3 +811,101 @@ func Splinesteps(number any) Opt {
 func (w *CanvasWidget) CreateOval(x1, y1, x2, y2 any, options ...any) (r string) {
 	return w.create("oval", append([]any{x1, y1, x2, y2}, options...)...)
 }
+
+// Canvas — Create and manipulate 'canvas' hypergraphics drawing surface widgets
+//
+// # Description
+//
+// Items of type polygon appear as polygonal or curved filled regions on the
+// display. Polygon items support coordinate indexing operations using the
+// dchars, index and insert widget commands. Polygons are created with widget
+// commands of the following form:
+//
+//	pathName create polygon x1 y1 ... xn yn ?option value ...?
+//
+// The arguments x1 through yn or coordList specify the coordinates for three
+// or more points that define a polygon. The first point should not be repeated
+// as the last to close the shape; Tk will automatically close the periphery
+// between the first and last points. After the coordinates there may be any
+// number of option-value pairs, each of which sets one of the configuration
+// options for the item. These same option-value pairs may be used in
+// itemconfigure widget commands to change the item's configuration. A polygon
+// item is the current item whenever the mouse pointer is over any part of the
+// polygon, whether drawn or not and whether or not the outline is smoothed.
+//
+// The following standard options are supported by polygons:
+//   - [Dash]
+//   - [Activedash]
+//   - [Disableddash]
+//   - [Dashoffset]
+//   - [Fill]
+//   - [Activefill]
+//   - [Disabledfill]
+//   - [Offset]
+//   - [Outline]
+//   - [Activeoutline]
+//   - [Disabledoutline]
+//   - [Outlineoffset]
+//   - [Outlinestipple]
+//   - [Activeoutlinestipple]
+//   - [Disabledoutlinestipple]
+//   - [Stipple]
+//   - [Activestipple]
+//   - [Disabledstipple]
+//   - [State]
+//   - [Tags]
+//   - [Width]
+//   - [Activewidth]
+//   - [Disabledwidth]
+//
+// The following extra options are supported for polygons:
+//
+//   - [Joinstyle] style
+//
+//     Specifies the ways in which joints are to be drawn at the vertices of the
+//     outline. Style may have any of the forms accepted by Tk_GetJoinStyle (bevel,
+//     miter, or round). If this option is not specified then it defaults to round.
+//
+//   - [Smooth] boolean
+//
+//     Boolean must have one of the forms accepted by Tcl_GetBoolean or a line
+//     smoothing method. Only true and raw are supported in the core (with bezier
+//     being an alias for true), but more can be added at runtime. If a boolean
+//     false value or empty string is given, no smoothing is applied. A boolean
+//     truth value assumes true smoothing. If the smoothing method is true, this
+//     indicates that the polygon should be drawn as a curve, rendered as a set of
+//     quadratic splines: one spline is drawn for the first and second line
+//     segments, one for the second and third, and so on. Straight-line segments
+//     can be generated within a curve by duplicating the end-points of the
+//     desired line segment. If the smoothing method is raw, this indicates that
+//     the polygon should also be drawn as a curve but where the list of
+//     coordinates is such that the first coordinate pair (and every third
+//     coordinate pair thereafter) is a knot point on a cubic Bezier curve, and
+//     the other coordinates are control points on the cubic Bezier curve.
+//     Straight line segments can be generated within a curve by making control
+//     points equal to their neighbouring knot points. If the last point is not
+//     the second point of a pair of control points, the point is repeated (one or
+//     two times) so that it also becomes the second point of a pair of control
+//     points (the associated knot point will be the first control point).
+//
+//   - [Splinesteps] number
+//
+//     Specifies the degree of smoothness desired for curves: each spline will be
+//     approximated with number line segments. This option is ignored unless the
+//     -smooth option is true or raw.
+//
+// Polygon items are different from other items such as rectangles, ovals and
+// arcs in that interior points are considered to be “inside” a polygon (e.g.
+// for purposes of the find closest and find overlapping widget commands) even
+// if it is not filled. For most other item types, an interior point is
+// considered to be inside the item only if the item is filled or if it has
+// neither a fill nor an outline. If you would like an unfilled polygon whose
+// interior points are not considered to be inside the polygon, use a line item
+// instead.
+//
+// More information might be available at the [Tcl/Tk canvas] page.
+//
+// [Tcl/Tk canvas]: https://www.tcl.tk/man/tcl9.0/TkCmd/canvas.html
+func (w *CanvasWidget) CreatePolygon(x1, y1 any, options ...any) (r string) {
+	return w.create("polygon", append([]any{x1, y1}, options...)...)
+}
