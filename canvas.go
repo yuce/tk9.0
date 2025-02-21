@@ -618,3 +618,151 @@ func Activeimage(val any) Opt {
 func Disabledimage(val any) Opt {
 	return rawOption(fmt.Sprintf(`-disabledimage %s`, optionString(val)))
 }
+
+// Canvas — Create and manipulate 'canvas' hypergraphics drawing surface widgets
+//
+// # Description
+//
+// Items of type line appear on the display as one or more connected line
+// segments or curves. Line items support coordinate indexing operations using
+// the dchars, index and insert widget commands. Lines are created with widget
+// commands of the following form:
+//
+//	pathName create image x y ?option value ...?
+//
+// The following standard options are supported by bitmaps:
+//
+//   - [Dash]
+//   - [Activedash]
+//   - [Disableddash]
+//   - [Dashoffset]
+//   - [Fill]
+//   - [Activefill]
+//   - [Disabledfill]
+//   - [Stipple]
+//   - [Activestipple]
+//   - [Disabledstipple]
+//   - [State]
+//   - [Tags]
+//   - [Width]
+//   - [Activewidth]
+//   - [Disabledwidth]
+//
+// The following extra options are supported for bitmaps:
+//
+//   - [Linearrow] where
+//   - [Arrowshape] shape
+//   - [Capstyle] style
+//   - [Joinstyle] style
+//   - [Smooth] smoothMethod
+//   - [Splinesteps] number
+//
+// More information might be available at the [Tcl/Tk canvas] page.
+//
+// [Tcl/Tk canvas]: https://www.tcl.tk/man/tcl9.0/TkCmd/canvas.html
+func (w *CanvasWidget) CreateLine(x, y any, options ...any) (r string) {
+	return w.create("line", append([]any{x, y}, options...)...)
+}
+
+// Linearrow option.
+//
+// Indicates whether or not arrowheads are to be drawn at one or both ends of
+// the line. Where must have one of the values none (for no arrowheads), first
+// (for an arrowhead at the first point of the line), last (for an arrowhead
+// at the last point of the line), or both (for arrowheads at both ends). This
+// option defaults to none. When requested to draw an arrowhead, Tk internally
+// adjusts the corresponding line end point so that the rendered line ends at
+// the neck of the arrowhead rather than at its tip so that the line doesn't
+// extend past the edge of the arrowhead. This may trigger a Leave event if
+// the mouse is hovering this line end. Conversely, when removing an arrowhead
+// Tk adjusts the corresponding line point the other way round, which may
+// trigger an Enter event.
+//
+// Known uses:
+//   - [CanvasWidget.CreateLine] (widget specific)
+func Linearrow(where any) Opt {
+	return rawOption(fmt.Sprintf(`-arrow %s`, optionString(where)))
+}
+
+// Arrowshape option.
+//
+// This option indicates how to draw arrowheads. The shape argument must be
+// a list with three elements, each specifying a distance in any of the
+// forms described in the COORDINATES section above. The first element of
+// the list gives the distance along the line from the neck of the
+// arrowhead to its tip. The second element gives the distance along the
+// line from the trailing points of the arrowhead to the tip, and the third
+// element gives the distance from the outside edge of the line to the
+// trailing points. If this option is not specified then Tk picks a
+// “reasonable” shape.
+//
+// Known uses:
+//   - [CanvasWidget.CreateLine] (widget specific)
+func Arrowshape(a, b, c any) Opt {
+	return rawOption(fmt.Sprintf(`-arrowshape {%s}`, tclSafeList(a, b, c)))
+}
+
+// Capstyle option.
+//
+// Specifies the ways in which caps are to be drawn at the endpoints of the
+// line. Style may have any of the forms accepted by Tk_GetCapStyle (butt,
+// projecting, or round). If this option is not specified then it defaults to
+// butt. Where arrowheads are drawn the cap style is ignored.
+//
+// Known uses:
+//   - [CanvasWidget.CreateLine] (widget specific)
+func Capstyle(style any) Opt {
+	return rawOption(fmt.Sprintf(`-capstyle %s`, tclSafeString(fmt.Sprint(style))))
+}
+
+// Joinstyle option.
+//
+// Specifies the ways in which joints are to be drawn at the vertices of the
+// line. Style may have any of the forms accepted by Tk_GetJoinStyle (bevel,
+// miter, or round). If this option is not specified then it defaults to
+// round. If the line only contains two points then this option is irrelevant.
+//
+// Known uses:
+//   - [CanvasWidget.CreateLine] (widget specific)
+func Joinstyle(style any) Opt {
+	return rawOption(fmt.Sprintf(`-joinstyle %s`, tclSafeString(fmt.Sprint(style))))
+}
+
+// Smooth option.
+//
+// smoothMethod must have one of the forms accepted by Tcl_GetBoolean or a
+// line smoothing method. Only true and raw are supported in the core (with
+// bezier being an alias for true), but more can be added at runtime. If a
+// boolean false value or empty string is given, no smoothing is applied. A
+// boolean truth value assumes true smoothing. If the smoothing method is
+// true, this indicates that the line should be drawn as a curve, rendered as
+// a set of quadratic splines: one spline is drawn for the first and second
+// line segments, one for the second and third, and so on. Straight-line
+// segments can be generated within a curve by duplicating the end-points of
+// the desired line segment. If the smoothing method is raw, this indicates
+// that the line should also be drawn as a curve but where the list of
+// coordinates is such that the first coordinate pair (and every third
+// coordinate pair thereafter) is a knot point on a cubic Bezier curve, and
+// the other coordinates are control points on the cubic Bezier curve.
+// Straight line segments can be generated within a curve by making control
+// points equal to their neighbouring knot points. If the last point is a
+// control point and not a knot point, the point is repeated (one or two
+// times) so that it also becomes a knot point.
+//
+// Known uses:
+//   - [CanvasWidget.CreateLine] (widget specific)
+func Smooth(smoothMethod any) Opt {
+	return rawOption(fmt.Sprintf(`-smooth %s`, tclSafeString(fmt.Sprint(smoothMethod))))
+}
+
+// Splinesteps option.
+//
+// Specifies the degree of smoothness desired for curves: each spline will be
+// approximated with number line segments. This option is ignored unless the
+// -smooth option is true or raw.
+//
+// Known uses:
+//   - [CanvasWidget.CreateLine] (widget specific)
+func Splinesteps(number any) Opt {
+	return rawOption(fmt.Sprintf(`-splinesteps %s`, tclSafeString(fmt.Sprint(number))))
+}
