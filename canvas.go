@@ -965,3 +965,105 @@ func (w *CanvasWidget) CreatePolygon(x1, y1 any, options ...any) (r string) {
 func (w *CanvasWidget) CreateRectangle(x1, y1, x2, y2 any, options ...any) (r string) {
 	return w.create("rectangle", append([]any{x1, y1, x2, y2}, options...)...)
 }
+
+// Canvas — Create and manipulate 'canvas' hypergraphics drawing surface widgets
+//
+// # Description
+//
+// A text item displays a string of characters on the screen in one or more
+// lines. Text items support indexing, editing and selection through the dchars
+// widget command, the focus widget command, the icursor widget command, the
+// index widget command, the insert widget command, and the select widget
+// command. Text items are created with widget commands of the following form:
+//
+//	pathName create text x y ?option value ...?
+//
+// The arguments x and y or coordList (which must have two elements) specify
+// the coordinates of a point used to position the text on the display (see the
+// options below for more information on how text is displayed). After the
+// coordinates there may be any number of option-value pairs, each of which
+// sets one of the configuration options for the item. These same option-value
+// pairs may be used in itemconfigure widget commands to change the item's
+// configuration. A text item becomes the current item when the mouse pointer
+// is over any part of its bounding box.
+//
+// The following standard options are supported by text items:
+//
+//   - [Anchor]
+//   - [Fill]
+//   - [Activefill]
+//   - [Disabledfill]
+//   - [Stipple]
+//   - [Activestipple]
+//   - [Disabledstipple]
+//   - [State]
+//   - [Tags]
+//
+// The following extra options are supported for text items:
+//
+//   - [Angle] rotationDegrees
+//
+//     RotationDegrees tells how many degrees to rotate the text anticlockwise
+//     about the positioning point for the text; it may have any floating-point
+//     value from 0.0 to 360.0. For example, if rotationDegrees is 90, then the
+//     text will be drawn vertically from bottom to top. This option defaults
+//     to 0.0.
+//
+//   - [Font] fontName
+//
+//     Specifies the font to use for the text item. FontName may be any string
+//     acceptable to Tk_GetFont. If this option is not specified, it defaults to a
+//     system-dependent font.
+//
+//   - [Justify] how
+//
+//     Specifies how to justify the text within its bounding region. How must be
+//     one of the values left, right, or center. This option will only matter if
+//     the text is displayed as multiple lines. If the option is omitted, it
+//     defaults to left.
+//
+//   - [Txt] string
+//
+//     String specifies the characters to be displayed in the text item. Newline
+//     characters cause line breaks. The characters in the item may also be
+//     changed with the insert and delete widget commands. This option defaults to
+//     an empty string.
+//
+//   - [Underline] number
+//
+//     Specifies the integer index of a character within the text to be
+//     underlined. 0 corresponds to the first character of the text displayed, 1
+//     to the next character, and so on. -1 means that no underline should be
+//     drawn (if the whole text item is to be underlined, the appropriate font
+//     should be used instead).
+//
+//   - [Width] lineLength
+//
+//     Specifies a maximum line length for the text, in any of the forms described
+//     in the COORDINATES section above. If this option is zero (the default) the
+//     text is broken into lines only at newline characters. However, if this
+//     option is non-zero then any line that would be longer than lineLength is
+//     broken just before a space character to make the line shorter than
+//     lineLength; the space character is treated as if it were a newline
+//     character.
+//
+// More information might be available at the [Tcl/Tk canvas] page.
+//
+// [Tcl/Tk canvas]: https://www.tcl.tk/man/tcl9.0/TkCmd/canvas.html
+func (w *CanvasWidget) CreateText(x, y any, options ...any) (r string) {
+	return w.create("text", append([]any{x, y}, options...)...)
+}
+
+// Angle option.
+//
+// RotationDegrees tells how many degrees to rotate the text anticlockwise
+// about the positioning point for the text; it may have any floating-point
+// value from 0.0 to 360.0. For example, if rotationDegrees is 90, then the
+// text will be drawn vertically from bottom to top. This option defaults
+// to 0.0.
+//
+// Known uses:
+//   - [CanvasWidget.Createtext] (widget specific)
+func Angle(rotationDegrees any) Opt {
+	return rawOption(fmt.Sprintf(`-angle %s`, tclSafeString(fmt.Sprint(rotationDegrees))))
+}
