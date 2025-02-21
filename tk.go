@@ -6,7 +6,6 @@ package tk9_0 // import "modernc.org/tk9.0"
 
 import (
 	"bytes"
-	"context"
 	"crypto/sha256"
 	_ "embed"
 	"encoding/base64"
@@ -16,7 +15,6 @@ import (
 	"image/png"
 	"io/fs"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"reflect"
 	"runtime"
@@ -4168,44 +4166,6 @@ func (w *Window) Raise(aboveThis Widget) {
 		b = aboveThis.optionString(nil)
 	}
 	evalErr(fmt.Sprintf("raise %s %s", w, b))
-}
-
-// Graph — use gnuplot to draw on a canvas. Graph returns 'w'.
-//
-// The 'script' argument is passed to a gnuplot executable, which must be
-// installed on the machine.  See the [gnuplot site] for documentation about
-// producing graphs. The script must not use the 'set term <device>' command.
-//
-// [gnuplot site]: http://www.gnuplot.info/
-func (w *CanvasWidget) Graph(script string) *CanvasWidget {
-	script = fmt.Sprintf("set terminal tkcanvas size %s, %s\n%s", w.Width(), w.Height(), script)
-	out, err := gnuplot(script)
-	if err != nil {
-		fail(fmt.Errorf("plot: executing script: %s", err))
-		return w
-	}
-
-	evalErr(fmt.Sprintf("%s\ngnuplot %s", out, w))
-	return w
-}
-
-func gnuplot(script string) (out []byte, err error) {
-	f, err := os.CreateTemp("", "tk9.0-")
-	if err != nil {
-		return nil, err
-	}
-
-	defer os.Remove(f.Name())
-
-	if err := os.WriteFile(f.Name(), []byte(script), 0o660); err != nil {
-		return nil, err
-	}
-
-	ctx, cancel := context.WithTimeout(context.Background(), gnuplotTimeout)
-
-	defer cancel()
-
-	return exec.CommandContext(ctx, "gnuplot", f.Name()).Output()
 }
 
 // MenuItem represents an entry on a menu.

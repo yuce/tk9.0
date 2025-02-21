@@ -18,6 +18,7 @@ WINARM64 = embed/windows/arm64
 all:
 	golint 2>&1
 	staticcheck 2>&1
+	$(shell for f in _examples/*.go ; do go build -o /dev/null $$f ; done)
 
 build_all_targets:
 	GOOS=darwin GOARCH=amd64 CGO_ENABLED=0 go build ./...
@@ -63,14 +64,13 @@ edit:
 	@if [ -f "Session.vim" ]; then gvim -S & else gvim -p Makefile go.mod builder.json *.go & fi
 
 editor:
-	go test -c -o /dev/null
+	go test -vet=off -c -o /dev/null
 	go build -v  -o /dev/null generator.go
-	go run generator.go
+	@go run generator.go > /dev/null
 	gofmt -l -s -w .
 	go build -v  -o /dev/null
 	go build -v  -o /dev/null ./vnc
 	go build -v  -o /dev/null ./themes/azure
-	$(shell for f in _examples/*.go ; do go build -o /dev/null $$f ; done)
 
 test:
 	go test -vet=off -v -timeout 24h -count=1
