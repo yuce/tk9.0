@@ -554,3 +554,70 @@ func Activebitmap(bitmap any) Opt {
 func Disabledbitmap(bitmap any) Opt {
 	return rawOption(fmt.Sprintf(`-disabledbitmap %s`, tclSafeString(fmt.Sprint(bitmap))))
 }
+<<<<<<< HEAD
+=======
+
+// Canvas — Create and manipulate 'canvas' hypergraphics drawing surface widgets
+//
+// # Description
+//
+// Items of type image are used to display images on a canvas. Images are
+// created with widget commands of the following form:
+//
+//	pathName create image x y ?option value ...?
+//
+// The arguments x and y or coordList specify the coordinates of a point used
+// to position the image on the display, as controlled by the -anchor option.
+// After the coordinates there may be any number of option-value pairs, each of
+// which sets one of the configuration options for the item. These same
+// option-value pairs may be used in itemconfigure widget commands to change
+// the item's configuration. An image item becomes the current item when the
+// mouse pointer is over any part of its bounding box.
+//
+// The following standard options are supported by bitmaps:
+//
+//   - [Anchor]
+//   - [State]
+//   - [Tags]
+//
+// The following extra options are supported for bitmaps:
+//
+//   - [Image] name
+//
+//   - [Activeimage] name
+//
+//   - [Disabledimage] name
+//
+//     Specifies the name of the images to display in the item in is normal,
+//     active and disabled states. This image must have been created previously
+//     with the image create command.
+//
+// More information might be available at the [Tcl/Tk canvas] page.
+//
+// [Tcl/Tk canvas]: https://www.tcl.tk/man/tcl9.0/TkCmd/canvas.html
+func (w *CanvasWidget) CreateImage(x, y any, options ...any) (r string) {
+	return w.create("image", append([]any{x, y}, options...)...)
+}
+
+// Activeimage option.
+//
+// Specifies the name of the image to display in the item in its active state.
+// This image must have been created previously with the image create command.
+//
+// Known uses:
+//   - [CanvasWidget.CreateImage] (widget specific)
+func Activeimage(val any) Opt {
+	return rawOption(fmt.Sprintf(`-activeimage %s`, optionString(val)))
+}
+
+// Disabledimage option.
+//
+// Specifies the name of the image to display in the item in its disabled state.
+// This image must have been created previously with the image create command.
+//
+// Known uses:
+//   - [CanvasWidget.CreateImage] (widget specific)
+func Disabledimage(val any) Opt {
+	return rawOption(fmt.Sprintf(`-disabledimage %s`, optionString(val)))
+}
+>>>>>>> ok
