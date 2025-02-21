@@ -1063,7 +1063,84 @@ func (w *CanvasWidget) CreateText(x, y any, options ...any) (r string) {
 // to 0.0.
 //
 // Known uses:
-//   - [CanvasWidget.Createtext] (widget specific)
+//   - [CanvasWidget.CreateText] (widget specific)
 func Angle(rotationDegrees any) Opt {
 	return rawOption(fmt.Sprintf(`-angle %s`, tclSafeString(fmt.Sprint(rotationDegrees))))
+}
+
+// Canvas — Create and manipulate 'canvas' hypergraphics drawing surface widgets
+//
+// # Description
+//
+// Items of type window cause a particular window to be displayed at a given
+// position on the canvas. Window items are created with widget commands of the
+// following form:
+//
+//	pathName create window x y ?option value ...?
+//
+// The arguments x and y or coordList (which must have two elements) specify
+// the coordinates of a point used to position the window on the display, as
+// controlled by the -anchor option. After the coordinates there may be any
+// number of option-value pairs, each of which sets one of the configuration
+// options for the item. These same option-value pairs may be used in
+// itemconfigure widget commands to change the item's configuration.
+// Theoretically, a window item becomes the current item when the mouse pointer
+// is over any part of its bounding box, but in practice this typically does
+// not happen because the mouse pointer ceases to be over the canvas at that
+// point.
+//
+// The following standard options are supported by window items:
+//
+//   - [Anchor]
+//   - [State]
+//   - [Tags]
+//
+// The following extra options are supported for window items:
+//
+//   - [Height] pixels
+//
+//     Specifies the height to assign to the item's window. Pixels may have any of
+//     the forms described in the COORDINATES section above. If this option is not
+//     specified, or if it is specified as zero, then the window is given whatever
+//     height it requests internally.
+//
+//   - [Width] pixels
+//     Specifies the width to assign to the item's window. Pixels may have any of
+//     the forms described in the COORDINATES section above. If this option is not
+//     specified, or if it is specified as zero, then the window is given whatever
+//     width it requests internally.
+//
+//   - [ItemWindow] pathName
+//
+//     Specifies the window to associate with this item. The window specified by
+//     pathName must either be a child of the canvas widget or a child of some
+//     ancestor of the canvas widget. PathName may not refer to a top-level
+//     window.
+//
+// Note that, due to restrictions in the ways that windows are managed, it is
+// not possible to draw other graphical items (such as lines and images) on top
+// of window items. A window item always obscures any graphics that overlap it,
+// regardless of their order in the display list. Also note that window items,
+// unlike other canvas items, are not clipped for display by their containing
+// canvas's border, and are instead clipped by the parent widget of the window
+// specified by the -window option; when the parent widget is the canvas, this
+// means that the window item can overlap the canvas's border.
+//
+// More information might be available at the [Tcl/Tk canvas] page.
+//
+// [Tcl/Tk canvas]: https://www.tcl.tk/man/tcl9.0/TkCmd/canvas.html
+func (w *CanvasWidget) CreateWindow(x, y any, options ...any) (r string) {
+	return w.create("window", append([]any{x, y}, options...)...)
+}
+
+// ItemWindow option.
+//
+// Specifies the window to associate with this item. The window specified by
+// pathName must either be a child of the canvas widget or a child of some
+// ancestor of the canvas widget. PathName may not refer to a top-level window.
+//
+// Known uses:
+//   - [CanvasWidget.CreateWindow] (widget specific)
+func ItemWindow(w *Window) Opt {
+	return rawOption(fmt.Sprintf(`-window %s`, w))
 }
