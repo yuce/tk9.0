@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"image"
 	"math/rand"
-	"os"
 	"time"
 
 	. "modernc.org/tk9.0"
@@ -20,9 +19,7 @@ const (
 	gridSize = 20
 )
 
-var (
-	game *Game
-)
+var game *Game
 
 type Game struct {
 	bodyColor Opt
@@ -38,7 +35,6 @@ type Game struct {
 	snake     []image.Point
 	t         *Ticker
 	tick      int
-
 	isRunning bool
 }
 
@@ -52,67 +48,67 @@ func NewGame() *Game {
 	g := &Game{
 		bodyColor: Fill(Green),
 		canvas:    canvas,
-		dx:        gridSize,
-		dy:        0,
-		gear:      1,
 		headColor: Fill(Yellow),
-		isRunning: true,
-		score:     TLabel(Justify("center")).Window,
+		score:     Label(Justify("center")).Window,
 		speed:     TLabel(Justify("center"), Txt("Speed 1 (F1-F4 to change)")).Window,
-		snake:     []image.Point{{round(width/2, gridSize), round(height/2, gridSize)}},
 	}
 	Pack(g.speed, canvas, g.score, Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
 	Bind(App, "<Key>", Command(g.handleKeyPress))
+	Bind(g.score, "<Button-1>", Command(func() {
+		if !g.isRunning {
+			g.init()
+		}
+
+	}))
+	g.init()
 	g.t, _ = NewTicker(100*time.Millisecond, func() {
 		g.tick++
-		switch g.gear {
-		case 1:
-			if g.tick&3 > 0 {
-				return
-			}
-		case 2:
-			if g.tick&3 > 1 {
-				return
-			}
-		case 3:
-			if g.tick&3 > 2 {
-				return
-			}
+		if g.gear < 4 && g.tick&3 > g.gear-1 {
+			return
 		}
 		if g.isRunning {
 			g.moveSnake()
 			g.draw()
 		}
 	})
+	return g
+}
+
+func (g *Game) init() {
+	g.dx = gridSize
+	g.dy = 0
+	g.setSpeed(1)
+	g.setPoints(0)
+	g.snake = []image.Point{{round(width/2, gridSize), round(height/2, gridSize)}}
+	g.isRunning = true
 	g.spawnFood()
 	g.draw()
-	return g
+}
+
+func (g *Game) setPoints(n int) {
+	g.points = n
+	g.score.Configure(Txt(fmt.Sprintf("Score: %v", g.points)))
 }
 
 func (g *Game) moveSnake() {
 	head := g.snake[0]
 	newHead := image.Point{head.X + g.dx, head.Y + g.dy}
-
-	// Check for collisions
 	if newHead.X < 0 || newHead.X >= width || newHead.Y < 0 || newHead.Y >= height || g.collidesWithSelf(newHead) {
 		g.isRunning = false
-		g.score.Configure(Txt(fmt.Sprintf("Score %v\nGame Over!", g.points)))
-		fmt.Println("Game Over!\n")
+		g.score.Configure(Txt(fmt.Sprintf("Score: %v\nGame Over!\nClick to restart", g.points)))
 		return
 	}
 
-	g.snake = append([]image.Point{newHead}, g.snake[:len(g.snake)-1]...) // Move snake
+	g.snake = append([]image.Point{newHead}, g.snake[:len(g.snake)-1]...)
 	if newHead == g.food {
-		g.snake = append([]image.Point{newHead}, g.snake...) // Eat food (grow)
+		g.snake = append([]image.Point{newHead}, g.snake...)
 		g.spawnFood()
-		g.points += g.gear
-		g.score.Configure(Txt(fmt.Sprintf("Score %v", g.points)))
+		g.setPoints(g.points + g.gear)
 	}
 }
 
 func (g *Game) draw() {
-	g.canvas.Delete("all") // Clear the canvas
-	// Draw snake
+	g.canvas.Delete("all")
 	g.drawCycle++
 	for i, p := range g.snake {
 		switch {
@@ -121,27 +117,12 @@ func (g *Game) draw() {
 		default:
 			switch {
 			case (i+g.drawCycle)&1 == 0:
-				g.canvas.CreatePolygon(
-					p.X, p.Y,
-					p.X+gridSize/2, p.Y,
-					p.X+gridSize, p.Y+gridSize/2,
-					p.X+gridSize, p.Y+gridSize,
-					p.X+gridSize/2, p.Y+gridSize,
-					p.X, p.Y+gridSize/2,
-					g.bodyColor)
+				g.canvas.CreatePolygon(p.X, p.Y, p.X+gridSize/2, p.Y, p.X+gridSize, p.Y+gridSize/2, p.X+gridSize, p.Y+gridSize, p.X+gridSize/2, p.Y+gridSize, p.X, p.Y+gridSize/2, g.bodyColor)
 			default:
-				g.canvas.CreatePolygon(
-					p.X+gridSize, p.Y,
-					p.X+gridSize/2, p.Y,
-					p.X, p.Y+gridSize/2,
-					p.X, p.Y+gridSize,
-					p.X+gridSize/2, p.Y+gridSize,
-					p.X+gridSize, p.Y+gridSize/2,
-					g.bodyColor)
+				g.canvas.CreatePolygon(p.X+gridSize, p.Y, p.X+gridSize/2, p.Y, p.X, p.Y+gridSize/2, p.X, p.Y+gridSize, p.X+gridSize/2, p.Y+gridSize, p.X+gridSize, p.Y+gridSize/2, g.bodyColor)
 			}
 		}
 	}
-	// Draw food
 	g.canvas.CreateRectangle(g.food.X, g.food.Y, g.food.X+gridSize, g.food.Y+gridSize, Fill(Red))
 
 }
@@ -163,8 +144,6 @@ func (g *Game) handleKeyPress(e *Event) {
 		g.dx, g.dy = 0, -gridSize
 	case "Down":
 		g.dx, g.dy = 0, gridSize
-	case "Escape":
-		os.Exit(0)
 	case "F1":
 		g.setSpeed(1)
 	case "F2":
