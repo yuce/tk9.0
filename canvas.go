@@ -71,7 +71,6 @@ func (w *CanvasWidget) create(typ string, args ...any) string {
 // of the following form:
 //
 //	pathName create arc x1 y1 x2 y2 ?option value ...?
-//	pathName create arc coordList ?option value ...?
 //
 // The arguments x1, y1, x2, and y2 or coordList give the coordinates of two
 // diagonally opposite corners of a rectangular region enclosing the oval that
@@ -361,6 +360,7 @@ func Disabledoutlinestipple(bitmap any) Opt {
 //
 // Known uses:
 //   - [CanvasWidget.CreateArc] (widget specific)
+//   - [CanvasWidget.CreateBitmap] (widget specific)
 func Stipple(bitmap any) Opt {
 	return rawOption(fmt.Sprintf(`-stipple %s`, tclSafeString(fmt.Sprint(bitmap))))
 }
@@ -405,6 +405,7 @@ func Disabledstipple(bitmap any) Opt {
 //
 // Known uses:
 //   - [CanvasWidget.CreateArc] (widget specific)
+//   - [CanvasWidget.CreateBitmap] (widget specific)
 func Tags(tagList ...string) Opt {
 	list := fmt.Sprint(tagList)
 	return rawOption(fmt.Sprintf(`-tags {%s}`, list[1:len(list)-1]))
@@ -464,4 +465,92 @@ func Extent(degrees any) Opt {
 //   - [CanvasWidget.CreateArc] (widget specific)
 func Start(degrees any) Opt {
 	return rawOption(fmt.Sprintf(`-start %s`, tclSafeString(fmt.Sprint(degrees))))
+}
+
+// Canvas — Create and manipulate 'canvas' hypergraphics drawing surface widgets
+//
+// # Description
+//
+// Items of type bitmap appear on the display as images with two colors,
+// foreground and background. Bitmaps are created with widget commands of the
+// following form:
+//
+//	pathName create bitmap x y ?option value ...?
+//
+// The arguments x and y or coordList (which must have two elements) specify
+// the coordinates of a point used to position the bitmap on the display, as
+// controlled by the -anchor option. After the coordinates there may be any
+// number of option-value pairs, each of which sets one of the configuration
+// options for the item. These same option-value pairs may be used in
+// itemconfigure widget commands to change the item's configuration. A bitmap
+// item becomes the current item when the mouse pointer is over any part of its
+// bounding box.
+//
+// The following standard options are supported by bitmaps:
+//
+//   - [Anchor]
+//   - [State]
+//   - [Tags]
+//
+// The following extra options are supported for bitmaps:
+//
+//   - [Background] color
+//
+//   - [Activebackground] color
+//
+//   - [Disabledbackground] color
+//
+//     Specifies the color to use for each of the bitmap's “0” valued pixels in
+//     its normal, active and disabled states. Color may have any of the forms
+//     accepted by Tk_GetColor. If this option is not specified, or if it is
+//     specified as an empty string, then nothing is displayed where the bitmap
+//     pixels are 0; this produces a transparent effect.
+//
+//   - [Bitmap] bitmap
+//
+//   - [Activebitmap] bitmap
+//
+//   - [Disabledbitmap] bitmap:
+//
+//     These options specify the bitmaps to display in the item in its normal,
+//     active and disabled states. Bitmap may have any of the forms accepted by
+//     Tk_GetBitmap.
+//
+//   - [Foreground] color
+//
+//   - [Activeforeground] color
+//
+//   - [Disabledforeground] color:
+//
+//     These options specify the color to use for each of the bitmap's “1” valued
+//     pixels in its normal, active and disabled states. Color may have any of the
+//     forms accepted by Tk_GetColor.
+//
+// More information might be available at the [Tcl/Tk canvas] page.
+//
+// [Tcl/Tk canvas]: https://www.tcl.tk/man/tcl9.0/TkCmd/canvas.html
+func (w *CanvasWidget) CreateBitmap(x, y any, options ...any) (r string) {
+	return w.create("bitmap", append([]any{x, y}, options...)...)
+}
+
+// Activebitmap option.
+//
+// This option specify the bitmap to display in the item in its active state.
+// Bitmap may have any of the forms accepted by Tk_GetBitmap.
+//
+// Known uses:
+//   - [CanvasWidget.CreateBitmap] (widget specific)
+func Activebitmap(bitmap any) Opt {
+	return rawOption(fmt.Sprintf(`-activebitmap %s`, tclSafeString(fmt.Sprint(bitmap))))
+}
+
+// Disabledbitmap option.
+//
+// This option specify the bitmap to display in the item in its disabled state.
+// Bitmap may have any of the forms accepted by Tk_GetBitmap.
+//
+// Known uses:
+//   - [CanvasWidget.CreateBitmap] (widget specific)
+func Disabledbitmap(bitmap any) Opt {
+	return rawOption(fmt.Sprintf(`-disabledbitmap %s`, tclSafeString(fmt.Sprint(bitmap))))
 }
