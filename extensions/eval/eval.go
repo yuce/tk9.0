@@ -12,7 +12,7 @@
 // initalizing extensions at runtime.
 //
 // [modernc.org/tk9.0.Extension]: https://pkg.go.dev/modernc.org/tk9.0#Extension
-package tablelist // import "modernc.org/tk9.0/extensions/tablelist"
+package eval // import "modernc.org/tk9.0/extensions/eval"
 
 import (
 	. "modernc.org/tk9.0"
