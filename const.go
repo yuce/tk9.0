@@ -1043,9 +1043,9 @@ type Modifier int
 
 func (mods Modifier) String() string {
 	var names []string
-	for mod, name := range modifierNames {
-		if mods&mod == mod {
-			names = append(names, name)
+	for _, mod := range modifierNames {
+		if mods&mod.modifier == mod.modifier {
+			names = append(names, mod.name)
 		}
 	}
 	return strings.Join(names, "+")
@@ -1072,18 +1072,21 @@ const (
 	ModifierSuper   = ModifierMod4
 )
 
-var modifierNames = map[Modifier]string{
-	ModifierShift:   "Shift",
-	ModifierLock:    "Lock",
-	ModifierControl: "Control",
-	ModifierMod1:    "Mod1",
-	ModifierMod2:    "Mod2",
-	ModifierMod3:    "Mod3",
-	ModifierMod4:    "Mod4",
-	ModifierMod5:    "Mod5",
-	ModifierButton1: "Button1",
-	ModifierButton2: "Button2",
-	ModifierButton3: "Button3",
-	ModifierButton4: "Button4",
-	ModifierButton5: "Button5",
+var modifierNames = []struct {
+	modifier Modifier
+	name     string
+}{
+	{ModifierShift, "Shift"},
+	{ModifierLock, "Lock"},
+	{ModifierControl, "Control"},
+	{ModifierMod1, "Mod1"},
+	{ModifierMod2, "Mod2"},
+	{ModifierMod3, "Mod3"},
+	{ModifierMod4, "Mod4"},
+	{ModifierMod5, "Mod5"},
+	{ModifierButton1, "Button1"},
+	{ModifierButton2, "Button2"},
+	{ModifierButton3, "Button3"},
+	{ModifierButton4, "Button4"},
+	{ModifierButton5, "Button5"},
 }
