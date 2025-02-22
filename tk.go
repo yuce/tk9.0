@@ -543,6 +543,10 @@ type Event struct {
 	// the rotation units the mouse wheel has been moved. The sign of the
 	// value represents the direction the mouse wheel was scrolled.
 	Delta int
+	// The state field from the event. For KeyPress, KeyRelease, ButtonPress,
+	// ButtonRelease, Enter, Leave, and Motion events, it is a bit field.
+	// Visibility events are not currently supported, and the value will be 0.
+	State Modifier
 
 	args []string
 }
@@ -584,6 +588,8 @@ func newEvent(arg1 string) (id int, e *Event, err error) {
 			e.YRoot = atoi(v)
 		case 9: // %D
 			e.Delta = atoi(v)
+		case 10: // %s
+			e.State = Modifier(atoi(v))
 		}
 	}
 	return id, e, nil
@@ -697,7 +703,7 @@ func (e *eventHandler) optionString(w *Window) string {
 	e.w = w
 	switch {
 	case e.lateBind:
-		return fmt.Sprintf("%s {eventDispatcher {%v %%# %%W %%K %%w %%h %%x %%y %%X %%Y %%D}}", e.tcl, e.id)
+		return fmt.Sprintf("%s {eventDispatcher {%v %%# %%W %%K %%w %%h %%x %%y %%X %%Y %%D %%s}}", e.tcl, e.id)
 	default:
 		return fmt.Sprintf("%s {eventDispatcher %v}", e.tcl, e.id)
 	}

@@ -1036,3 +1036,27 @@ const (
 	WM_TAKE_FOCUS    = "WM_TAKE_FOCUS"
 	WM_DELETE_WINDOW = "WM_DELETE_WINDOW"
 )
+
+// Modifier is a bit field representing 0 or more modifiers.
+type Modifier int
+
+const (
+	ModifierNone  Modifier = 0
+	ModifierShift Modifier = 1 << iota
+	ModifierLock
+	ModifierControl
+	ModifierMod1
+	ModifierMod2
+	ModifierMod3
+	ModifierMod4
+	ModifierMod5
+	ModifierButton1
+	ModifierButton2
+	ModifierButton3
+	ModifierButton4
+	ModifierButton5
+
+	ModifierAlt     = ModifierMod1
+	ModifierWindows = ModifierMod4
+	ModifierSuper   = ModifierMod4
+)
