@@ -539,6 +539,10 @@ type Event struct {
 	// ButtonRelease, Enter, Key, KeyRelease, Leave and Motion events. Same meaning
 	// as X and Y, except relative to the (virtual) root window.
 	XRoot, YRoot int
+	// The delta value of a MouseWheel event. The delta value represents
+	// the rotation units the mouse wheel has been moved. The sign of the
+	// value represents the direction the mouse wheel was scrolled.
+	Delta int
 
 	args []string
 }
@@ -578,6 +582,8 @@ func newEvent(arg1 string) (id int, e *Event, err error) {
 			e.XRoot = atoi(v)
 		case 8: // %Y
 			e.YRoot = atoi(v)
+		case 9: // %D
+			e.Delta = atoi(v)
 		}
 	}
 	return id, e, nil
@@ -691,7 +697,7 @@ func (e *eventHandler) optionString(w *Window) string {
 	e.w = w
 	switch {
 	case e.lateBind:
-		return fmt.Sprintf("%s {eventDispatcher {%v %%# %%W %%K %%w %%h %%x %%y %%X %%Y}}", e.tcl, e.id)
+		return fmt.Sprintf("%s {eventDispatcher {%v %%# %%W %%K %%w %%h %%x %%y %%X %%Y %%D}}", e.tcl, e.id)
 	default:
 		return fmt.Sprintf("%s {eventDispatcher %v}", e.tcl, e.id)
 	}
