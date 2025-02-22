@@ -1042,7 +1042,7 @@ type Modifier int
 
 const (
 	ModifierNone  Modifier = 0
-	ModifierShift Modifier = 1 << iota
+	ModifierShift Modifier = 1 << (iota - 1)
 	ModifierLock
 	ModifierControl
 	ModifierMod1
