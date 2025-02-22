@@ -565,6 +565,7 @@ func main() {
 }
 
 func makeTokenizer() {
+	return // No more needed, only adds diff noise.
 	args := []string{
 		"-lexstring", "mlToken",
 		"-pkg", "tk9_0",

@@ -311,7 +311,7 @@ func Outlineoffset(offset any) Opt {
 // Known uses:
 //   - [CanvasWidget.CreateArc] (widget specific)
 func Outlinestipple(bitmap any) Opt {
-	return rawOption(fmt.Sprintf(`-outlinstipple %s`, tclSafeString(fmt.Sprint(bitmap))))
+	return rawOption(fmt.Sprintf(`-outlinestipple %s`, tclSafeString(fmt.Sprint(bitmap))))
 }
 
 // Activeoutlinestipple option.
