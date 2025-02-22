@@ -18,6 +18,14 @@ func focusOut(e *Event) {
 	fmt.Printf("focus out %+v\n", e)
 }
 
+func keyPress(e *Event) {
+	fmt.Printf("key press   '%s' %s\n", e.Keysym, e.State)
+}
+
+func keyRelease(e *Event) {
+	fmt.Printf("key release '%s' %s\n", e.Keysym, e.State)
+}
+
 func main() {
 	b1 := TButton(Txt("Hello"), Command(click))
 	b2 := TButton(Txt("World"), Command(click))
@@ -27,5 +35,7 @@ func main() {
 	Grid(TExit(), Columnspan(2), opts)
 	Bind(App, "<FocusIn>", Command(focusIn))
 	Bind(App, "<FocusOut>", Command(focusOut))
+	Bind(App, "<KeyPress>", Command(keyPress))
+	Bind(App, "<KeyRelease>", Command(keyRelease))
 	App.Wait()
 }

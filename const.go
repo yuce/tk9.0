@@ -6,6 +6,7 @@ package tk9_0 // import "modernc.org/tk9.0"
 
 import (
 	"fmt"
+	"strings"
 )
 
 type cursor string
@@ -1040,6 +1041,16 @@ const (
 // Modifier is a bit field representing 0 or more modifiers.
 type Modifier int
 
+func (mods Modifier) String() string {
+	var names []string
+	for mod, name := range modifierNames {
+		if mods&mod == mod {
+			names = append(names, name)
+		}
+	}
+	return strings.Join(names, "+")
+}
+
 const (
 	ModifierNone  Modifier = 0
 	ModifierShift Modifier = 1 << (iota - 1)
@@ -1060,3 +1071,19 @@ const (
 	ModifierWindows = ModifierMod4
 	ModifierSuper   = ModifierMod4
 )
+
+var modifierNames = map[Modifier]string{
+	ModifierShift:   "Shift",
+	ModifierLock:    "Lock",
+	ModifierControl: "Control",
+	ModifierMod1:    "Mod1",
+	ModifierMod2:    "Mod2",
+	ModifierMod3:    "Mod3",
+	ModifierMod4:    "Mod4",
+	ModifierMod5:    "Mod5",
+	ModifierButton1: "Button1",
+	ModifierButton2: "Button2",
+	ModifierButton3: "Button3",
+	ModifierButton4: "Button4",
+	ModifierButton5: "Button5",
+}
