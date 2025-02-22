@@ -1068,6 +1068,7 @@ const (
 	ModifierButton5
 
 	ModifierAlt     = ModifierMod1
+	ModifierNumlock = ModifierMod2
 	ModifierWindows = ModifierMod4
 	ModifierSuper   = ModifierMod4
 )
