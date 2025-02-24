@@ -25,6 +25,7 @@ var (
 	allocator memory.Allocator
 
 	createCommandProc uintptr
+	deleteCommandProc uintptr
 	evalExProc        uintptr
 	getObjResultProc  uintptr
 	getStringProc     uintptr
@@ -120,6 +121,10 @@ func bindLibs(cacheDir string) {
 	}
 
 	if createCommandProc, Error = purego.Dlsym(tclBinHandle, "Tcl_CreateCommand"); Error != nil {
+		return
+	}
+
+	if deleteCommandProc, Error = purego.Dlsym(tclBinHandle, "Tcl_DeleteCommand"); Error != nil {
 		return
 	}
 

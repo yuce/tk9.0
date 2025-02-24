@@ -23,6 +23,7 @@ var (
 	allocator memory.Allocator
 
 	createCommandProc *windows.Proc
+	deleteCommandProc *windows.Proc
 	evalExProc        *windows.Proc
 	getObjResultProc  *windows.Proc
 	getStringProc     *windows.Proc
@@ -106,6 +107,10 @@ func bindLibs(cacheDir string) {
 	}
 
 	if createCommandProc, Error = tclDll.FindProc("Tcl_CreateCommand"); Error != nil {
+		return
+	}
+
+	if deleteCommandProc, Error = tclDll.FindProc("Tcl_DeleteCommand"); Error != nil {
 		return
 	}
 
