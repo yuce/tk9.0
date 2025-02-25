@@ -8,7 +8,7 @@ import (
 
 // Create a new Tcl command whose name is the widget's pathname, and
 // whose action is to dispatch on the operation passed to the widget:
-func (proxy WidgetProxy) registerEventDispatcher() {
+func (proxy *WidgetProxy) registerEventDispatcher() {
 	runCmdProxy := windows.NewCallback(proxy.eventDispatcher)
 	if proxy.commandName, Error = cString(proxy.window.String()); Error != nil {
 		return
@@ -20,6 +20,6 @@ func (proxy WidgetProxy) registerEventDispatcher() {
 	}
 }
 
-func (proxy WidgetProxy) unregisterEventDispatcher() {
+func (proxy *WidgetProxy) unregisterEventDispatcher() {
 	_, _, _ = deleteCommandProc.Call(interp, proxy.commandName)
 }

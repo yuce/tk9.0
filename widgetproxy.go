@@ -38,7 +38,7 @@ func newWidgetProxy(window *Window) widgetProxy {
 
 // Close undoes the wrapping of its Window.
 // All registered operations are unregistered.
-func (proxy widgetProxy) Close() {
+func (proxy *widgetProxy) Close() {
 	// Unregister all registered operations.
 	for operation := range proxy.operations {
 		proxy.Unregister(operation)
@@ -59,22 +59,22 @@ func (proxy widgetProxy) Close() {
 // The operation's arguments are passed to the callback. The callback may perform
 // the operation on the wrapped widget by calling the EvalWrapped method with the
 // arguments. The arguments may be modified if desired.
-func (proxy widgetProxy) Register(operation string, callback OperationCallback) {
+func (proxy *widgetProxy) Register(operation string, callback OperationCallback) {
 	proxy.operations[operation] = callback
 }
 
 // Unregister unregisters an operation callback.
 // If there is no registered callback for the operation, it is silently ignored.
-func (proxy widgetProxy) Unregister(operation string) {
+func (proxy *widgetProxy) Unregister(operation string) {
 	delete(proxy.operations, operation)
 }
 
 // EvalWrapped evaluates the arguments as a raw Tcl string against the wrapped Window.
-func (proxy widgetProxy) EvalWrapped(args []string) {
+func (proxy *widgetProxy) EvalWrapped(args []string) {
 	evalErr(fmt.Sprintf("%s %s", proxy.originalPath, tclSafeStrings(args...)))
 }
 
-func (proxy widgetProxy) eventDispatcher(clientData, in uintptr, argc int32, argv uintptr) uintptr {
+func (proxy *widgetProxy) eventDispatcher(clientData, in uintptr, argc int32, argv uintptr) uintptr {
 	// Expect at least arguments for the path and the operation.
 	if argc < 2 {
 		setResult(fmt.Sprintf("WidgetProxy eventDispatcher internal error: argc=%v", argc))
