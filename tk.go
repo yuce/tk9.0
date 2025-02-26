@@ -2390,12 +2390,8 @@ func (f *FontFace) String() string {
 //
 // # Description
 //
-// Returns information about the metrics (the font-specific data), for font when
-// it is used on window's display. font is a font description; see FONT DESCRIPTIONS
-// below. If the window argument is omitted, it defaults to the main window. If
-// option is specified, returns the value of that metric; if it is omitted, the
-// return value is a list of all the metrics and their values. See FONT METRICS
-// below for a list of the possible metrics.
+// Returns the amount in pixels that the tallest letter sticks up above the baseline
+// of the font, plus any extra blank space added by the designer of the font.
 //
 // Additional information might be available at the [Tcl/Tk font] page.
 //
@@ -2409,12 +2405,8 @@ func (f *FontFace) MetricsAscent(window *Window) int {
 //
 // # Description
 //
-// Returns information about the metrics (the font-specific data), for font when
-// it is used on window's display. font is a font description; see FONT DESCRIPTIONS
-// below. If the window argument is omitted, it defaults to the main window. If
-// option is specified, returns the value of that metric; if it is omitted, the
-// return value is a list of all the metrics and their values. See FONT METRICS
-// below for a list of the possible metrics.
+// Returns the largest amount in pixels that any letter sticks down below the baseline
+// of the font, plus any extra blank space added by the designer of the font.
 //
 // Additional information might be available at the [Tcl/Tk font] page.
 //
@@ -2428,12 +2420,10 @@ func (f *FontFace) MetricsDescent(window *Window) int {
 //
 // # Description
 //
-// Returns information about the metrics (the font-specific data), for font when
-// it is used on window's display. font is a font description; see FONT DESCRIPTIONS
-// below. If the window argument is omitted, it defaults to the main window. If
-// option is specified, returns the value of that metric; if it is omitted, the
-// return value is a list of all the metrics and their values. See FONT METRICS
-// below for a list of the possible metrics.
+// Returns how far apart vertically in pixels two lines of text using the same font should
+// be placed so that none of the characters in one line overlap any of the characters
+// in the other line. This is generally the sum of the ascent above the baseline line plus
+// the descent below the baseline.
 //
 // Additional information might be available at the [Tcl/Tk font] page.
 //
@@ -2447,12 +2437,10 @@ func (f *FontFace) MetricsLinespace(window *Window) int {
 //
 // # Description
 //
-// Returns information about the metrics (the font-specific data), for font when
-// it is used on window's display. font is a font description; see FONT DESCRIPTIONS
-// below. If the window argument is omitted, it defaults to the main window. If
-// option is specified, returns the value of that metric; if it is omitted, the
-// return value is a list of all the metrics and their values. See FONT METRICS
-// below for a list of the possible metrics.
+// Returns a boolean flag that is true if this is a fixed-width font, where each normal character
+// is the same width as all the other characters, or is false if this is a proportionally-spaced font,
+// where individual characters have different widths. The widths of control characters, tab characters,
+// and other non-printing characters are not included when calculating this value.
 //
 // Additional information might be available at the [Tcl/Tk font] page.
 //
