@@ -157,3 +157,12 @@ func InitializeExtension(name string) (err error) {
 	}
 	return NotFound
 }
+
+func extensionInitialized(name string) bool {
+	for extName, ext := range Extensions {
+		if extName.Name == name && ext.(*extension).initialized {
+			return true
+		}
+	}
+	return false
+}

@@ -7,9 +7,13 @@ import (
 	"unicode"
 
 	. "modernc.org/tk9.0"
+	_ "modernc.org/tk9.0/extensions/eval"
 )
 
 func main() {
+	// Proxying widgets requires that the eval extension be enabled.
+	InitializeExtension("eval")
+
 	var text TextWidgetProxy
 
 	// textInsert will be called when text is about to be inserted.

@@ -1,6 +1,7 @@
 package tk9_0 // import "modernc.org/tk9.0"
 
 import (
+	"errors"
 	"fmt"
 	"unsafe"
 )
@@ -22,6 +23,10 @@ type widgetProxy struct {
 // newWidgetProxy creates a proxy that facilitates hooking in to
 // a widget window's internal operations.
 func newWidgetProxy(window *Window) widgetProxy {
+	if !extensionInitialized("eval") {
+		fail(errors.New("use of WidgetProxy requires the 'eval' extension to be enabled, but it is not"))
+	}
+
 	proxy := widgetProxy{
 		window:       window,
 		originalPath: window.String() + "_original",
@@ -110,6 +115,9 @@ type TextWidgetProxy struct {
 
 // NewTextWidgetProxy creates a TextWidgetProxy, wrapping the
 // provided TextWidget.
+//
+// Note that because the EvalWrapped method evaluates raw Tcl, the "eval" extension
+// must be enabled in the main package before calling this function.
 func NewTextWidgetProxy(widget *TextWidget) TextWidgetProxy {
 	return TextWidgetProxy{
 		TextWidget:  widget,
