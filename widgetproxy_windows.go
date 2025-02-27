@@ -21,5 +21,9 @@ func (proxy *WidgetProxy) registerEventDispatcher() {
 }
 
 func (proxy *WidgetProxy) unregisterEventDispatcher() {
+	defer func() {
+		allocator.UintptrFree(proxy.commandName)
+		proxy.commandName = 0 // nil
+	}()
 	_, _, _ = deleteCommandProc.Call(interp, proxy.commandName)
 }

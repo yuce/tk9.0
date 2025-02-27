@@ -23,5 +23,9 @@ func (proxy *widgetProxy) registerEventDispatcher() {
 }
 
 func (proxy *widgetProxy) unregisterEventDispatcher() {
+	defer func() {
+		allocator.UintptrFree(proxy.commandName)
+		proxy.commandName = 0 // nil
+	}()
 	_, _, _ = purego.SyscallN(deleteCommandProc, interp, proxy.commandName)
 }
