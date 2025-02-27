@@ -6,6 +6,14 @@ import (
 )
 
 func TestWidgetProxy(t *testing.T) {
+	// Widget proxying checks that the eval extension is initialized.
+	// However it can't be initialized by calling InitializeExtension() here,
+	// as that requires the extension to have been registered. But importing the
+	// modernc.org/tk9.0/extensions/eval package would result in an import cycle.
+	//
+	// Instead let's be a little naughty, and simply pretend that it's initialized.
+	Extensions[ExtensionKey{Name: "eval"}] = &extension{initialized: true}
+
 	text := NewTextWidgetProxy(Text())
 
 	assertContent := func(expected string) {
