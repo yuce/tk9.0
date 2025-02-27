@@ -8,19 +8,19 @@ import (
 
 // Create a new Tcl command whose name is the widget's pathname, and
 // whose action is to dispatch on the operation passed to the widget:
-func (proxy *WidgetProxy) registerEventDispatcher() {
+func (proxy *widgetProxy) registerEventDispatcher() {
 	runCmdProxy := windows.NewCallback(proxy.eventDispatcher)
 	if proxy.commandName, Error = cString(proxy.window.String()); Error != nil {
 		return
 	}
 	cmd, _, _ := createCommandProc.Call(interp, interp, proxy.commandName, runCmdProxy, 0, 0)
 	if cmd == 0 {
-		Error = fmt.Errorf("registering widget proxy event dispatcher proxy failed: %v", getObjResultProc)
+		fail(fmt.Errorf("registering widget proxy event dispatcher proxy failed: %v", getObjResultProc))
 		return
 	}
 }
 
-func (proxy *WidgetProxy) unregisterEventDispatcher() {
+func (proxy *widgetProxy) unregisterEventDispatcher() {
 	defer func() {
 		allocator.UintptrFree(proxy.commandName)
 		proxy.commandName = 0 // nil

@@ -17,7 +17,7 @@ func (proxy *widgetProxy) registerEventDispatcher() {
 	}
 	cmd, _, _ := purego.SyscallN(createCommandProc, interp, proxy.commandName, runCmdProxy, 0, 0)
 	if cmd == 0 {
-		Error = fmt.Errorf("registering widget proxy event dispatcher proxy failed: %v", getObjResultProc)
+		fail(fmt.Errorf("registering widget proxy event dispatcher proxy failed: %v", getObjResultProc))
 		return
 	}
 }
