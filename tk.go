@@ -7227,6 +7227,26 @@ func (w *ListboxWidget) Insert(index any, elements ...any) {
 	evalErr(fmt.Sprintf("%s insert %s %s", w, tclSafeString(fmt.Sprint(index)), tclSafeList(elements...)))
 }
 
+// listbox — Create and manipulate 'listbox' item list widgets
+//
+// # Description
+//
+// Returns a list containing the numerical indices of all of the elements in the
+// listbox that are currently selected. If there are no elements selected in the
+// listbox then an empty string is returned.
+//
+// More information might be available at the [Tcl/Tk listbox] page.
+//
+// [Tcl/Tk listbox]: https://www.tcl.tk/man/tcl9.0/TkCmd/listbox.html
+func (w *ListboxWidget) Curselection() (r []int) {
+	indicesStrings := parseList(evalErr(fmt.Sprintf("%s curselection", w)))
+	indices := make([]int, len(indicesStrings))
+	for i, index := range indicesStrings {
+		indices[i] = atoi(index)
+	}
+	return indices
+}
+
 // ttk::progressbar — Provide progress feedback
 //
 // # Description
