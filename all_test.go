@@ -9,11 +9,13 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"slices"
 	"testing"
 
 	_ "github.com/adrg/xdg"       // generator.go
 	_ "github.com/expr-lang/expr" // examples
 	_ "golang.org/x/net/html"     // generator.go
+	_ "modernc.org/egg/lib"       // ltok_generator.go
 	_ "modernc.org/ngrab/lib"     // generator.go
 	_ "modernc.org/rec/lib"       // generator.go
 )
@@ -76,5 +78,38 @@ func TestTokenizer(t *testing.T) {
 		if g, e := fmt.Sprintf("%v %q", ids, toks), fmt.Sprintf("%v %q", test.ids, test.toks); g != e {
 			t.Errorf("#%3v: `%s`\ngot %s\nexp %s", i, test.s, g, e)
 		}
+	}
+}
+
+// Credits: https://gitlab.com/cznic/tk9.0/-/issues/51#note_2374472931
+func TestParseList(t *testing.T) {
+	tests := []struct {
+		name     string
+		in       string
+		expected []string
+	}{
+		{"empty", "", []string{}},
+		{"one item", "abc", []string{"abc"}},
+		{"multiple items", "abc def ghi", []string{"abc", "def", "ghi"}},
+		{"multiple inter item spaces", "abc   def", []string{"abc", "def"}},
+		{"leading and trailing spaces", "  abc def  ", []string{"abc", "def"}},
+		{"delimited item at start", "{ab c} def ghi", []string{"ab c", "def", "ghi"}},
+		{"delimited item in middle", "abc {de f} ghi", []string{"abc", "de f", "ghi"}},
+		{"delimited item at end", "abc def {gh i}", []string{"abc", "def", "gh i"}},
+		{"all items delimited", "{abc} {def} {ghi}", []string{"abc", "def", "ghi"}},
+		{"delimited with leading and trailing space", " {ab c} def {gh i}  ", []string{"ab c", "def", "gh i"}},
+		{"whitespace in items", "{ab c} {de\tf} {gh\ni}", []string{"ab c", "de\tf", "gh\ni"}},
+		{"braces in items", `{ab\{c} {de\}f}`, []string{"ab{c", "de}f"}},
+		{"backslash not escaping a brace", `{ab\c}`, []string{"ab\\c"}},
+		{"whitespace in items", "{ab c} {de\tf} {gh\ni}", []string{"ab c", "de\tf", "gh\ni"}},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			list := parseList(test.in)
+			if slices.Compare(list, test.expected) != 0 {
+				t.Errorf("got %#v, expected %#v", list, test.expected)
+			}
+		})
 	}
 }
