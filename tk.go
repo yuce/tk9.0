@@ -7233,7 +7233,7 @@ func (w *ListboxWidget) Insert(index any, elements ...any) {
 //
 // Returns a list containing the numerical indices of all of the elements in the
 // listbox that are currently selected. If there are no elements selected in the
-// listbox then an empty string is returned.
+// listbox then a zero length slice is returned.
 //
 // More information might be available at the [Tcl/Tk listbox] page.
 //
