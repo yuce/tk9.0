@@ -3281,6 +3281,14 @@ func (w *TextWidget) Count(options ...any) []string {
 	return parseList(evalErr(fmt.Sprintf("%s count %s", w, collectAny(options...))))
 }
 
+// All option.
+//
+// Known uses:
+//   - [TextWidget] (command specific)
+func All() Opt {
+	return rawOption("-all")
+}
+
 // Displayindices option.
 //
 // Known uses:
@@ -3311,6 +3319,14 @@ func Indices() Opt {
 //   - [TextWidget] (command specific)
 func Lines() Opt {
 	return rawOption("-lines")
+}
+
+// Mark option.
+//
+// Known uses:
+//   - [TextWidget] (command specific)
+func Mark() Opt {
+	return rawOption("-mark")
 }
 
 // Xpixels option.
@@ -3691,6 +3707,49 @@ func (w *TextWidget) Text() string {
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) Replace(index1, index2, chars any, options ...any) string {
 	return evalErr(fmt.Sprintf("%s replace %s", w, collectAny(options...)))
+}
+
+// Text — Create and manipulate 'text' hypertext editing widgets
+//
+// # Description
+//
+// Return the contents of the text widget from index1 up to, but not including
+// index2, including the text and information about marks, tags, and embedded
+// windows. If index2 is not specified, then it defaults to one character past
+// index1. The information is returned in the following format:
+//
+// key1 value1 index1 key2 value2 index2 ...
+//
+// The possible key values are text, mark, tagon, tagoff, image, and window.
+// The corresponding value is the text, mark name, tag name, image name, or
+// window name. The index information is the index of the start of the text,
+// mark, tag transition, image or window. One or more of the following switches
+// (or abbreviations thereof) may be specified to control the dump:
+//
+//   - [All] Return information about all elements: text, marks, tags, images and windows.
+//     This is the default.
+//   - [Command command] Instead of returning the information as the result of the
+//     dump operation, invoke the command on each element of the text widget within the range. The command has three arguments appended to it before it is evaluated: the key, value, and index.
+//   - [Image] Include information about images in the dump results.
+//   - [Mark] Include information about marks in the dump results.
+//   - [Tag] Include information about tag transitions in the dump results. Tag
+//     information is returned as tagon and tagoff elements that indicate the begin
+//     and end of each range of each tag, respectively.
+//   - [Text] Include information about text in the dump results. The value is the
+//     text up to the next element or the end of range indicated by index2. A text
+//     element does not span newlines. A multi-line block of text that contains no
+//     marks or tag transitions will still be dumped as a set of text segments that
+//     each end with a newline. The newline is part of the value.
+//   - [Window] Include information about embedded windows in the dump results. The
+//     value of a window is its Tk pathname, unless the window has not been created yet.
+//     (It must have a create script.) In this case an empty string is returned, and you
+//     must query the window by its index position to get more information.
+//
+// Additional information might be available at the [Tcl/Tk text] page.
+//
+// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
+func (w *TextWidget) Dump(options ...any) []string {
+	return parseList(evalErr(fmt.Sprintf("%s dump %s", w, collectAny(options...))))
 }
 
 // LC encodes a text index consisting of a line and char number.
@@ -6847,6 +6906,7 @@ func Tab(tabId any) Opt {
 //
 // Known uses:
 //   - [Tooltip] (command specific)
+//   - [TextWidget] (command specific)
 func Tag(name string) Opt {
 	return rawOption(fmt.Sprintf(`-tag %s`, optionString(name)))
 }
