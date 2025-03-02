@@ -4742,6 +4742,20 @@ func (m *MenuWidget) Id(index int) *MenuItem {
 	return &MenuItem{id: id}
 }
 
+// Menu — Create and manipulate 'menu' widgets and menubars
+//
+// # Description
+//
+// Returns the numerical index corresponding to a MenuItem.
+//
+// Additional information might be available at the [Tcl/Tk menu] page.
+//
+// [Tcl/Tk menu]: https://www.tcl.tk/man/tk9.0/TkCmd/menu.htm
+func (m *MenuWidget) Index(item *MenuItem) int {
+	index := evalErr(fmt.Sprintf("%s index %s", m, item.id))
+	return atoi(index)
+}
+
 // TScrollbar — Control the viewport of a scrollable widget
 //
 // # Description
