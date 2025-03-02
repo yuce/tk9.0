@@ -3671,6 +3671,28 @@ func (w *TextWidget) Text() string {
 	return w.Get("1.0", "end-1c")[0]
 }
 
+// Text — Create and manipulate 'text' hypertext editing widgets
+//
+// # Description
+//
+// Replaces the range of characters between index1 and index2 with the given
+// characters and tags. See the section on pathName insert for an explanation
+// of the handling of the tagList... arguments, and the section on pathName delete
+// for an explanation of the handling of the indices. If index2 corresponds to
+// an index earlier in the text than index1, an error will be generated.
+//
+// The deletion and insertion are arranged so that no unnecessary scrolling of
+// the window or movement of insertion cursor occurs. In addition the undo/redo
+// stack are correctly modified, if undo operations are active in the text widget.
+// The command returns an empty string.
+//
+// Additional information might be available at the [Tcl/Tk text] page.
+//
+// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
+func (w *TextWidget) Replace(index1, index2, chars any, options ...any) string {
+	return evalErr(fmt.Sprintf("%s replace %s", w, collectAny(options...)))
+}
+
 // LC encodes a text index consisting of a line and char number.
 type LC struct {
 	Line int // 1-based line number within the text content.
