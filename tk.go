@@ -4723,6 +4723,25 @@ func (w *MenuWidget) EntryConfigure(index uint, options ...Opt) {
 	evalErr(fmt.Sprintf("%s entryconfigure %d %s", w, index, winCollect(w.Window, options...)))
 }
 
+// Menu — Create and manipulate 'menu' widgets and menubars
+//
+// # Description
+//
+// Returns the id of the menu entry given by index. This is the identifier that was
+// assigned to the entry when it was created using the add or insert widget command.
+// Returns an empty string for the tear-off entry, or if index is equivalent to {}.
+//
+// Note that while the raw tk command returns an id, that alone is of no practical use
+// to the caller. So a MenuItem representing the id is returned.
+//
+// Additional information might be available at the [Tcl/Tk menu] page.
+//
+// [Tcl/Tk menu]: https://www.tcl.tk/man/tk9.0/TkCmd/menu.htm
+func (m *MenuWidget) Id(index int) *MenuItem {
+	id := evalErr(fmt.Sprintf("%s id %d", m, index))
+	return &MenuItem{id: id}
+}
+
 // TScrollbar — Control the viewport of a scrollable widget
 //
 // # Description
