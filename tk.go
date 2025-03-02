@@ -2798,16 +2798,18 @@ func FontFamilies(options ...Opt) []string {
 // resulting elements until parseList return its argument unchanged, modulo any
 // white space prefix and/or suffix, ie. list is a "primitive" element.
 //
-// List = { white_space Element white_space } .
-// Element = String | BracedString .
-// String = Char { Char | '{' | '}' } .
-// BracedString = '{' { Char | '{' | ' ' } '}' .
-// Char = ascii | escape_seq .
-// non_printable = `[\x00-\x08\x0e-\x1f]` .
-// ascii = non_printable | `[!-\x5b\x5d-\x7a\\x7e-\x7f\xff]` .
-// escape_seq = '\\' ( 'u' h h h h | `.` ) .
-// h = `[0-9A-Fa-f]` .
-// white_space = { '\t' | '\n' | '\v' | '\f' | '\r' | ' ' } .
+// # The grammar
+//
+//	List = { white_space Element white_space } .
+//	Element = String | BracedString .
+//	String = Char { Char | '{' | '}' } .
+//	BracedString = '{' { Char | '{' | ' ' } '}' .
+//	Char = ascii | escape_seq .
+//	non_printable = `[\x00-\x08\x0e-\x1f]` .
+//	ascii = non_printable | `[!-\x5b\x5d-\x7a\\x7e-\x7f\xff]` .
+//	escape_seq = '\\' ( 'u' h h h h | `.` ) .
+//	h = `[0-9A-Fa-f]` .
+//	white_space = { '\t' | '\n' | '\v' | '\f' | '\r' | ' ' } .
 func parseList(list string) (r []string) {
 	const (
 		eof = iota
