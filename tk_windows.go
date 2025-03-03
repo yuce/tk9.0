@@ -31,6 +31,7 @@ var (
 	newStringObjProc  *windows.Proc
 	runCmdProxy       = windows.NewCallbackCDecl(eventDispatcher)
 	setObjResultProc  *windows.Proc
+	splitListProc     *windows.Proc
 	tclDll            *windows.DLL
 	tkDll             *windows.DLL
 )
@@ -119,6 +120,10 @@ func bindLibs(cacheDir string) {
 	}
 
 	if setObjResultProc, Error = tclDll.FindProc("Tcl_SetObjResult"); Error != nil {
+		return
+	}
+
+	if splitListProc, Error = tclDll.FindProc("Tcl_SplitList"); Error != nil {
 		return
 	}
 
@@ -327,4 +332,8 @@ func Finalize() (err error) {
 		err = errors.Join(err, os.RemoveAll(v))
 	}
 	return err
+}
+
+func callSplitList(cList uintptr, argcPtr uintptr, argvPtr uintptr) (r1 uintptr, r2 uintptr, err error) {
+	return splitListProc.Call(interp, cList, argcPtr, argvPtr)
 }
