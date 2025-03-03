@@ -102,6 +102,8 @@ func TestParseList(t *testing.T) {
 		{"braces in items", `{ab\{c} {de\}f}`, []string{"ab{c", "de}f"}},
 		{"backslash not escaping a brace", `{ab\c}`, []string{"ab\\c"}},
 		{"whitespace in items", "{ab c} {de\tf} {gh\ni}", []string{"ab c", "de\tf", "gh\ni"}},
+		{"braces in elements", "a{b c}d e{f} g{{h i{}j k}{l }m}}", []string{"a{b", "c}d", "e{f}", "g{{h", "i{}j", "k}{l", "}m}}"}},
+		{"nested list", "{abc {def ghi}} jkl", []string{"abc {def ghi}", "jkl"}},
 	}
 
 	for _, test := range tests {

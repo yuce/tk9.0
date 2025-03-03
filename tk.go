@@ -2825,7 +2825,7 @@ func parseList(list string) (r []string) {
 		switch c, n := ltok(list); c {
 		case eof:
 			return r
-		case ascii: // String
+		case ascii, rbrace: // String
 			elem.Reset()
 			elem.WriteString(list[:n])
 			list = list[n:]
@@ -2868,6 +2868,7 @@ func parseList(list string) (r []string) {
 					list = list[n:]
 				case lbrace:
 					lvl++
+					elem.WriteString(list[:n])
 					list = list[n:]
 				case rbrace:
 					lvl--
