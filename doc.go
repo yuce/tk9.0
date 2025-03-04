@@ -219,6 +219,13 @@
 //
 //	-gcflags="github.com/ebitengine/purego/internal/fakecgo=-std"
 //
+// Specific to windows/386:
+//
+// There's an open [Go issue 54187] that affects [issue 54]. This target is no
+// more a first-class supported one. Moreover, Windows 11 do not support the
+// 386 architecture at all, meaning Go will eventually stop supporting
+// windows/386 as well.
+//
 // # Builders
 //
 // Builder results available at [modern-c.appspot.com].
@@ -2488,6 +2495,7 @@
 // Layout: Vertical.Scrollbar.trough -sticky ns -children {Vertical.Scrollbar.uparrow -side top -sticky {} Vertical.Scrollbar.downarrow -side bottom -sticky {} Vertical.Scrollbar.thumb -sticky nswe -unit 1 -children {Vertical.Scrollbar.grip -sticky {}}}PASS
 //
 // [FreeBSD]: https://github.com/ebitengine/purego/blob/7402fed73989eaf478f4f7905862d0f04537ac8c/internal/fakecgo/freebsd.go#L15
+// [Go issue 54187]: https://github.com/golang/go/issues/54187
 // [MVP]: https://en.wikipedia.org/wiki/Minimum_viable_product
 // [RERO]: https://en.wikipedia.org/wiki/Release_early,_release_often
 // [Tkinter]: https://en.wikipedia.org/wiki/Tkinter
@@ -2495,6 +2503,7 @@
 // [cgo]: https://pkg.go.dev/cmd/cgo
 // [documentation for cmd/link]: https://pkg.go.dev/cmd/link
 // [equ]: https://pkg.go.dev/modernc.org/equ
+// [issue 54]: https://gitlab.com/cznic/tk9.0/-/issues/54
 // [issue tracker]: https://gitlab.com/cznic/tk9.0/-/issues
 // [jnml's LiberaPay]: https://liberapay.com/jnml/donate
 // [modern-c.appspot.com]: https://modern-c.appspot.com/-/builder/?importpath=modernc.org%2ftk9.0
