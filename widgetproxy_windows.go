@@ -44,7 +44,7 @@ func (proxy *widgetProxy) registerEventDispatcher() {
 	if proxy.commandName, Error = cString(proxy.window.String()); Error != nil {
 		return
 	}
-	cmd, _, _ := createCommandProc.Call(interp, interp, proxy.commandName, runCmdProxy, 0, 0)
+	cmd, _, _ := createCommandProc.Call(interp, proxy.commandName, runCmdProxy, 0, 0)
 	if cmd == 0 {
 		fail(fmt.Errorf("registering widget proxy event dispatcher proxy failed: %v", getObjResultProc))
 		return

@@ -12,7 +12,7 @@ import (
 	tcl "modernc.org/tcl9.0"
 )
 
-//func (proxy *widgetProxy) eventDispatcher(clientData, in uintptr, argc int32, argv uintptr) uintptr {
+// func (proxy *widgetProxy) eventDispatcher(clientData, in uintptr, argc int32, argv uintptr) uintptr {
 func (proxy *widgetProxy) eventDispatcher(clientData any, in *tcl.Interp, args []string) int {
 	// Expect at least arguments for the path and the operation.
 	if len(args) < 2 {
