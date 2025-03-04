@@ -192,3 +192,7 @@ func Finalize() (err error) {
 	}
 	return err
 }
+
+func setResult(s string) (err error) {
+	return interp.SetResult(s)
+}

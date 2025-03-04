@@ -212,23 +212,6 @@ func tclResult() string {
 	return ""
 }
 
-func goString(p uintptr) string { // Result can be retained.
-	if p == 0 {
-		return ""
-	}
-
-	p0 := p
-	var n int
-	for ; *(*byte)(unsafe.Pointer(p)) != 0; n++ {
-		p++
-	}
-	if n != 0 {
-		return string(unsafe.Slice((*byte)(unsafe.Pointer(p0)), n))
-	}
-
-	return ""
-}
-
 func cString(s string) (r uintptr, err error) {
 	if s == "" {
 		return 0, nil

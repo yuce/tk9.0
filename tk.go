@@ -22,6 +22,7 @@ import (
 	"strings"
 	"sync/atomic"
 	"time"
+	"unsafe"
 
 	"github.com/mat/besticon/v3/ico"
 	"golang.org/x/net/html"
@@ -7744,4 +7745,21 @@ func (w *TProgressbarWidget) Step(amount ...float64) {
 // [Tcl/Tk progressbar]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_progressbar.html
 func (w *TProgressbarWidget) Stop() {
 	evalErr(fmt.Sprintf("%s stop", w))
+}
+
+func goString(p uintptr) string { // Result can be retained.
+	if p == 0 {
+		return ""
+	}
+
+	p0 := p
+	var n int
+	for ; *(*byte)(unsafe.Pointer(p)) != 0; n++ {
+		p++
+	}
+	if n != 0 {
+		return string(unsafe.Slice((*byte)(unsafe.Pointer(p0)), n))
+	}
+
+	return ""
 }
