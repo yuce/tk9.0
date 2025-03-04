@@ -3707,8 +3707,13 @@ func (w *TextWidget) Text() string {
 // Additional information might be available at the [Tcl/Tk text] page.
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
-func (w *TextWidget) Replace(index1, index2, chars any, options ...any) string {
-	return evalErr(fmt.Sprintf("%s replace %s", w, collectAny(options...)))
+func (w *TextWidget) Replace(index1 any, index2 any, chars string, options ...any) string {
+	return evalErr(fmt.Sprintf("%s replace %s %s %s %s", w,
+		tclSafeString(fmt.Sprint(index1)),
+		tclSafeString(fmt.Sprint(index2)),
+		tclSafeString(chars),
+		collectAny(options...),
+	))
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
