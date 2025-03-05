@@ -2570,22 +2570,15 @@ func parseList(list string) (r []string) {
 	}
 	defer allocator.UintptrFree(cList)
 
-	var _pointer uintptr
-	sizeofPointer := int(unsafe.Sizeof(_pointer))
-	var argcPtr uintptr
-	var argvPtr uintptr
-
-	if argcPtr, err = allocator.UintptrMalloc(sizeofPointer); err != nil {
-		fail(fmt.Errorf("failed to allocate memory for argc pointer : %w", err))
+	var _uintptr uintptr
+	pointers, err := allocator.UintptrMalloc(int(2 * unsafe.Sizeof(_uintptr)))
+	if err != nil {
+		fail(fmt.Errorf("failed to allocate memory for argc & argv pointers : %w", err))
 		return
 	}
-	defer allocator.UintptrFree(argcPtr)
-
-	if argvPtr, err = allocator.UintptrMalloc(sizeofPointer); err != nil {
-		fail(fmt.Errorf("failed to allocate memory for argv pointer : %w", err))
-		return
-	}
-	defer allocator.UintptrFree(argvPtr)
+	defer allocator.UintptrFree(pointers)
+	argcPtr := pointers
+	argvPtr := pointers + unsafe.Sizeof(_uintptr)
 
 	callSplitList(cList, argcPtr, argvPtr)
 	argc := *((*int)(unsafe.Pointer(argcPtr)))
