@@ -28,6 +28,7 @@
 // # In action
 //
 //   - [equ] A Plain TeX math editor.
+//   - [secure-files-go-gui] A GUI for [secure-files-go].
 //   - [visualmd] A WYSIWYG markdown editor.
 //
 // # Frequently Asked Questions
@@ -2508,6 +2509,8 @@
 // [jnml's LiberaPay]: https://liberapay.com/jnml/donate
 // [modern-c.appspot.com]: https://modern-c.appspot.com/-/builder/?importpath=modernc.org%2ftk9.0
 // [purego]: https://github.com/ebitengine/purego
+// [secure-files-go-gui]: https://github.com/darshanags/secure-files-go-gui
+// [secure-files-go]: https://github.com/darshanags/secure-files-go
 // [tcl.tk site]: https://www.tcl.tk/man/tcl9.0/TkCmd/index.html
 // [tk9.0/vnc package]: https://pkg.go.dev/modernc.org/tk9.0/vnc
 // [tkinter.ttk site]: https://docs.python.org/3/library/tkinter.ttk.html
