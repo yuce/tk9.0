@@ -2568,15 +2568,15 @@ func parseList(list string) (r []string) {
 		fail(fmt.Errorf("failed to allocate C string for list : %w", err))
 		return
 	}
-	defer allocator.UintptrFree(cList)
+	defer free(cList)
 
 	var _uintptr uintptr
-	pointers, err := allocator.UintptrMalloc(int(2 * unsafe.Sizeof(_uintptr)))
+	pointers, err := malloc(int(2 * unsafe.Sizeof(_uintptr)))
 	if err != nil {
 		fail(fmt.Errorf("failed to allocate memory for argc & argv pointers : %w", err))
 		return
 	}
-	defer allocator.UintptrFree(pointers)
+	defer free(pointers)
 	argcPtr := pointers
 	argvPtr := pointers + unsafe.Sizeof(_uintptr)
 

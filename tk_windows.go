@@ -337,3 +337,15 @@ func Finalize() (err error) {
 func callSplitList(cList uintptr, argcPtr uintptr, argvPtr uintptr) (r1 uintptr, r2 uintptr, err error) {
 	return splitListProc.Call(interp, cList, argcPtr, argvPtr)
 }
+
+// Internal malloc enabling parseList() in tk.go to not care about the target
+// specific implemetations.
+func malloc(sz int) (r uintptr, err error) {
+	return allocator.UintptrMalloc(sz)
+}
+
+// Internal free enabling parseList() in tk.go to not care about the target
+// specific implemetations.
+func free(p uintptr) (err error) {
+	return allocator.UintptrFree(p)
+}
