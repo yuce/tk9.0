@@ -14,6 +14,7 @@ func TestWidgetProxy(t *testing.T) {
 	case 
 		"freebsd/amd64",
 		"linux/386",
+		"linux/amd64",
 		"linux/arm64":
 
 		if display == "" {
