@@ -10,6 +10,13 @@ import (
 )
 
 func TestWidgetProxy(t *testing.T) {
+	switch target {
+	case "linux/386":
+		if display == "" {
+			t.Skip("This test is known to work only interactively (use ssh -X).")
+		}
+	}
+
 	// Widget proxying checks that the eval extension is initialized.
 	// However it can't be initialized by calling InitializeExtension() here,
 	// as that requires the extension to have been registered. But importing the

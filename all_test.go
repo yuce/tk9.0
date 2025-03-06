@@ -20,6 +20,11 @@ import (
 	_ "modernc.org/rec/lib"       // generator.go
 )
 
+var (
+	display = os.Getenv("DISPLAY")
+	target  = fmt.Sprintf("%s/%s", goos, goarch)
+)
+
 func TestMain(m *testing.M) {
 	if Error != nil {
 		fmt.Fprintln(os.Stderr, Error)
