@@ -33,6 +33,7 @@ var (
 	newStringObjProc  uintptr
 	runCmdProxy       = purego.NewCallback(eventDispatcher)
 	setObjResultProc  uintptr
+	splitListProc     uintptr
 	tclBinHandle      uintptr
 	tkBinHandle       uintptr
 )
@@ -133,6 +134,10 @@ func bindLibs(cacheDir string) {
 	}
 
 	if setObjResultProc, Error = purego.Dlsym(tclBinHandle, "Tcl_SetObjResult"); Error != nil {
+		return
+	}
+
+	if splitListProc, Error = purego.Dlsym(tclBinHandle, "Tcl_SplitList"); Error != nil {
 		return
 	}
 
@@ -343,4 +348,20 @@ func setResult(s string) (err error) {
 
 	purego.SyscallN(setObjResultProc, interp, obj)
 	return nil
+}
+
+func callSplitList(cList uintptr, argcPtr uintptr, argvPtr uintptr) (r1 uintptr, r2 uintptr, err uintptr) {
+	return purego.SyscallN(splitListProc, interp, cList, argcPtr, argvPtr)
+}
+
+// Internal malloc enabling parseList() in tk.go to not care about the target
+// specific implemetations.
+func malloc(sz int) (r uintptr, err error) {
+	return allocator.UintptrMalloc(sz)
+}
+
+// Internal free enabling parseList() in tk.go to not care about the target
+// specific implemetations.
+func free(p uintptr) (err error) {
+	return allocator.UintptrFree(p)
 }

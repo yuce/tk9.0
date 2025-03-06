@@ -196,3 +196,33 @@ func Finalize() (err error) {
 func setResult(s string) (err error) {
 	return interp.SetResult(s)
 }
+
+func cString(s string) (r uintptr, err error) {
+	return libc.CString(s)
+}
+
+func callSplitList(cList uintptr, argcPtr uintptr, argvPtr uintptr) (r1 uintptr, r2 uintptr, err uintptr) {
+	rc := libtcl.XTclSplitList(interp.TLS(), interp.Handle(), cList, argcPtr, argvPtr) // .SyscallN(splitListProc, interp, cList, argcPtr, argvPtr)
+	if rc == tcl_error {
+		err = libtcl.TCL_ERROR
+	}
+	return uintptr(rc), 0, err
+}
+
+var oom = errors.New("OOM")
+
+// Internal malloc enabling parseList() in tk.go to not care about the target
+// specific implemetations.
+func malloc(sz int) (r uintptr, err error) {
+	if r = libc.Xmalloc(interp.TLS(), libc.Tsize_t(sz)); r == 0 {
+		err = oom
+	}
+	return r, err
+}
+
+// Internal free enabling parseList() in tk.go to not care about the target
+// specific implemetations.
+func free(p uintptr) (err error) {
+	libc.Xfree(interp.TLS(), p)
+	return nil
+}

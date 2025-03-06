@@ -88,6 +88,9 @@ func TestTokenizer(t *testing.T) {
 
 // Credits: https://gitlab.com/cznic/tk9.0/-/issues/51#note_2374472931
 func TestParseList(t *testing.T) {
+	Initialize()
+	defer Finalize()
+
 	tests := []struct {
 		name     string
 		in       string
@@ -104,7 +107,7 @@ func TestParseList(t *testing.T) {
 		{"all items delimited", "{abc} {def} {ghi}", []string{"abc", "def", "ghi"}},
 		{"delimited with leading and trailing space", " {ab c} def {gh i}  ", []string{"ab c", "def", "gh i"}},
 		{"whitespace in items", "{ab c} {de\tf} {gh\ni}", []string{"ab c", "de\tf", "gh\ni"}},
-		{"braces in items", `{ab\{c} {de\}f}`, []string{"ab{c", "de}f"}},
+		{"braces in items", `ab\{c de\}f`, []string{`ab{c`, "de}f"}},
 		{"backslash not escaping a brace", `{ab\c}`, []string{"ab\\c"}},
 		{"whitespace in items", "{ab c} {de\tf} {gh\ni}", []string{"ab c", "de\tf", "gh\ni"}},
 		{"braces in elements", "a{b c}d e{f} g{{h i{}j k}{l }m}}", []string{"a{b", "c}d", "e{f}", "g{{h", "i{}j", "k}{l", "}m}}"}},
