@@ -11,7 +11,11 @@ import (
 
 func TestWidgetProxy(t *testing.T) {
 	switch target {
-	case "linux/386", "linux/arm64":
+	case 
+		"freebsd/amd64",
+		"linux/386",
+		"linux/arm64":
+
 		if display == "" {
 			t.Skip("This test is known to work only interactively (use ssh -X).")
 		}
