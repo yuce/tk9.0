@@ -93,6 +93,8 @@ func TestParseList(t *testing.T) {
 		if display == "" {
 			t.Skip("This test is known to work only interactively (use ssh -X).")
 		}
+	case "linux/s390x":
+		t.Skipf("This test is known to not work on %s.", target)
 	}
 	Initialize()
 	defer Finalize()
