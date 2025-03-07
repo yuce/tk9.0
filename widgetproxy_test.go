@@ -19,11 +19,12 @@ func TestWidgetProxy(t *testing.T) {
 		"linux/s390x":
 
 		if display == "" {
-			t.Skip("This test is known to work only interactively (use ssh -X).")
+			t.Skipf("This test is known to work only interactively on %s, use ssh -X.", target)
 		}
 	case
 		"freebsd/arm64",
 		"linux/arm",
+		"linux/ppc64le",
 		"windows/386":
 
 		t.Skipf("This test is known to not work on %s.", target)
