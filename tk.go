@@ -69,6 +69,8 @@ const (
 	PanicOnError = iota
 	// Errors will be recorded into the Error variable using errors.Join
 	CollectErrors
+
+	testHookWaitVar = "TK9_TEST_HOOK_WAIT"
 )
 
 // ErrorMode selects the action taken on errors.
@@ -86,10 +88,10 @@ var (
 	//go:embed embed/tklib/tooltip/tooltip.tcl
 	tooltip []byte
 
-	autocenterDisabled bool
-	appWithdrawn       bool
-	appIconified       bool
 	appDeiconified     bool
+	appIconified       bool
+	appWithdrawn       bool
+	autocenterDisabled bool
 	cleanupDirs        []string
 	exitHandler        Opt
 	finished           atomic.Int32
@@ -100,6 +102,7 @@ var (
 	initialized        bool
 	isBuilder          = os.Getenv("MODERNC_BUILDER") != ""
 	isVNC              = os.Getenv("TK9_VNC") == "1"
+	testHookWait       = os.Getenv(testHookWaitVar)
 	wmTitle            string
 
 	// https://pdos.csail.mit.edu/archive/rover/RoverDoc/escape_shell_table.html
@@ -1303,6 +1306,11 @@ func (w *Window) SetResizable(width, height bool) {
 // If an event handler invokes Wait again, the nested call to Wait must
 // complete before the outer call can complete.
 func (w *Window) Wait() {
+	if isBuilder && testHookWait != "" {
+		TclAfterIdle(Command(func() {
+			fmt.Println(testHookWait)
+		}))
+	}
 	if w == App {
 		switch {
 		case os.Getenv("TK9_VNC") == "1":
