@@ -54,32 +54,6 @@ func TestMain(m *testing.M) {
 	os.Exit(rc)
 }
 
-func killXvfb() {
-	out := mustSys("pgrep", "-l", "Xvfb")
-	a := strings.Split(string(out), "\n")
-	for _, v := range a {
-		b := strings.Fields(v)
-		if len(b) != 0 {
-			mustSys("kill", b[0])
-		}
-	}
-}
-
-func mustStart(arg0 string, args ...string) {
-	if err := exec.Command(arg0, args...).Start(); err != nil {
-		panic(err)
-	}
-}
-
-func mustSys(arg0 string, args ...string) (r []byte) {
-	var err error
-	if r, err = sys(arg0, args...); err != nil {
-		panic(err)
-	}
-
-	return r
-}
-
 func sys(arg0 string, args ...string) (r []byte, err error) {
 	return exec.Command(arg0, args...).CombinedOutput()
 }
@@ -215,16 +189,16 @@ func TestExamples(t *testing.T) {
 	graylist := map[string]struct{}{}
 
 next:
-	for _, v := range m {
+	for i, v := range m {
 		base := filepath.Base(v)
 		if _, ok := blacklist[base]; ok {
 			continue
 		}
 
 		t.Log(v)
-		for i := 0; i < retries; i++ {
-			t.Logf("\t%v: %v", i, v)
-			if err = testExample(t, tmpDir, v, i); err == nil {
+		for j := 0; j < retries; j++ {
+			t.Logf("\t%v: %v", j, v)
+			if err = testExample(t, tmpDir, v, 100*i+j); err == nil {
 				continue next
 			}
 		}
