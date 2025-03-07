@@ -13,7 +13,6 @@ func TestWidgetProxy(t *testing.T) {
 	switch target {
 	case
 		"freebsd/amd64",
-		"linux/386",
 		"linux/amd64",
 		"linux/arm64",
 		"linux/s390x":
@@ -23,6 +22,7 @@ func TestWidgetProxy(t *testing.T) {
 		}
 	case
 		"freebsd/arm64",
+		"linux/386",
 		"linux/arm",
 		"linux/ppc64le",
 		"windows/386":

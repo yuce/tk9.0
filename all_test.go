@@ -90,6 +90,7 @@ func TestTokenizer(t *testing.T) {
 func TestParseList(t *testing.T) {
 	switch target {
 	case 
+		"linux/386",
 		"linux/arm",
 		"linux/ppc64le":
 
