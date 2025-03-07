@@ -92,6 +92,7 @@ func TestParseList(t *testing.T) {
 	case 
 		"linux/386",
 		"linux/arm",
+		"linux/loong64",
 		"linux/ppc64le":
 
 		if display == "" {

@@ -24,6 +24,7 @@ func TestWidgetProxy(t *testing.T) {
 		"freebsd/arm64",
 		"linux/386",
 		"linux/arm",
+		"linux/loong64",
 		"linux/ppc64le",
 		"windows/386":
 
