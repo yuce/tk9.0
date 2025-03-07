@@ -190,6 +190,7 @@ func TestExamples(t *testing.T) {
 
 next:
 	for i, v := range m {
+		t.Logf("\t%v: %v", i, v)
 		base := filepath.Base(v)
 		if _, ok := blacklist[base]; ok {
 			continue
@@ -197,7 +198,6 @@ next:
 
 		t.Log(v)
 		for j := 0; j < retries; j++ {
-			t.Logf("\t%v: %v", j, v)
 			if err = testExample(t, tmpDir, v, 100*i+j); err == nil {
 				continue next
 			}
