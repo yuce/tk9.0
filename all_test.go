@@ -42,7 +42,7 @@ func TestMain(m *testing.M) {
 		os.Exit(1)
 	}
 
-	if display == "" && goos == "linux" {
+	if display == "" && (goos == "linux" || goos == "freebsd") {
 		if s := os.Getenv(xvfbDisplayVar); s != "" {
 			display = s
 			os.Setenv("DISPLAY", s)
@@ -165,7 +165,7 @@ func TestExamples(t *testing.T) {
 
 	const retries = 10
 	switch goos {
-	case "linux":
+	case "linux", "freebsd":
 		if display == "" {
 			t.Fatal("DISPLAY=")
 		}
