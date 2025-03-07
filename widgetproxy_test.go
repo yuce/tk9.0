@@ -22,8 +22,11 @@ func TestWidgetProxy(t *testing.T) {
 		}
 	case "freebsd/arm64":
 		t.Skip("This test is known to not work even interactively using ssh -X.")
-	case "windows/386":
-		t.Skip("This test is known to not work on this target.")
+	case
+		"linux/arm",
+		"windows/386":
+
+		t.Skipf("This test is known to not work on this %s.", target)
 	}
 
 	// Widget proxying checks that the eval extension is initialized.

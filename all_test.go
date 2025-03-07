@@ -88,6 +88,12 @@ func TestTokenizer(t *testing.T) {
 
 // Credits: https://gitlab.com/cznic/tk9.0/-/issues/51#note_2374472931
 func TestParseList(t *testing.T) {
+	switch target {
+	case "linux/arm":
+		if display == "" {
+			t.Skip("This test is known to work only interactively (use ssh -X).")
+		}
+	}
 	Initialize()
 	defer Finalize()
 

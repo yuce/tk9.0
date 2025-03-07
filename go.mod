@@ -17,14 +17,14 @@ require (
 	modernc.org/fileutil v1.3.0
 	modernc.org/knuth v0.5.4
 	modernc.org/libc v1.61.13
-	modernc.org/libtcl9.0 v0.15.1
-	modernc.org/libtk9.0 v0.15.0
+	modernc.org/libtcl9.0 v0.14.0
+	modernc.org/libtk9.0 v0.13.0
 	modernc.org/mathutil v1.7.1
 	modernc.org/memory v1.8.2
 	modernc.org/ngrab v0.1.0
 	modernc.org/opt v0.1.4
 	modernc.org/rec v0.3.1
-	modernc.org/tcl9.0 v0.15.25
+	modernc.org/tcl9.0 v0.15.0
 )
 
 require (
