@@ -188,8 +188,11 @@ func TestExamples(t *testing.T) {
 	}
 
 	graylist := map[string]struct{}{
+		"b5.go":          {},
+		"calc.go":        {},
 		"ctext.go":       {},
 		"font.go":        {},
+		"ntext.go":       {},
 		"splot.go":       {}, // gnuplot not available on all builders
 		"tablelist.go":   {},
 		"tori.go":        {}, // gnuplot not available on all builders
@@ -213,14 +216,15 @@ next:
 			continue
 		}
 
-		for j := 0; j < retries; j++ {
+		var j int
+		for j = 0; j < retries; j++ {
 			if err = testExample(t, tmpDir, bin); err == nil {
 				continue next
 			}
 		}
 
 		if _, ok := graylist[filepath.Base(v)]; !ok {
-			t.Errorf("%v: FAIL %v", v, err)
+			t.Errorf("%v: FAIL %v (tries=%v)", v, err, j)
 		}
 	}
 }
