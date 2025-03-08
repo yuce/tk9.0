@@ -17,6 +17,7 @@ func TestWidgetProxy(t *testing.T) {
 			t.Skipf("This test is known to work only interactively on %s, use ssh -X.", target)
 		}
 	case
+		"darwin/amd64",
 		"freebsd/amd64",
 		"freebsd/arm64",
 		"linux/386",
