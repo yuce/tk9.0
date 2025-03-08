@@ -190,7 +190,6 @@ func TestExamples(t *testing.T) {
 
 next:
 	for i, v := range m {
-		t.Logf("\t%v: %v", i, v)
 		base := filepath.Base(v)
 		if _, ok := blacklist[base]; ok {
 			continue
