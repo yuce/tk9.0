@@ -191,7 +191,8 @@ func TestExamples(t *testing.T) {
 		"ctext.go":       {},
 		"font.go":        {},
 		"splot.go":       {}, // gnuplot not available on all builders
-		"tori.png":       {}, // gnuplot not available on all builders
+		"tablelist.go":   {},
+		"tori.go":        {}, // gnuplot not available on all builders
 		"tori_canvas.go": {}, // gnuplot not available on all builders
 	}
 
