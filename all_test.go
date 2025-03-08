@@ -195,7 +195,6 @@ next:
 			continue
 		}
 
-		t.Log(v)
 		for j := 0; j < retries; j++ {
 			if err = testExample(t, tmpDir, v, 100*i+j); err == nil {
 				continue next
