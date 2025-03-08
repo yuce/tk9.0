@@ -26,6 +26,7 @@ func TestWidgetProxy(t *testing.T) {
 		"linux/arm",
 		"linux/loong64",
 		"linux/ppc64le",
+		"linux/riscv64",
 		"windows/386":
 
 		t.Skipf("This test is known to not work on %s.", target)
