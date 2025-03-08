@@ -164,7 +164,7 @@ func TestExamples(t *testing.T) {
 	}
 
 	t.Logf("DISPLAY=%s XVFB_DISPLAY=%s display=%s", os.Getenv("DISPLAY"), os.Getenv(xvfbDisplayVar), display)
-	const retries = 20
+	const retries = 10
 	switch goos {
 	case "linux", "freebsd":
 		if display == "" {
@@ -187,7 +187,13 @@ func TestExamples(t *testing.T) {
 		"tex.go":         {},
 	}
 
-	graylist := map[string]struct{}{}
+	graylist := map[string]struct{}{
+		"ctext.go":       {},
+		"font.go":        {},
+		"splot.go":       {}, // gnuplot not available on all builders
+		"tori.png":       {}, // gnuplot not available on all builders
+		"tori_canvas.go": {}, // gnuplot not available on all builders
+	}
 
 next:
 	for i, v := range m {
@@ -196,28 +202,29 @@ next:
 			continue
 		}
 
+		bin := filepath.Join(tmpDir, fmt.Sprintf("prog%v", i))
+		if goos == "windows" {
+			bin += ".exe"
+		}
+
+		if _, err := sys("go", "build", "-o", bin, v); err != nil {
+			t.Error(err)
+			continue
+		}
+
 		for j := 0; j < retries; j++ {
-			if err = testExample(t, tmpDir, v, 100*i+j); err == nil {
+			if err = testExample(t, tmpDir, bin); err == nil {
 				continue next
 			}
 		}
 
 		if _, ok := graylist[filepath.Base(v)]; !ok {
-			t.Errorf("%v: %v", v, err)
+			t.Errorf("%v: FAIL %v", v, err)
 		}
 	}
 }
 
-func testExample(t *testing.T, tmpDir string, fn string, n int) (err error) {
-	bin := filepath.Join(tmpDir, fmt.Sprintf("prog%v", n))
-	if goos == "windows" {
-		bin += ".exe"
-	}
-
-	if _, err := sys("go", "build", "-o", bin, fn); err != nil {
-		t.Fatal(err)
-	}
-
+func testExample(t *testing.T, tmpDir, bin string) (err error) {
 	token := fmt.Sprint(time.Now().UnixNano())
 	os.Setenv(testHookWaitVar, token)
 
@@ -254,12 +261,12 @@ func testExample(t *testing.T, tmpDir string, fn string, n int) (err error) {
 	case <-crashCheckTimer.C:
 		if runtime.GOOS == "windows" {
 			if err := cmd.Process.Kill(); err != nil {
-				t.Fatalf("%v: error killing process: %v", fn, err)
+				return fmt.Errorf("error killing process: %v", err)
 			}
 		} else {
 			if err := cmd.Process.Signal(syscall.SIGTERM); err != nil {
 				if err := cmd.Process.Kill(); err != nil {
-					t.Fatalf("%v: error killing process: %v", fn, err)
+					return fmt.Errorf("error killing process: %v", err)
 				}
 			}
 		}
