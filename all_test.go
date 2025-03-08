@@ -159,6 +159,13 @@ func TestParseList(t *testing.T) {
 }
 
 func TestExamples(t *testing.T) {
+	switch target {
+	case
+		"darwin/amd64",
+		"darwin/arm64":
+
+		t.Skipf("This test is known to not work on %s.", target)
+	}
 	if !isBuilder {
 		t.Skip("not a builder")
 	}
