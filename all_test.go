@@ -163,7 +163,8 @@ func TestExamples(t *testing.T) {
 		t.Skip("not a builder")
 	}
 
-	const retries = 10
+	t.Logf("DISPLAY=%s XVFB_DISPLAY=%s display=%s", os.Getenv("DISPLAY"), os.Getenv(xvfbDisplayVar), display)
+	const retries = 20
 	switch goos {
 	case "linux", "freebsd":
 		if display == "" {
