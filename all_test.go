@@ -176,13 +176,7 @@ func TestExamples(t *testing.T) {
 	}
 
 	graylist := map[string]struct{}{
-		"b5.go":          {},
-		"calc.go":        {},
-		"ctext.go":       {},
-		"font.go":        {},
-		"ntext.go":       {},
 		"splot.go":       {}, // gnuplot not available on all builders
-		"tablelist.go":   {},
 		"tori.go":        {}, // gnuplot not available on all builders
 		"tori_canvas.go": {}, // gnuplot not available on all builders
 	}
