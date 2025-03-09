@@ -22,7 +22,6 @@ import (
 	_ "github.com/adrg/xdg"       // generator.go
 	_ "github.com/expr-lang/expr" // examples
 	_ "golang.org/x/net/html"     // generator.go
-	_ "modernc.org/egg/lib"       // ltok_generator.go
 	_ "modernc.org/ngrab/lib"     // generator.go
 	_ "modernc.org/rec/lib"       // generator.go
 )
@@ -125,7 +124,6 @@ func TestParseList(t *testing.T) {
 		t.Skipf("This test is known to not work on %s.", target)
 	}
 	Initialize()
-	defer Finalize()
 
 	tests := []struct {
 		name     string

@@ -41,7 +41,7 @@ const (
 	gnuplotTimeout = time.Minute //TODO do not let the UI freeze
 	goarch         = runtime.GOARCH
 	goos           = runtime.GOOS
-	libVersion     = "tk9.0.0"
+	libVersion     = "tk9.0.1"
 
 	tcl_eval_direct = 0x40000
 	tcl_ok          = 0
@@ -282,7 +282,7 @@ func setDefaults() {
 			v.Finalize(nil)
 		}
 	})
-	evalErr("option add *tearOff 0") // https://tkdocs.com/tutorial/menus.html
+	//TODO- evalErr("option add *tearOff 0") // https://tkdocs.com/tutorial/menus.html
 	NativeScaling = TkScaling()
 	if s := os.Getenv(ScaleEnvVar); s != "" {
 		if k, err := strconv.ParseFloat(s, 64); err == nil {

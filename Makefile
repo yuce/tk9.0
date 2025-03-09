@@ -5,15 +5,17 @@
 .PHONY:	all clean edit editor test work w65 lib_win lib_linux lib_darwin lib_freebsd \
 	build_all_targets demo examples
 
-TAR = tcl-core9.0.0-src.tar.gz
-URL = http://prdownloads.sourceforge.net/tcl/$(TAR)
-TAR2 = tk9.0.0-src.tar.gz
-URL2 = http://prdownloads.sourceforge.net/tcl/$(TAR2)
+TCL_TAR = tcl-core9.0.1-src.tar.gz
+TCL_TAR_URL = http://prdownloads.sourceforge.net/tcl/$(TCL_TAR)
+TK_TAR = tk9.0.1-src.tar.gz
+TK_TAR_URL = http://prdownloads.sourceforge.net/tcl/$(TK_TAR)
 GOOS = $(shell go env GOOS)
 GOARCH = $(shell go env GOARCH)
 WIN32 = embed/windows/386
 WIN64 = embed/windows/amd64
 WINARM64 = embed/windows/arm64
+GOMAXPROCS = $(shell go run internal/cpus.go 2>&1)
+PWD = $(shell pwd)
 
 all:
 	golint 2>&1
@@ -57,8 +59,8 @@ clean:
 	go clean
 
 download:
-	@if [ ! -f $(TAR) ]; then wget $(URL) ; fi
-	@if [ ! -f $(TAR2) ]; then wget $(URL2) ; fi
+	@if [ ! -f $(TCL_TAR) ]; then wget $(TCL_TAR_URL) ; fi
+	@if [ ! -f $(TK_TAR) ]; then wget $(TK_TAR_URL) ; fi
 
 edit:
 	@if [ -f "Session.vim" ]; then gvim -S & else gvim -p Makefile go.mod builder.json *.go & fi
@@ -156,19 +158,23 @@ lib_winarm64: download
 
 lib_linux: download
 	if [ "$(GOOS)" != "linux" ]; then exit 1 ; fi
-	rm -rf ~/tmp/tcl9* ~/tmp/tk9* embed/$(GOOS)/$(GOARCH)
+	rm -rf tcl9.0.1/ tk9.0.1/ Img-2.0.1/ embed/$(GOOS)/$(GOARCH)
 	mkdir -p embed/$(GOOS)/$(GOARCH)
-	tar xf $(TAR) -C ~/tmp
-	tar xf $(TAR2) -C ~/tmp
-	sh -c "cd ~/tmp/tcl9.0.0/unix ; ./configure --disable-dll-unloading"
-	make -C ~/tmp/tcl9.0.0/unix -j2
-	cp -v ~/tmp/tcl9.0.0/unix/libtcl9.0.so embed/$(GOOS)/$(GOARCH)
-	sh -c "cd ~/tmp/tk9.0.0/unix ; ./configure --with-tcl=$$HOME/tmp/tcl9.0.0/unix"
-	make -C ~/tmp/tk9.0.0/unix -j2
-	cp -v ~/tmp/tk9.0.0/unix/libtcl9tk9.0.so ~/tmp/tk9.0.0/unix/libtk9.0.0.zip embed/$(GOOS)/$(GOARCH)
-	zip -j embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/*.so embed/$(GOOS)/$(GOARCH)/*.zip
+	tar xf $(TCL_TAR)
+	tar xf $(TK_TAR)
+	sh -c "cd tcl9.0.1/unix ; ./configure --disable-dll-unloading"
+	make -C tcl9.0.1/unix -j$(GOMAXPROCS)
+	cp -v tcl9.0.1/unix/*.so embed/$(GOOS)/$(GOARCH)
+	sh -c "cd tk9.0.1/unix ; ./configure --with-tcl=$(PWD)/tcl9.0.1/unix"
+	make -C tk9.0.1/unix -j$(GOMAXPROCS)
+	cp -v tk9.0.1/unix/*.so tk9.0.1/unix/libtk9.0.1.zip embed/$(GOOS)/$(GOARCH)
+	go run internal/shasig.go - tk_$(GOOS)_$(GOARCH).go
+	gofmt -l -s -w tk_$(GOOS)_$(GOARCH).go
+	zip -j embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/*
 	rm -f embed/$(GOOS)/$(GOARCH)/*.so embed/$(GOOS)/$(GOARCH)/*.zip
 	mv embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/lib.zip
+	rm -rf tcl9.0.1/ tk9.0.1/ Img-2.0.1/
+	git status
 
 lib_darwin: download
 	if [ "$(GOOS)" != "darwin" ]; then exit 1 ; fi

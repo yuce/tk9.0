@@ -15,8 +15,7 @@ const (
 var libZip []byte
 
 var shasig = map[string]string{
-	// embed/linux/amd64/lib.zip
-	"libtcl9.0.so":    "e693dc74ea2039474ce42dc53eb2774e883b0903e7dbf3dad3d9040c665dcd1a",
-	"libtcl9tk9.0.so": "e55f7910c1477dfc259bc7cace99a8184fd3c091e9b22377b02da11ca9f896e4",
-	"libtk9.0.0.zip":  "c666cf661852f896d83669a34fe5eb12620d0aae1517841082eb38093563b73c",
+	"libtcl9.0.so":    "7294529d7397998c5c1bb13b4fd8c75ea9ad96caffcace581a5056aa65f40ead",
+	"libtcl9tk9.0.so": "681a7a5fdd7edd19f844df06c0287d6a5f689d93b6001c8e9143d40265366333",
+	"libtk9.0.1.zip":  "542e9ab34ae1a4eed1ccfd349d0fcd5b2acf6c606ba4e61bd6097b00761ac06b",
 }

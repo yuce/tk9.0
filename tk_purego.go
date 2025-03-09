@@ -167,7 +167,7 @@ func bindLibs(cacheDir string) {
 		return
 	}
 
-	fn := filepath.Join(cacheDir, "libtk9.0.0.zip")
+	fn := filepath.Join(cacheDir, fmt.Sprintf("lib%s.zip", libVersion))
 	if _, Error := eval(fmt.Sprintf("zipfs mount %s /app", fn)); Error != nil {
 		return
 	}
