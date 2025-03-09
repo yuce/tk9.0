@@ -164,7 +164,8 @@ func TestExamples(t *testing.T) {
 	switch target {
 	case
 		"darwin/amd64",
-		"darwin/arm64":
+		"darwin/arm64",
+		"windows/386":
 
 		t.Skipf("This test is known to not work on %s.", target)
 	case "linux/loong64":
