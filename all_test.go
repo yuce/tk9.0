@@ -120,11 +120,12 @@ func TestParseList(t *testing.T) {
 		}
 	case
 		"darwin/amd64",
+		"linux/amd64",
 		"linux/s390x":
 		t.Skipf("This test is known to not work on %s.", target)
 	}
-	Initialize()
 
+	Initialize()
 	tests := []struct {
 		name     string
 		in       string
