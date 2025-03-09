@@ -282,7 +282,7 @@ func setDefaults() {
 			v.Finalize(nil)
 		}
 	})
-	//TODO- evalErr("option add *tearOff 0") // https://tkdocs.com/tutorial/menus.html
+	evalErr("option add *tearOff 0") // https://tkdocs.com/tutorial/menus.html
 	NativeScaling = TkScaling()
 	if s := os.Getenv(ScaleEnvVar); s != "" {
 		if k, err := strconv.ParseFloat(s, 64); err == nil {
