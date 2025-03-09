@@ -108,23 +108,6 @@ func TestTokenizer(t *testing.T) {
 
 // Credits: https://gitlab.com/cznic/tk9.0/-/issues/51#note_2374472931
 func TestParseList(t *testing.T) {
-	switch target {
-	case
-		"linux/386",
-		"linux/arm",
-		"linux/loong64",
-		"linux/ppc64le":
-
-		if display == "" {
-			t.Skipf("This test is known to work only interactively on %s, use ssh -X.", target)
-		}
-	case
-		"darwin/amd64",
-		"linux/amd64",
-		"linux/s390x":
-		t.Skipf("This test is known to not work on %s.", target)
-	}
-
 	Initialize()
 	tests := []struct {
 		name     string
@@ -160,18 +143,12 @@ func TestParseList(t *testing.T) {
 }
 
 func TestExamples(t *testing.T) {
-	switch target {
-	case
-		"darwin/amd64",
-		"darwin/arm64",
-		"windows/386":
-
-		t.Skipf("This test is known to not work on %s.", target)
-	case "linux/loong64":
-		t.Skipf("Xvfb not available on %s. (issue 59)", target)
-	}
 	if !isBuilder {
 		t.Skip("not a builder")
+	}
+	switch target {
+	case "linux/loong64":
+		t.Skipf("Xvfb not available on %s. (issue 59)", target)
 	}
 
 	t.Logf("DISPLAY=%s XVFB_DISPLAY=%s display=%s", os.Getenv("DISPLAY"), os.Getenv(xvfbDisplayVar), display)

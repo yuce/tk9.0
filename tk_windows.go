@@ -37,10 +37,6 @@ var (
 )
 
 func init() {
-	if isBuilder {
-		return
-	}
-
 	runtime.LockOSThread()
 }
 
