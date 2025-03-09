@@ -152,7 +152,7 @@ func TestExamples(t *testing.T) {
 	}
 
 	t.Logf("DISPLAY=%s XVFB_DISPLAY=%s display=%s", os.Getenv("DISPLAY"), os.Getenv(xvfbDisplayVar), display)
-	const retries = 10
+	const retries = 1
 	switch goos {
 	case "linux", "freebsd":
 		if display == "" {
