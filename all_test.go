@@ -167,6 +167,8 @@ func TestExamples(t *testing.T) {
 		"darwin/arm64":
 
 		t.Skipf("This test is known to not work on %s.", target)
+	case "linux/loong64":
+		t.Skipf("Xvfb not available on %s. (issue 59)", target)
 	}
 	if !isBuilder {
 		t.Skip("not a builder")
