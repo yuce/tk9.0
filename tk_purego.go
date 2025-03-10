@@ -13,8 +13,8 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
-	"unsafe"
 	"testing"
+	"unsafe"
 
 	"github.com/ebitengine/purego"
 	"github.com/evilsocket/islazy/zip"

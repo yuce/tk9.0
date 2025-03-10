@@ -31,7 +31,6 @@ const (
 
 var (
 	display = os.Getenv("DISPLAY")
-	target  = fmt.Sprintf("%s/%s", goos, goarch)
 )
 
 func TestMain(m *testing.M) {

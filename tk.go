@@ -61,6 +61,8 @@ var NativeScaling float64
 // App is the main/root application window.
 var App = &Window{}
 
+var target = fmt.Sprintf("%s/%s", goos, goarch)
+
 //TODO? ErrorMsg
 
 // Error modes
