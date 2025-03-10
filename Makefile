@@ -209,19 +209,22 @@ lib_darwin: download
 # use gmake
 lib_freebsd: download
 	if [ "$(GOOS)" != "freebsd" ]; then exit 1 ; fi
-	rm -rf ~/tmp/tcl9* ~/tmp/tk9* embed/$(GOOS)/$(GOARCH)
+	rm -rf tcl9.0.1/ tk9.0.1/ Img-2.0.1/ embed/$(GOOS)/$(GOARCH)
 	mkdir -p embed/$(GOOS)/$(GOARCH)
-	tar xf $(TAR) -C ~/tmp
-	tar xf $(TAR2) -C ~/tmp
-	sh -c "cd ~/tmp/tcl9.0.0/unix ; ./configure --disable-dll-unloading"
-	gmake -C ~/tmp/tcl9.0.0/unix -j2
-	cp -v ~/tmp/tcl9.0.0/unix/libtcl9.0.so embed/$(GOOS)/$(GOARCH)
-	sh -c "cd ~/tmp/tk9.0.0/unix ; ./configure --with-tcl=$$HOME/tmp/tcl9.0.0/unix"
-	gmake -C ~/tmp/tk9.0.0/unix -j2
-	cp -v ~/tmp/tk9.0.0/unix/libtcl9tk9.0.so ~/tmp/tk9.0.0/unix/libtk9.0.0.zip embed/$(GOOS)/$(GOARCH)
-	zip -j embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/*.so embed/$(GOOS)/$(GOARCH)/*.zip
+	tar xf $(TCL_TAR)
+	tar xf $(TK_TAR)
+	sh -c "cd tcl9.0.1/unix ; ./configure --disable-dll-unloading"
+	make -C tcl9.0.1/unix -j$(GOMAXPROCS)
+	cp -v tcl9.0.1/unix/*.so embed/$(GOOS)/$(GOARCH)
+	sh -c "cd tk9.0.1/unix ; ./configure --with-tcl=$(PWD)/tcl9.0.1/unix"
+	make -C tk9.0.1/unix -j$(GOMAXPROCS)
+	cp -v tk9.0.1/unix/*.so tk9.0.1/unix/libtk9.0.1.zip embed/$(GOOS)/$(GOARCH)
+	go run internal/shasig.go - tk_$(GOOS)_$(GOARCH).go
+	gofmt -l -s -w tk_$(GOOS)_$(GOARCH).go
+	zip -j embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/*
 	rm -f embed/$(GOOS)/$(GOARCH)/*.so embed/$(GOOS)/$(GOARCH)/*.zip
 	mv embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/lib.zip
+	rm -rf tcl9.0.1/ tk9.0.1/ Img-2.0.1/
 	git status
 
 demo:
