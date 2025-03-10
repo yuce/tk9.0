@@ -8,6 +8,7 @@ package main
 
 import (
 	"bytes"
+	"flag"
 	"fmt"
 	"os"
 	"os/exec"
@@ -23,6 +24,9 @@ var (
 )
 
 func main() {
+	flag.StringVar(&goos, "goos", runtime.GOOS, "")
+	flag.StringVar(&goarch, "goarch", runtime.GOARCH, "")
+	flag.Parse()
 	m, err := filepath.Glob(filepath.Join("embed", goos, goarch, "*"))
 	if err != nil {
 		panic(err.Error())

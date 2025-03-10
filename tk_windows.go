@@ -149,7 +149,7 @@ func bindLibs(cacheDir string) {
 		return
 	}
 
-	if _, Error := eval("zipfs mount libtk9.0.0.zip /app"); Error != nil {
+	if _, Error := eval(fmt.Sprintf("zipfs mount lib%s.zip /app", libVersion)); Error != nil {
 		return
 	}
 

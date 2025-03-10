@@ -118,6 +118,8 @@ lib_win64: download
 	sh -c "cd ~/tmp/tk9.0.1/win ; ./configure  --build=x86_64-linux-gnu --host=x86_64-w64-mingw32 --with-tcl=$$HOME/tmp/tcl9.0.1/win"
 	make -C ~/tmp/tk9.0.1/win -j$(GOMAXPROCS)
 	cp -v ~/tmp/tk9.0.1/win/tcl9tk90.dll ~/tmp/tk9.0.1/win/libtk9.0.1.zip $(WIN64)
+	go run internal/shasig.go -goos=windows -goarch=amd64 tk_windows_amd64.go
+	gofmt -l -s -w tk_$(GOOS)_$(GOARCH).go
 	zip -j $(WIN64)/lib.zip.tmp $(WIN64)/*.dll $(WIN64)/*.zip
 	rm -f $(WIN64)/*.dll $(WIN64)/*.zip
 	mv $(WIN64)/lib.zip.tmp $(WIN64)/lib.zip
@@ -136,6 +138,8 @@ lib_win32: download
 	sh -c "cd ~/tmp/tk9.0.1/win ; ./configure  --build=x86_64-linux-gnu --host=i686-w64-mingw32 --with-tcl=$$HOME/tmp/tcl9.0.1/win"
 	make -C ~/tmp/tk9.0.1/win -j$(GOMAXPROCS)
 	cp -v ~/tmp/tk9.0.1/win/tcl9tk90.dll ~/tmp/tk9.0.1/win/libtk9.0.1.zip $(WIN32)
+	go run internal/shasig.go -goos=windows -goarch=386  tk_windows_386.go
+	gofmt -l -s -w tk_$(GOOS)_$(GOARCH).go
 	zip -j $(WIN32)/lib.zip.tmp $(WIN32)/*.dll $(WIN32)/*.zip
 	rm -f $(WIN32)/*.dll $(WIN32)/*.zip
 	mv $(WIN32)/lib.zip.tmp $(WIN32)/lib.zip
@@ -155,6 +159,8 @@ lib_winarm64: download
 	sh -c "cd ~/tmp/tk9.0.1/win ; ./configure --build=x86_64-linux-gnu --host=aarch64-w64-mingw32 --with-tcl=$$HOME/tmp/tcl9.0.1/win  --enable-64bit=arm64"
 	make -C ~/tmp/tk9.0.1/win -j$(GOMAXPROCS)
 	cp -v ~/tmp/tk9.0.1/win/tcl9tk90.dll ~/tmp/tk9.0.1/win/libtk9.0.1.zip $(WINARM64)
+	go run internal/shasig.go -goos=windows -goarch=arm64  tk_windows_arm64.go
+	gofmt -l -s -w tk_$(GOOS)_$(GOARCH).go
 	zip -j $(WINARM64)/lib.zip.tmp $(WINARM64)/*.dll $(WINARM64)/*.zip
 	rm -f $(WINARM64)/*.dll $(WINARM64)/*.zip
 	mv $(WINARM64)/lib.zip.tmp $(WINARM64)/lib.zip

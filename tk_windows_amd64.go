@@ -15,14 +15,13 @@ const (
 var libZip []byte
 
 var shasig = map[string]string{
-	// embed/windows/amd64/lib.zip
-	"libtommath.dll":     "2d760fefb452665b6af8c8d9d29f3a8378f10fc0847cdd9938ea0cb5edf1d573",
-	"tcl90.dll":          "ffe73bcaf947e361561d71a8d93e525c637ca4e2d0b4b4c14c5e0df9756e92b0",
-	"tcl9dde14.dll":      "752748e6975bc56cb941e29c291c18db67e33216b026d49962bf62042584b50e",
-	"tcl9registry13.dll": "0943f57b7bf4a5433a660f5ae6f252fa2f67603af01e916725c48f4fdd6ed658",
-	"tcl9tk90.dll":       "38efd85ac62473ea9615d272b1b923ee3fe8fe9e35d6fa9ebab3f7a0d4aaf795",
-	"tcldde14.dll":       "71ee58d7ddd6213fc2a3d05f089296453c4c8b3de9b7268c2256bbbbab386aab",
-	"tclregistry13.dll":  "e0bfebf0377f3b1671f7d501bb14683cadf382d8181936448d98864eb137acb2",
-	"zlib1.dll":          "04117778e255ed158cf6a4a1e51aa40f49124d9035208218fbfebbe565cf254d",
-	"libtk9.0.0.zip":     "b8873abe39f903e8c0e6e0669083421e020646af9946e16baf30897a64dd5460",
+	"libtk9.0.1.zip": "942297fe73c74085c431e315cfb8e4ef0f4a8c2ef7ab11840268da91c8b31494",
+	"libtommath.dll": "2d760fefb452665b6af8c8d9d29f3a8378f10fc0847cdd9938ea0cb5edf1d573",
+	"tcl90.dll": "704e550abfaa9c9659bf6f16d2ca76783fb68cbafa49a83613a148641cf77605",
+	"tcl9dde14.dll": "d696384cce2adf5d80e6f969b1dc262ec3fb58a81d7b614bfb39cbba2e424a21",
+	"tcl9registry13.dll": "34bfa90eced8921108df3d58c1d7f878c68e416283873446e27262c6c7b01a1b",
+	"tcl9tk90.dll": "ed2f91f231f840f51e2db5f666a3366455f022503a7eeb32a11413acafcec8b2",
+	"tcldde14.dll": "b072fd5f98f47d6fa9d1c8e8992ffb8c7f364dc92c4d413bf47fc38aa5a6e753",
+	"tclregistry13.dll": "0129eb4d73dd44e4dfe8db208e165246b986d7eeaf4f8bc5a18b3110175d770e",
+	"zlib1.dll": "04117778e255ed158cf6a4a1e51aa40f49124d9035208218fbfebbe565cf254d",
 }
