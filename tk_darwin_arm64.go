@@ -15,8 +15,7 @@ const (
 var libZip []byte
 
 var shasig = map[string]string{
-	// embed/darwin/arm64/lib.zip
-	"libtcl9.0.dylib":    "707bb2ec114901c5821ed7c6dfb4bfc9b351c5d45398a9704b624586231a250f",
-	"libtcl9tk9.0.dylib": "face40c56012e61bfff95970de07ccda03a31b60e2ed4f371f93c19d4259b49b",
-	"libtk9.0.0.zip":     "9df27e04a9ca76b080520de045200a7bb1e9a62f738828765da40784a4221252",
+	"libtcl9.0.dylib":    "643ebd83a980e599552b4ddfa540daeefa0caf6a240ce8b1234ba8598e5df1d0",
+	"libtcl9tk9.0.dylib": "2969f7993c5d35a2f139062d1ff578884b867c523046a76bbd333a10e73f2c87",
+	"libtk9.0.1.zip":     "5e8b7b3bc7e37881fad6aacfa868e767baf5890be0bebe21094587bf81938c09",
 }

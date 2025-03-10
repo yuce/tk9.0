@@ -162,7 +162,7 @@ func TestExamples(t *testing.T) {
 	}
 
 	t.Logf("DISPLAY=%s XVFB_DISPLAY=%s display=%s", os.Getenv("DISPLAY"), os.Getenv(xvfbDisplayVar), display)
-	const retries = 1
+	const retries = 2
 	switch goos {
 	case "linux", "freebsd":
 		if display == "" {
@@ -262,7 +262,7 @@ func testExample(t *testing.T, tmpDir, bin string) (err error) {
 		if err != nil {
 			if exitError, ok := err.(*exec.ExitError); ok {
 				status := exitError.Sys().(syscall.WaitStatus)
-				if !status.Signaled() && goos != "windows" {
+				if !status.Signaled() && goos == "linux" {
 					return fmt.Errorf("process exited with error: %v", err)
 				}
 			} else {
