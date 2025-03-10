@@ -12,7 +12,6 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"runtime"
 	"slices"
 	"strings"
 	"syscall"
@@ -147,21 +146,6 @@ func TestExamples(t *testing.T) {
 		t.Skip("not a builder")
 	}
 
-	t.Logf("DISPLAY=%s XVFB_DISPLAY=%s display=%s", os.Getenv("DISPLAY"), os.Getenv(xvfbDisplayVar), display)
-	const retries = 1
-	switch goos {
-	case "linux", "freebsd":
-		if display == "" {
-			t.Fatal("DISPLAY=")
-		}
-	}
-
-	tmpDir := t.TempDir()
-	m, err := filepath.Glob(filepath.Join("_examples", "*.go"))
-	if err != nil {
-		t.Fatal(err)
-	}
-
 	blacklist := map[string]struct{}{
 		"demo.go":        {},
 		"embed.go":       {},
@@ -175,6 +159,27 @@ func TestExamples(t *testing.T) {
 		"splot.go":       {}, // gnuplot not available on all builders
 		"tori.go":        {}, // gnuplot not available on all builders
 		"tori_canvas.go": {}, // gnuplot not available on all builders
+	}
+
+	t.Logf("DISPLAY=%s XVFB_DISPLAY=%s display=%s", os.Getenv("DISPLAY"), os.Getenv(xvfbDisplayVar), display)
+	const retries = 1
+	switch goos {
+	case "linux", "freebsd":
+		if display == "" {
+			t.Fatal("DISPLAY=")
+		}
+	case "windows":
+		blacklist["dialog.go"] = struct{}{}
+	}
+	switch target {
+	case "windows/386":
+		blacklist["widgetproxy.go"] = struct{}{} // See #54
+	}
+
+	tmpDir := t.TempDir()
+	m, err := filepath.Glob(filepath.Join("_examples", "*.go"))
+	if err != nil {
+		t.Fatal(err)
 	}
 
 next:
@@ -242,7 +247,7 @@ func testExample(t *testing.T, tmpDir, bin string) (err error) {
 			return fmt.Errorf("process unexpectedly exited normally")
 		}
 	case <-crashCheckTimer.C:
-		if runtime.GOOS == "windows" {
+		if goos == "windows" {
 			if err := cmd.Process.Kill(); err != nil {
 				return fmt.Errorf("error killing process: %v", err)
 			}
@@ -257,7 +262,7 @@ func testExample(t *testing.T, tmpDir, bin string) (err error) {
 		if err != nil {
 			if exitError, ok := err.(*exec.ExitError); ok {
 				status := exitError.Sys().(syscall.WaitStatus)
-				if !status.Signaled() {
+				if !status.Signaled() && goos != "windows" {
 					return fmt.Errorf("process exited with error: %v", err)
 				}
 			} else {
