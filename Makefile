@@ -108,15 +108,16 @@ lib_win64: download
 	if [ "$(GOOS)" != "linux" ]; then exit 1 ; fi
 	if [ "$(GOARCH)" != "amd64" ]; then exit 1 ; fi
 	rm -rf ~/tmp/tcl9* ~/tmp/tk9* $(WIN64)
+	mkdir -p ~/tmp/tcl9.0.1/win ~/tmp/tk9.0.1/win
 	mkdir -p $(WIN64)
-	tar xf $(TAR) -C ~/tmp
-	tar xf $(TAR2) -C ~/tmp
-	sh -c "cd ~/tmp/tcl9.0.0/win ; ./configure --build=x86_64-linux-gnu --host=x86_64-w64-mingw32"
-	make -C ~/tmp/tcl9.0.0/win -j12
-	cp -v ~/tmp/tcl9.0.0/win/*.dll $(WIN64)
-	sh -c "cd ~/tmp/tk9.0.0/win ; ./configure  --build=x86_64-linux-gnu --host=x86_64-w64-mingw32 --with-tcl=$$HOME/tmp/tcl9.0.0/win"
-	make -C ~/tmp/tk9.0.0/win -j12
-	cp -v ~/tmp/tk9.0.0/win/tcl9tk90.dll ~/tmp/tk9.0.0/win/libtk9.0.0.zip $(WIN64)
+	tar xf $(TCL_TAR) -C ~/tmp
+	tar xf $(TK_TAR) -C ~/tmp
+	sh -c "cd ~/tmp/tcl9.0.1/win ; ./configure --build=x86_64-linux-gnu --host=x86_64-w64-mingw32"
+	make -C ~/tmp/tcl9.0.1/win -j$(GOMAXPROCS)
+	cp -v ~/tmp/tcl9.0.1/win/*.dll $(WIN64)
+	sh -c "cd ~/tmp/tk9.0.1/win ; ./configure  --build=x86_64-linux-gnu --host=x86_64-w64-mingw32 --with-tcl=$$HOME/tmp/tcl9.0.1/win"
+	make -C ~/tmp/tk9.0.1/win -j$(GOMAXPROCS)
+	cp -v ~/tmp/tk9.0.1/win/tcl9tk90.dll ~/tmp/tk9.0.1/win/libtk9.0.1.zip $(WIN64)
 	zip -j $(WIN64)/lib.zip.tmp $(WIN64)/*.dll $(WIN64)/*.zip
 	rm -f $(WIN64)/*.dll $(WIN64)/*.zip
 	mv $(WIN64)/lib.zip.tmp $(WIN64)/lib.zip
@@ -125,15 +126,16 @@ lib_win32: download
 	if [ "$(GOOS)" != "linux" ]; then exit 1 ; fi
 	if [ "$(GOARCH)" != "amd64" ]; then exit 1 ; fi
 	rm -rf ~/tmp/tcl9* ~/tmp/tk9* $(WIN32)
+	mkdir -p ~/tmp/tcl9.0.1/win ~/tmp/tk9.0.1/win
 	mkdir -p $(WIN32)
-	tar xf $(TAR) -C ~/tmp
-	tar xf $(TAR2) -C ~/tmp
-	sh -c "cd ~/tmp/tcl9.0.0/win ; ./configure --build=x86_64-linux-gnu --host=i686-w64-mingw32"
-	make -C ~/tmp/tcl9.0.0/win -j12
-	cp -v ~/tmp/tcl9.0.0/win/*.dll ~/tmp/tcl9.0.0/win/tcl90.dll $(WIN32)
-	sh -c "cd ~/tmp/tk9.0.0/win ; ./configure  --build=x86_64-linux-gnu --host=i686-w64-mingw32 --with-tcl=$$HOME/tmp/tcl9.0.0/win"
-	make -C ~/tmp/tk9.0.0/win -j12
-	cp -v ~/tmp/tk9.0.0/win/tcl9tk90.dll ~/tmp/tk9.0.0/win/libtk9.0.0.zip $(WIN32)
+	tar xf $(TCL_TAR) -C ~/tmp
+	tar xf $(TK_TAR) -C ~/tmp
+	sh -c "cd ~/tmp/tcl9.0.1/win ; ./configure --build=x86_64-linux-gnu --host=i686-w64-mingw32"
+	make -C ~/tmp/tcl9.0.1/win -j$(GOMAXPROCS)
+	cp -v ~/tmp/tcl9.0.1/win/*.dll ~/tmp/tcl9.0.1/win/tcl90.dll $(WIN32)
+	sh -c "cd ~/tmp/tk9.0.1/win ; ./configure  --build=x86_64-linux-gnu --host=i686-w64-mingw32 --with-tcl=$$HOME/tmp/tcl9.0.1/win"
+	make -C ~/tmp/tk9.0.1/win -j$(GOMAXPROCS)
+	cp -v ~/tmp/tk9.0.1/win/tcl9tk90.dll ~/tmp/tk9.0.1/win/libtk9.0.1.zip $(WIN32)
 	zip -j $(WIN32)/lib.zip.tmp $(WIN32)/*.dll $(WIN32)/*.zip
 	rm -f $(WIN32)/*.dll $(WIN32)/*.zip
 	mv $(WIN32)/lib.zip.tmp $(WIN32)/lib.zip
@@ -142,16 +144,17 @@ lib_winarm64: download
 	if [ "$(GOOS)" != "linux" ]; then exit 1 ; fi
 	if [ "$(GOARCH)" != "amd64" ]; then exit 1 ; fi
 	rm -rf ~/tmp/tcl9* ~/tmp/tk9* $(WINARM64)
+	mkdir -p ~/tmp/tcl9.0.1/win ~/tmp/tk9.0.1/win
 	mkdir -p $(WINARM64)
-	tar xf $(TAR) -C ~/tmp
-	tar xf $(TAR2) -C ~/tmp
-	sh -c "cd ~/tmp/tcl9.0.0/win ; ./configure --build=x86_64-linux-gnu --host=aarch64-w64-mingw32 --enable-64bit=arm64"
-	sh -c "cd ~/tmp/tcl9.0.0/win ; sed -i 's/-DHAVE_CPUID=1/-UHAVE_CPUID/g' *"
-	make -C ~/tmp/tcl9.0.0/win -j12
-	cp -v ~/tmp/tcl9.0.0/win/*.dll $(WINARM64)
-	sh -c "cd ~/tmp/tk9.0.0/win ; ./configure --build=x86_64-linux-gnu --host=aarch64-w64-mingw32 --with-tcl=$$HOME/tmp/tcl9.0.0/win  --enable-64bit=arm64"
-	make -C ~/tmp/tk9.0.0/win -j12
-	cp -v ~/tmp/tk9.0.0/win/tcl9tk90.dll ~/tmp/tk9.0.0/win/libtk9.0.0.zip $(WINARM64)
+	tar xf $(TCL_TAR) -C ~/tmp
+	tar xf $(TK_TAR) -C ~/tmp
+	sh -c "cd ~/tmp/tcl9.0.1/win ; ./configure --build=x86_64-linux-gnu --host=aarch64-w64-mingw32 --enable-64bit=arm64"
+	sh -c "cd ~/tmp/tcl9.0.1/win ; sed -i 's/-DHAVE_CPUID=1/-UHAVE_CPUID/g' *"
+	make -C ~/tmp/tcl9.0.1/win -j$(GOMAXPROCS)
+	cp -v ~/tmp/tcl9.0.1/win/*.dll $(WINARM64)
+	sh -c "cd ~/tmp/tk9.0.1/win ; ./configure --build=x86_64-linux-gnu --host=aarch64-w64-mingw32 --with-tcl=$$HOME/tmp/tcl9.0.1/win  --enable-64bit=arm64"
+	make -C ~/tmp/tk9.0.1/win -j$(GOMAXPROCS)
+	cp -v ~/tmp/tk9.0.1/win/tcl9tk90.dll ~/tmp/tk9.0.1/win/libtk9.0.1.zip $(WINARM64)
 	zip -j $(WINARM64)/lib.zip.tmp $(WINARM64)/*.dll $(WINARM64)/*.zip
 	rm -f $(WINARM64)/*.dll $(WINARM64)/*.zip
 	mv $(WINARM64)/lib.zip.tmp $(WINARM64)/lib.zip
