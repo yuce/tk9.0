@@ -146,10 +146,6 @@ func TestExamples(t *testing.T) {
 	if !isBuilder {
 		t.Skip("not a builder")
 	}
-	switch target {
-	case "linux/loong64":
-		t.Skipf("Xvfb not available on %s. (issue 59)", target)
-	}
 
 	t.Logf("DISPLAY=%s XVFB_DISPLAY=%s display=%s", os.Getenv("DISPLAY"), os.Getenv(xvfbDisplayVar), display)
 	const retries = 1
