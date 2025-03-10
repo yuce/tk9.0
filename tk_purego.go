@@ -14,6 +14,7 @@ import (
 	"runtime"
 	"strings"
 	"unsafe"
+	"testing"
 
 	"github.com/ebitengine/purego"
 	"github.com/evilsocket/islazy/zip"
@@ -37,6 +38,12 @@ var (
 	tclBinHandle      uintptr
 	tkBinHandle       uintptr
 )
+
+func init() {
+	if runtime.GOOS == "darwin" && !testing.Testing() {
+		runtime.LockOSThread()
+	}
+}
 
 func lazyInit() {
 	if initialized {
