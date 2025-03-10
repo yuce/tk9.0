@@ -36,15 +36,12 @@ var (
 	tkDll             *windows.DLL
 )
 
-func init() {
-	runtime.LockOSThread()
-}
-
 func lazyInit() {
 	if initialized {
 		return
 	}
 
+	runtime.LockOSThread()
 	initialized = true
 
 	defer commonLazyInit()

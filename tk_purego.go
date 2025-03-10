@@ -38,15 +38,12 @@ var (
 	tkBinHandle       uintptr
 )
 
-func init() {
-	runtime.LockOSThread()
-}
-
 func lazyInit() {
 	if initialized {
 		return
 	}
 
+	runtime.LockOSThread()
 	initialized = true
 
 	defer func() {

@@ -338,9 +338,13 @@
 //
 // # OS thread
 //
-// This package should be used from the same goroutine that initialized the
-// package. Package initialization performs a runtime.LockOSThread, meaning
-// func main() will start execuing locked on the same OS thread.
+// This package should be used only from the same goroutine that initialized
+// the Tcl/Tk system and performed os.LockOSThread before doing so. The
+// initialization happens lazily on the first call to an Tcl/Tk API function or
+// it can be forced by calling [Initialize].
+//
+// Note that when running Go tests, the goroutine that executes TestMain is not
+// the same goroutine that executes the Test* functions.
 //
 // # Event handlers
 //
