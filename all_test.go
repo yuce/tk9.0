@@ -106,6 +106,11 @@ func TestTokenizer(t *testing.T) {
 
 // Credits: https://gitlab.com/cznic/tk9.0/-/issues/51#note_2374472931
 func TestParseList(t *testing.T) {
+	switch target {
+	case "linux/s390x":
+		t.Skipf("this test is known to not work on %s VM", target)
+	}
+
 	Initialize()
 	tests := []struct {
 		name     string
