@@ -176,6 +176,9 @@ func TestExamples(t *testing.T) {
 		blacklist["dialog.go"] = struct{}{}
 	}
 	switch target {
+	case "linux/s390x":
+		blacklist["font.go"] = struct{}{}
+		blacklist["winfoChildren.go"] = struct{}{}
 	case "windows/386":
 		blacklist["widgetproxy.go"] = struct{}{} // See #54
 	}
