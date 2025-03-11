@@ -201,6 +201,9 @@ next:
 		var j int
 		for j = 0; j < retries; j++ {
 			if err = testExample(t, tmpDir, bin); err == nil {
+				if testing.Verbose() {
+					t.Logf("PASS %v (%v/%v)", v, i, len(m))
+				}
 				continue next
 			}
 		}
@@ -224,7 +227,7 @@ func testExample(t *testing.T, tmpDir, bin string) (err error) {
 		t.Fatal(err)
 	}
 
-	crashCheckDuration := 3 * time.Second
+	crashCheckDuration := 10 * time.Second
 	crashCheckTimer := time.NewTimer(crashCheckDuration)
 
 	waitChan := make(chan error, 1) // Buffered channel to prevent goroutine leak

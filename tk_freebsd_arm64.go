@@ -15,8 +15,7 @@ const (
 var libZip []byte
 
 var shasig = map[string]string{
-	// embed/freebsd/arm64/lib.zip
-	"libtcl9.0.so":    "53641e10ee9405c4951edb90fb6d1efa4f9f98eb1d6da711597e5d6c4a8e1d4a",
-	"libtcl9tk9.0.so": "1db9adbd1463368f6992f86fd27d94ad88013ed5e4035ce30dd651bed1b2f6b8",
-	"libtk9.0.0.zip":  "7ea3ca76b18051b63aeba1b0ddf1bec037891ebb5be100215384742d3af1641b",
+	"libtcl9.0.so":    "29db3ce5108115079af8136d08fbdbddd71c97ebb4ca9fc17d46eb3cef18a538",
+	"libtcl9tk9.0.so": "25f8fc725b35163e6235c3d5cb8bdf687dda0f5e0760e0a89a813e48dd10da29",
+	"libtk9.0.1.zip":  "984a4e2fc2632aea902b8a6ab2d7a40fe8dbc365aee9089671fa2d8aa0551b32",
 }
