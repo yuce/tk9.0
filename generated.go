@@ -1200,7 +1200,7 @@ type ListboxWidget struct {
 // the other entries will number starting at 1.  The default menu
 // bindings arrange for the menu to be torn off when the tear-off entry
 // is invoked.
-// This option is ignored under Aqua/MacOS, where menus cannot
+// This option is ignored under Aqua/macOS, where menus cannot
 // be torn off.
 //
 // [Tearoffcommand]
@@ -1214,7 +1214,7 @@ type ListboxWidget struct {
 // and menu .x.y is torn off to
 // create a new menu .x.tearoff1, then the command
 // will be invoked.
-// This option is ignored under Aqua/MacOS, where menus cannot
+// This option is ignored under Aqua/macOS, where menus cannot
 // be torn off.
 //
 // [Title]
@@ -8452,26 +8452,6 @@ func Value(val any) Opt {
 //   - [TScale] (widget specific)
 func (w *Window) Value() string {
 	return evalErr(fmt.Sprintf(`%s cget -value`, w))
-}
-
-// Values option.
-//
-// Known uses:
-//   - [Spinbox] (widget specific)
-//   - [TCombobox] (widget specific)
-//   - [TSpinbox] (widget specific)
-func Values(val any) Opt {
-	return rawOption(fmt.Sprintf(`-values %s`, optionString(val)))
-}
-
-// Values — Get the configured option value.
-//
-// Known uses:
-//   - [Spinbox] (widget specific)
-//   - [TCombobox] (widget specific)
-//   - [TSpinbox] (widget specific)
-func (w *Window) Values() string {
-	return evalErr(fmt.Sprintf(`%s cget -values`, w))
 }
 
 // Visual option.

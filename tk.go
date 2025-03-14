@@ -7436,3 +7436,20 @@ func goString(p uintptr) string { // Result can be retained.
 
 	return ""
 }
+
+// Values option.
+//
+// Known uses:
+//   - [Spinbox] (widget specific)
+//   - [TCombobox] (widget specific)
+//   - [TSpinbox] (widget specific)
+func Values(val any) Opt {
+	switch x := val.(type) {
+	case []string:
+		return rawOption(fmt.Sprintf(`-values {%s}`, tclSafeStrings(x...)))
+	case []any:
+		return rawOption(fmt.Sprintf(`-values {%s}`, tclSafeList(x...)))
+	default:
+		return rawOption(fmt.Sprintf(`-values %s`, optionString(val)))
+	}
+}

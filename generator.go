@@ -501,11 +501,12 @@ var (
 	}
 
 	hideOpts = map[string]bool{
-		"Data": true,
-		"Font": true,
-		"From": true,
-		"To":   true,
-		"Type": true,
+		"Data":   true,
+		"Font":   true,
+		"From":   true,
+		"To":     true,
+		"Type":   true,
+		"Values": true,
 	}
 
 	hideOptMethods = map[string]bool{
