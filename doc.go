@@ -50,6 +50,10 @@
 //     Go build system use 'go build -ldflags -H=windowsgui somefile.go', for
 //     example.
 //
+//   - How to set/get the text of a Entry/TEntry widget?
+//
+//     Using [Textvariable]. See the _examples/entry.go example.
+//
 //   - What does CGo-free really mean?
 //
 //     [cgo] is a tool used by the Go build system when Go code uses the
