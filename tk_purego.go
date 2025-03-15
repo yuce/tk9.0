@@ -176,6 +176,23 @@ func bindLibs(cacheDir string) {
 		Error = fmt.Errorf("failed to initialize Tk: %s", tclResult())
 		return
 	}
+
+	for _, dll := range moreDLLs {
+		var handle, initProc uintptr
+		if handle, Error = purego.Dlopen(filepath.Join(cacheDir, dll.dll), purego.RTLD_LAZY|purego.RTLD_GLOBAL); Error != nil {
+			return
+		}
+
+		if initProc, Error = purego.Dlsym(handle, dll.initProc); Error != nil {
+			return
+		}
+
+		r, _, _ := purego.SyscallN(initProc, interp)
+		if r != tcl_ok {
+			Error = fmt.Errorf("failed to initialize %s: %s", dll.dll, tclResult())
+			return
+		}
+	}
 }
 
 func getCacheDir() (r string, err error) {

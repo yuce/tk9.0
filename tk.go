@@ -24,8 +24,8 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/mat/besticon/v3/ico"
 	"golang.org/x/net/html"
+	"modernc.org/libtk9.0"
 )
 
 const (
@@ -41,7 +41,7 @@ const (
 	gnuplotTimeout = time.Minute //TODO do not let the UI freeze
 	goarch         = runtime.GOARCH
 	goos           = runtime.GOOS
-	libVersion     = "tk9.0.1"
+	libVersion     = libtk9_0.Version
 
 	tcl_eval_direct = 0x40000
 	tcl_ok          = 0
@@ -71,9 +71,16 @@ const (
 	PanicOnError = iota
 	// Errors will be recorded into the Error variable using errors.Join
 	CollectErrors
+)
 
+const (
 	testHookWaitVar = "TK9_TEST_HOOK_WAIT"
 )
+
+type dllInfo struct {
+	dll      string
+	initProc string
+}
 
 // ErrorMode selects the action taken on errors.
 var ErrorMode int
@@ -715,12 +722,38 @@ func (e *eventHandler) optionString(w *Window) string {
 	}
 }
 
-func optionString(v any) string {
+func hexDigit(b byte) byte {
+	if b <= 9 {
+		return '0' + b
+	}
+
+	return 'a' + b - 10
+}
+
+func tclBinaryBytes(s []byte) string {
+	var b strings.Builder
+	for _, v := range s {
+		b.WriteByte('\\')
+		b.WriteByte('x')
+		b.WriteByte(hexDigit(v >> 4))
+		b.WriteByte(hexDigit(v & 15))
+	}
+	return b.String()
+}
+
+var xpmSig = []byte("/* XPM */") // https://en.wikipedia.org/wiki/X_PixMap
+
+func optionString(v any) (r string) {
 	switch x := v.(type) {
 	case time.Duration:
 		return fmt.Sprint(int64((x + time.Millisecond/2) / time.Millisecond))
 	case []byte:
-		return base64.StdEncoding.EncodeToString(x)
+		switch {
+		case bytes.HasPrefix(x, xpmSig):
+			return tclSafeString(fmt.Sprintf("%s", v))
+		default:
+			return tclBinaryBytes(x)
+		}
 	case image.Image:
 		var buf bytes.Buffer
 		err := png.Encode(&buf, x)
@@ -875,13 +908,12 @@ type Img struct {
 //
 // # Description
 //
-// Deletes 'm!. If there are
-// instances of the image displayed in widgets, the image will not actually
-// be deleted until all of the instances are released. However, the association
-// between the instances and the image manager will be dropped. Existing
-// instances will retain their sizes but redisplay as empty areas. If a deleted
-// image is recreated with another call to image create, the existing instances
-// will use the new image.
+// Deletes 'm'. If there are instances of the image displayed in widgets, the
+// image will not actually be deleted until all of the instances are released.
+// However, the association between the instances and the image manager will be
+// dropped. Existing instances will retain their sizes but redisplay as empty
+// areas. If a deleted image is recreated with another call to image create,
+// the existing instances will use the new image.
 func (m *Img) Delete() {
 	evalErr(fmt.Sprintf("image delete %s", m))
 }
@@ -970,13 +1002,28 @@ func NewBitmap(options ...Opt) *Img {
 // of transparency (the alpha channel). A photo image is stored internally in
 // full color (32 bits per pixel), and is displayed using dithering if
 // necessary. Image data for a photo image can be obtained from a file or a
-// string, or it can be supplied from C code through a procedural interface. At
-// present, only PNG, GIF, PPM/PGM, and (read-only) SVG formats are supported,
-// but an interface exists to allow additional image file formats to be added
-// easily. A photo image is (semi)transparent if the image data it was obtained
-// from had transparency information. In regions where no image data has been
-// supplied, it is fully transparent. Transparency may also be modified with
-// the transparency set subcommand.
+// string, or it can be supplied from C code through a procedural interface. A
+// photo image is (semi)transparent if the image data it was obtained from had
+// transparency information. In regions where no image data has been supplied,
+// it is fully transparent. Transparency may also be modified with the
+// transparency set subcommand.
+//
+// # Supported image formats
+//
+//   - BMP
+//   - GIF
+//   - ICO
+//   - JPEG
+//   - PCX
+//   - PNG
+//   - PPM
+//   - SVG
+//   - TGA
+//   - TIFF
+//   - XBM
+//   - XMP
+//
+// # Photo Options
 //
 //   - [Data] string
 //
@@ -1036,7 +1083,489 @@ func NewBitmap(options ...Opt) *Img {
 //
 // Additional information might be available at the [Tcl/Tk photo] page.
 //
+// # Format("bmp") additional options
+//
+// In addition the value of option [Format] is treated as a list and may contain
+// any of the special options listed below.
+//
+//   - -verbose bool
+//
+//     This option is supported for reading and writing. Available since
+//     version 2.0.
+//
+//     If set to true, additional information about the read or written image
+//     is printed to stdout. Default is false.
+//
+//   - -resolution xres ?yres?
+//
+//     This option is supported for writing only. Available since version 2.0.
+//     An incompatible version of this option was introduced in version 1.4.1.
+//
+//     Set the resolution values of the written image file. If yres is not
+//     specified, it is set to the value of xres.
+//
+//     If option is not specified, the DPI and aspect values of the metadata
+//     dictionary are written. If no metadata values are available, no
+//     resolution values are written.
+//
+//   - -xresolution xres
+//
+//     This option is supported for writing only. Available since version 2.0.
+//
+//     Set the horizontal resolution value of the written image file.
+//
+//   - -yresolution yres
+//
+//     This option is supported for writing only. Available since version 2.0.
+//
+//     Set the vertical resolution value of the written image file.
+//
+// Additional information might be available at the [tkImg-bmp] page.
+//
+// # Format("ico") additional options
+//
+// In addition the value of option [Format] is treated as a list and may contain
+// any of the special options listed below.
+//
+//   - -verbose bool
+//
+//     This option is supported for reading and writing. Available since version
+//     1.3.
+//
+//     If set to true, additional information about the read or written image is
+//     printed to stdout. Default is false.
+//
+//   - -index integer
+//
+//     This option is supported for reading only. Available since version 1.3.
+//
+//     Read the page at specified index. The first page is at index 0. Default is
+//     0.
+//
+// Additional information might be available at the [tkImg-ico] page.
+//
+// # Format("jpeg") additional options
+//
+// In addition the value of option [Format] is treated as a list and may contain
+// any of the special options listed below.
+//
+//   - -verbose bool
+//
+//     This option is supported for reading and writing. Available since version
+//     2.0.
+//
+//     If set to true, additional information about the read or written image is
+//     printed to stdout. Default is false.
+//
+//   - -fast
+//
+//     This option is supported for reading only. Available since version
+//     1.2.4.
+//
+//     If specified, it activates a processing mode which is fast, but
+//     provides only low-quality information.
+//
+//   - -grayscale
+//
+//     This option is supported for reading and writing. Available since
+//     version 1.2.4.
+//
+//     Usage of this option forces incoming images to grayscale and written
+//     images will be monochrome.
+//
+//   - -optimize
+//
+//     This option is supported for writing only. Available since version
+//     1.2.4.
+//
+//     If specified, it causes the writer to optimize the Huffman table used
+//     to encode the JPEG coefficients.
+//
+//   - -progressive
+//
+//     This option is supported for writing only. Available since version
+//     1.2.4.
+//
+//     If specified, it causes the creation of a progressive JPEG file.
+//
+//   - -quality n
+//
+//     This option is supported for writing only. Available since version
+//     1.2.4.
+//
+//     It specifies the compression level as a quality percentage. The higher the
+//     quality, the less the compression. The nominal range for n is 0...100.
+//     Useful values are in the range 5...95. The default value is 75.
+//
+//   - -smooth n
+//
+//     This option is supported for writing only. Available since version
+//     1.2.4.
+//
+//     When used the writer will smooth the image before performing the
+//     compression. Values in the 10...30 are usually enough. The default is
+//     0, i.e no smoothing.
+//
+//   - -resolution xres ?yres?
+//
+//     This option is supported for writing only. Available since version 2.0.
+//
+//     Set the resolution values of the written image file. If yres is not
+//     specified, it is set to the value of xres.
+//
+//     If option is not specified, the DPI and aspect values of the metadata
+//     dictionary are written. If no metadata values are available, no
+//     resolution values are written.
+//
+//   - -xresolution xres
+//
+//     This option is supported for writing only. Available since version 2.0.
+//
+//     Set the horizontal resolution value of the written image file.
+//
+//   - -yresolution yres
+//
+//     This option is supported for writing only. Available since version 2.0.
+//
+//     Set the vertical resolution value of the written image file.
+//
+// Additional information might be available at the [tkImg-jpeg] page.
+//
+// # Format("pcx") additional options
+//
+// In addition the value of option [Format] is treated as a list and may contain
+// any of the special options listed below.
+//
+//   - -verbose bool
+//
+//     This option is supported for reading and writing. Available since
+//     version 1.3.
+//
+//     If set to true, additional information about the read or written image
+//     is printed to stdout. Default is false.
+//
+//   - -compression string
+//
+//     This option is supported for writing only. Available since version 1.3.
+//
+//     Set the compression mode to either none or rle. Default is rle.
+//
+//   - -resolution xres ?yres?
+//
+//     This option is supported for writing only. Available since version 2.0.
+//
+//     Set the resolution values of the written image file. If yres is not
+//     specified, it is set to the value of xres.
+//
+//     If option is not specified, the DPI and aspect values of the metadata
+//     dictionary are written. If no metadata values are available, no
+//     resolution values are written.
+//
+//   - -xresolution xres
+//
+//     This option is supported for writing only. Available since version 2.0.
+//
+//     Set the horizontal resolution value of the written image file.
+//
+//   - -yresolution yres
+//
+//     This option is supported for writing only. Available since version 2.0.
+//
+//     Set the vertical resolution value of the written image file.
+//
+// Additional information might be available at the [tkImg-pcx] page.
+//
+// # Format("png") additional options
+//
+// In addition the value of option [Format] is treated as a list and may contain
+// any of the special options listed below.
+//
+//   - -verbose bool
+//
+//     This option is supported for reading and writing. Available since
+//     version 1.4.6.
+//
+//     If set to true, additional information about the read or written image
+//     is printed to stdout. Default is false.
+//
+//   - -alpha double
+//
+//     This option is supported for reading only. Available since version
+//     1.4.2.
+//
+//     An additional alpha filtering value for the overall image, which allows
+//     the background on which the image is displayed to show through. This
+//     usually also has the effect of desaturating the image. The alpha value
+//     must be between 0.0 and 1.0. Specifying an alpha value, overrides the
+//     setting of the -withalpha flag, i.e. reading a file which has no alpha
+//     channel (Grayscale, RGB) will add an alpha channel to the image
+//     independent of the -withalpha flag setting.
+//
+//   - -gamma double
+//
+//     This option is supported for reading only. Available since version
+//     1.4.6.
+//
+//     Use the specified gamma value when reading an image. This option
+//     overwrites gamma values specified in the file. If this option is not
+//     specified and no gamma value is in the file, a default value of 1.0 is
+//     used.
+//
+//   - -withalpha bool
+//
+//     This option is supported for reading and writing. Available since
+//     version 1.4.1.
+//
+//     If set to false, an alpha channel is ignored during reading or writing.
+//     Default is true.
+//
+//     Note: This option was named -matte in previous versions and is still
+//     recognized.
+//
+//   - -resolution xres ?yres?
+//
+//     This option is supported for writing only. Available since version 2.0.
+//
+//     Set the resolution values of the written image file. If yres is not
+//     specified, it is set to the value of xres.
+//
+//     If option is not specified, the DPI and aspect values of the metadata
+//     dictionary are written. If no metadata values are available, no
+//     resolution values are written.
+//
+//   - -xresolution xres
+//
+//     This option is supported for writing only. Available since version 2.0.
+//
+//     Set the horizontal resolution value of the written image file.
+//
+//   - -yresolution yres
+//
+//     This option is supported for writing only. Available since version 2.0.
+//
+//     Set the vertical resolution value of the written image file.
+//
+//   - -tag key value
+//
+//     This option is supported for writing only. Available since version 2.0.
+//
+//     Each key-value pair will be written as a named text chunk where the key
+//     provides the name of the chunk and the value its contents. Currently the
+//     maximum number of -tag specifications are 10.
+//
+// Additional information might be available at the [tkImg-png] page.
+//
+// # Format("ppm") additional options
+//
+// In addition the value of option [Format] is treated as a list and may contain
+// any of the special options listed below.
+//
+//   - -verbose bool
+//
+//     This option is supported for reading and writing. Available since
+//     version 1.4.0.
+//
+//     If set to true, additional information about the read or written image
+//     is printed to stdout. Default is false.
+//
+//   - -scanorder string
+//
+//     This option is supported for reading only. Available since version
+//     1.4.0.
+//
+//     Specify the scanline order of the input image. Possible values: TopDown
+//     or BottomUp. Default is TopDown.
+//
+//   - -min double
+//
+//     This option is supported for reading only. Available since version
+//     1.4.0.
+//
+//     Specify the minimum pixel value to be used for mapping 16-bit input data
+//     to 8-bit image values. If not specified or negative, the minimum value
+//     found in the image data.
+//
+//   - -max float
+//
+//     This option is supported for reading only. Available since version
+//     1.4.0.
+//
+//     Specify the maximum pixel value to be used for mapping 16-bit input data
+//     to 8-bit image values. If not specified or negative, the maximum value
+//     found in the image data.
+//
+//   - -gamma double
+//
+//     This option is supported for reading only. Available since version
+//     1.4.0.
+//
+//     Specify a gamma correction to be applied when mapping 16-bit input data
+//     to 8-bit image values. Default is 1.0.
+//
+//   - -ascii bool
+//
+//     This option is supported for writing only. Available since version
+//     1.4.0.
+//
+//     If set to true, the file is written in PPM 8-bit ASCII format (P3).
+//     Default is false, i.e. write in PPM 8-bit binary format (P6).
+//
+// Additional information might be available at the [tkImg-ppm] page.
+//
+// # Format("tga") additional options
+//
+// In addition the value of option [Format] is treated as a list and may contain
+// any of the special options listed below.
+//
+//   - -verbose bool
+//
+//     This option is supported for reading and writing. Available since
+//     version 1.3.
+//
+//     If set to true, additional information about the read or written image
+//     is printed to stdout. Default is false.
+//
+//   - -withalpha bool
+//
+//     This option is supported for reading and writing. Available since
+//     version 1.3.
+//
+//     If set to false, an alpha channel is ignored during reading or writing.
+//     Default is true.
+//
+//     Note: This option was named -matte in previous versions and is still
+//     recognized.
+//
+//   - -compression string
+//
+//     This option is supported for writing only. Available since version 1.3.
+//
+//     Set the compression mode to either none or rle. Default is rle.
+//
+// Additional information might be available at the [tkImg-tga] page.
+//
+// # Format("tiff") additional options
+//
+// In addition the value of option [Format] is treated as a list and may contain
+// any of the special options listed below.
+//
+//   - -verbose bool
+//
+//     This option is supported for reading and writing. Available since
+//     version 2.0.
+//
+//     If set to true, additional information about the read or written image
+//     is printed to stdout. Default is false.
+//
+//   - -index integer
+//
+//     This option is supported for reading only. Available since version
+//     1.4.0.
+//
+//     Read the page at specified index. The first page is at index 0. Default
+//     is 0.
+//
+//   - -compression string
+//
+//     This option is supported for writing only. Available since version
+//     1.2.4.
+//
+//     Set the compression mode to either none, jpeg, packbits, or deflate.
+//     Default is none.
+//
+//   - -byteorder string
+//
+//     This option is supported for writing only. Available since version
+//     1.2.4.
+//
+//     Set the byteorder to either none, bigendian, littleendian, network or
+//     smallendian. Default is none.
+//
+//     The values bigendian and network are aliases of each other, as are
+//     littleendian and smallendian.
+//
+//   - -resolution xres ?yres?
+//
+//     This option is supported for writing only. Available since version 2.0.
+//
+//     Set the resolution values of the written image file. If yres is not
+//     specified, it is set to the value of xres.
+//
+//     If option is not specified, the DPI and aspect values of the metadata
+//     dictionary are written. If no metadata values are available, no
+//     resolution values are written.
+//
+//   - -xresolution xres
+//
+//     This option is supported for writing only. Available since version 2.0.
+//
+//     Set the horizontal resolution value of the written image file.
+//
+//   - -yresolution yres
+//
+//     This option is supported for writing only. Available since version 2.0.
+//
+//     Set the vertical resolution value of the written image file.
+//
+// Additional information might be available at the [tkImg-tiff] page.
+//
+// # Format("xbm") additional options
+//
+// In addition the value of option [Format] is treated as a list and may contain
+// any of the special options listed below.
+//
+//   - -verbose bool
+//
+//     This option is supported for reading and writing. Available since
+//     version 2.0.
+//
+//     If set to true, additional information about the read or written image
+//     is printed to stdout. Default is false.
+//
+//   - -foreground string
+//
+//     This option is supported for reading only. Available since version
+//     1.4.15.
+//
+//     Set the foreground color of the bitmap. Default value is black. The
+//     color string may be given in a format as accepted by Tk_GetColor.
+//
+//   - -background string
+//
+//     This option is supported for reading only. Available since version
+//     1.4.15.
+//
+//     Set the background color of the bitmap. Default value is transparent.
+//     The color string may be given in a format as accepted by Tk_GetColor.
+//
+// Additional information might be available at the [tkImg-xbm] page.
+//
+// # Format("xpm") additional options
+//
+// In addition the value of option [Format] is treated as a list and may contain
+// any of the special options listed below.
+//
+//   - -verbose bool
+//
+//     This option is supported for reading and writing. Available since
+//     version 2.0.
+//
+//     If set to true, additional information about the read or written image
+//     is printed to stdout. Default is false.
+//
+// Additional information might be available at the [tkImg-xpm] page.
+//
 // [Tcl/Tk photo]: https://www.tcl.tk/man/tcl9.0/TkCmd/photo.html
+// [tkImg-bmp]: https://tkimg.sourceforge.net/RefMan/files/img-bmp.html
+// [tkImg-ico]: https://tkimg.sourceforge.net/RefMan/files/img-ico.html
+// [tkImg-jpeg]: https://tkimg.sourceforge.net/RefMan/files/img-jpeg.html
+// [tkImg-pcx]: https://tkimg.sourceforge.net/RefMan/files/img-pcx.html
+// [tkImg-png]: https://tkimg.sourceforge.net/RefMan/files/img-png.html
+// [tkImg-ppm]: https://tkimg.sourceforge.net/RefMan/files/img-ppm.html
+// [tkImg-tga]: https://tkimg.sourceforge.net/RefMan/files/img-tga.html
+// [tkImg-tiff]: https://tkimg.sourceforge.net/RefMan/files/img-tiff.html
+// [tkImg-xbm]: https://tkimg.sourceforge.net/RefMan/files/img-xbm.html
+// [tkImg-xpm]: https://tkimg.sourceforge.net/RefMan/files/img-xmp.html
 func NewPhoto(options ...Opt) *Img {
 	nm := fmt.Sprintf("img%v", id.Add(1))
 	code := fmt.Sprintf("image create photo %s %s", nm, collect(options...))
@@ -2592,7 +3121,7 @@ func parseList(list string) (r []string) {
 
 	callSplitList(cList, argcPtr, argvPtr)
 	argc := *((*int)(unsafe.Pointer(argcPtr)))
-	argv := unsafe.Slice((*uintptr)((*(**uintptr)(unsafe.Pointer(argvPtr)))), argc)
+	argv := unsafe.Slice((*(**uintptr)(unsafe.Pointer(argvPtr))), argc)
 
 	items := make([]string, argc)
 	for i, arg := range argv {
@@ -6260,39 +6789,12 @@ func FontConfigure(name string, options ...any) []string {
 	return parseList(evalErr(fmt.Sprintf("font configure %s %s", tclSafeString(name), collectAny(options...))))
 }
 
-var (
-	pngSig = []byte{137, 80, 78, 71, 13, 10, 26, 10} // http://www.libpng.org/pub/png/spec/1.2/PNG-Structure.html
-	icoSig = []byte{'\x00', '\x00', '\x01', '\x00'}  // https://en.wikipedia.org/wiki/ICO_(file_format)#Header
-)
-
 // Data option.
 //
 // Known uses:
 //   - [NewBitmap] (command specific)
 //   - [NewPhoto] (command specific)
 func Data(val any) Opt {
-	switch x := val.(type) {
-	case []byte:
-		switch {
-		case bytes.HasPrefix(x, pngSig):
-			// ok
-		case bytes.HasPrefix(x, icoSig):
-			b := bytes.NewBuffer(x)
-			img, err := ico.Decode(bytes.NewReader(x))
-			if err != nil {
-				fail(err)
-				return rawOption("")
-			}
-
-			b.Reset()
-			if err := png.Encode(b, img); err != nil {
-				fail(err)
-				return rawOption("")
-			}
-
-			val = b.Bytes()
-		}
-	}
 	return rawOption(fmt.Sprintf(`-data %s`, optionString(val)))
 }
 

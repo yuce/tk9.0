@@ -12,6 +12,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"slices"
 	"strings"
 	"syscall"
@@ -31,6 +32,7 @@ const (
 
 var (
 	display = os.Getenv("DISPLAY")
+	re      *regexp.Regexp
 )
 
 func TestMain(m *testing.M) {
@@ -45,7 +47,11 @@ func TestMain(m *testing.M) {
 			os.Setenv("DISPLAY", s)
 		}
 	}
+	oRe := flag.String("re", "", "")
 	flag.Parse()
+	if *oRe != "" {
+		re = regexp.MustCompile(*oRe)
+	}
 	rc := m.Run()
 	Finalize()
 	os.Exit(rc)
@@ -151,21 +157,23 @@ func TestExamples(t *testing.T) {
 	}
 
 	blacklist := map[string]struct{}{
-		"demo.go":        {},
-		"embed.go":       {},
-		"events.go":      {},
-		"fontmetrics.go": {},
-		"ring.go":        {},
-		"tex.go":         {},
-	}
-
-	graylist := map[string]struct{}{
-		"splot.go":       {}, // gnuplot not available on all builders
-		"tori.go":        {}, // gnuplot not available on all builders
-		"tori_canvas.go": {}, // gnuplot not available on all builders
+		"demo.go":        {}, // executes multiple other examples
+		"fontmetrics.go": {}, // non GUI example
+		"ring.go":        {}, // expects arguments
 	}
 
 	t.Logf("DISPLAY=%s XVFB_DISPLAY=%s display=%s", os.Getenv("DISPLAY"), os.Getenv(xvfbDisplayVar), display)
+	wd, err := os.Getwd()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	wd, err = filepath.Abs(wd)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	wd = filepath.Join(wd, "_examples")
 	const retries = 1
 	switch goos {
 	case "linux", "freebsd":
@@ -173,14 +181,22 @@ func TestExamples(t *testing.T) {
 			t.Fatal("DISPLAY=")
 		}
 	case "windows":
-		blacklist["dialog.go"] = struct{}{}
+		blacklist["dialog.go"] = struct{}{} // uses X11 specific stuff
 	}
 	switch target {
-	case "linux/s390x":
-		blacklist["font.go"] = struct{}{}
-		blacklist["winfoChildren.go"] = struct{}{}
+	case "windows/amd64":
+		blacklist["photo_gif.go"] = struct{}{}  // See #66
+		blacklist["photo_gif2.go"] = struct{}{} // See #66
+		blacklist["tablelist.go"] = struct{}{}  // See #66
+	case "windows/arm64":
+		blacklist["splot.go"] = struct{}{}       // No gnuplot on this builder.
+		blacklist["tori.go"] = struct{}{}        // No gnuplot on this builder.
+		blacklist["tori_canvas.go"] = struct{}{} // No gnuplot on this builder.
 	case "windows/386":
 		blacklist["widgetproxy.go"] = struct{}{} // See #54
+		blacklist["splot.go"] = struct{}{}       // No gnuplot on this builder.
+		blacklist["tori.go"] = struct{}{}        // No gnuplot on this builder.
+		blacklist["tori_canvas.go"] = struct{}{} // No gnuplot on this builder.
 	}
 
 	tmpDir := t.TempDir()
@@ -191,8 +207,13 @@ func TestExamples(t *testing.T) {
 
 next:
 	for i, v := range m {
+		if re != nil && !re.MatchString(v) {
+			continue
+		}
+
 		base := filepath.Base(v)
 		if _, ok := blacklist[base]; ok {
+			t.Logf("SKIP %v (%v/%v)", v, i+1, len(m))
 			continue
 		}
 
@@ -208,21 +229,19 @@ next:
 
 		var j int
 		for j = 0; j < retries; j++ {
-			if err = testExample(t, tmpDir, bin); err == nil {
+			if err = testExample(t, wd, tmpDir, bin); err == nil {
 				if testing.Verbose() {
-					t.Logf("PASS %v (%v/%v)", v, i, len(m))
+					t.Logf("PASS %v (%v/%v)", v, i+1, len(m))
 				}
 				continue next
 			}
 		}
 
-		if _, ok := graylist[filepath.Base(v)]; !ok {
-			t.Errorf("%v: FAIL %v (tries=%v)", v, err, j)
-		}
+		t.Errorf("%v: FAIL %v (tries=%v)", v, err, j)
 	}
 }
 
-func testExample(t *testing.T, tmpDir, bin string) (err error) {
+func testExample(t *testing.T, wd, tmpDir, bin string) (err error) {
 	token := fmt.Sprint(time.Now().UnixNano())
 	os.Setenv(testHookWaitVar, token)
 
@@ -230,6 +249,7 @@ func testExample(t *testing.T, tmpDir, bin string) (err error) {
 	cmd := exec.Command(bin)
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
+	cmd.Dir = wd
 	t0 := time.Now()
 	if err := cmd.Start(); err != nil {
 		t.Fatal(err)

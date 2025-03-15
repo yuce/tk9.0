@@ -20,6 +20,7 @@ import (
 	libtk "modernc.org/libtk9.0"
 	tklib "modernc.org/libtk9.0/library"
 	tcl "modernc.org/tcl9.0"
+	"modernc.org/tk9.0/internal/img"
 )
 
 const (
@@ -34,8 +35,8 @@ var (
 
 	shasig = map[string]string{
 		// other
-		"tcl_library.zip": "ef851d549039c822cd06af0c657c8173006eae90f997bdae11c60c0bdc5a0c1c",
-		"tk_library.zip":  "2afaf3ccb4521fe44d330b4da077d7d433d377f9ffc56f5ce8decd1689e00352",
+		"tcl_library.zip": "1849c8e8df2e23cdaf904bd04f1316be29473612a215e84c9f9f8ba144d16b2f",
+		"tk_library.zip":  "ea619ae0c921446db3659cbfc4efa2c700f2531c9a20ce9029b603b629c29711",
 	}
 )
 
@@ -77,7 +78,9 @@ zipfs mount %s %s
 		return
 	}
 
-	if rc := libtk.XTk_Init(interp.TLS(), interp.Handle()); rc != libtk.TCL_OK {
+	tls = interp.TLS()
+	h := interp.Handle()
+	if rc := libtk.XTk_Init(tls, h); rc != libtk.TCL_OK {
 		interp.Close()
 		Error = fmt.Errorf("failed to initialize the Tk subsystem")
 		return
@@ -85,6 +88,81 @@ zipfs mount %s %s
 
 	if Error = interp.RegisterCommand("eventDispatcher", eventDispatcher, nil, nil); Error == nil {
 		setDefaults()
+	}
+
+	if rc := img.XTkimg_Init(tls, h); rc != 0 {
+		Error = fmt.Errorf("failed to initialize the img subsystem: Tkimg_Init")
+		return
+	}
+
+	if rc := img.XJpegtcl_Init(tls, h); rc != 0 {
+		Error = fmt.Errorf("failed to initialize the img subsystem: Jpegtcl_Init")
+		return
+	}
+
+	if rc := img.XTkimgjpeg_Init(tls, h); rc != 0 {
+		Error = fmt.Errorf("failed to initialize the img subsystem: Tkimgjpeg_Init")
+		return
+	}
+
+	if rc := img.XTkimgbmp_Init(tls, h); rc != 0 {
+		Error = fmt.Errorf("failed to initialize the img subsystem: Tkimgbmp_Init")
+		return
+	}
+
+	if rc := img.XTkimgico_Init(tls, h); rc != 0 {
+		Error = fmt.Errorf("failed to initialize the img subsystem: Tkimgico_Init")
+		return
+	}
+
+	if rc := img.XTkimgpcx_Init(tls, h); rc != 0 {
+		Error = fmt.Errorf("failed to initialize the img subsystem: Tkimgpcx_Init")
+		return
+	}
+
+	if rc := img.XTkimgxpm_Init(tls, h); rc != 0 {
+		Error = fmt.Errorf("failed to initialize the img subsystem: Tkimgxpm_Init")
+		return
+	}
+
+	if rc := img.XZlibtcl_Init(tls, h); rc != 0 {
+		Error = fmt.Errorf("failed to initialize the img subsystem: Zlibtcl_Init")
+		return
+	}
+
+	if rc := img.XPngtcl_Init(tls, h); rc != 0 {
+		Error = fmt.Errorf("failed to initialize the img subsystem: Pngtcl_Init")
+		return
+	}
+
+	if rc := img.XTkimgpng_Init(tls, h); rc != 0 {
+		Error = fmt.Errorf("failed to initialize the img subsystem: Tkimgpng_Init")
+		return
+	}
+
+	if rc := img.XTkimgppm_Init(tls, h); rc != 0 {
+		Error = fmt.Errorf("failed to initialize the img subsystem: Tkimgppm_Init")
+		return
+	}
+
+	if rc := img.XTkimgtga_Init(tls, h); rc != 0 {
+		Error = fmt.Errorf("failed to initialize the img subsystem: Tkimgtga_Init")
+		return
+	}
+
+	if rc := img.XTifftcl_Init(tls, h); rc != 0 {
+		Error = fmt.Errorf("failed to initialize the img subsystem: Tifftcl_Init")
+		return
+	}
+
+	if rc := img.XTkimgtiff_Init(tls, h); rc != 0 {
+		Error = fmt.Errorf("failed to initialize the img subsystem: Tkimgtiff_Init")
+		return
+	}
+
+	if rc := img.XTkimgxbm_Init(tls, h); rc != 0 {
+		Error = fmt.Errorf("failed to initialize the img subsystem: Tkimgxbm_Init")
+		return
 	}
 }
 

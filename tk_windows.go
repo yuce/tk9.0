@@ -11,12 +11,29 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"strings"
 	"unsafe"
 
 	"github.com/evilsocket/islazy/zip"
 	"golang.org/x/sys/windows"
 	"modernc.org/memory"
 )
+
+// trcw prints and return caller's position and an optional message tagged with TRC. Output goes to stderr.
+//
+//lint:ignore U1000 debug helper
+func trcw(s string, args ...interface{}) string {
+	switch {
+	case s == "":
+		s = fmt.Sprintf(strings.Repeat("%v ", len(args)), args...)
+	default:
+		s = fmt.Sprintf(s, args...)
+	}
+	r := fmt.Sprintf("%s: TRC(id=%v tid=%v) %s", origin(2), goroutineID(), windows.GetCurrentThreadId(), s)
+	fmt.Fprintf(os.Stderr, "%s\n", r)
+	os.Stderr.Sync()
+	return r
+}
 
 var (
 	// No mutex, the package must be used by a single goroutine only.
@@ -42,6 +59,7 @@ func lazyInit() {
 	}
 
 	runtime.LockOSThread()
+	// trcw("LockOSThread")
 	initialized = true
 
 	defer commonLazyInit()
@@ -153,6 +171,24 @@ func bindLibs(cacheDir string) {
 	if r, _, _ := tkInit.Call(interp); r != tcl_ok {
 		Error = fmt.Errorf("failed to initialize Tk")
 		return
+	}
+
+	for _, dll := range moreDLLs {
+		var handle *windows.DLL
+		if handle, Error = windows.LoadDLL(dll.dll); Error != nil {
+			return
+		}
+
+		var initProc *windows.Proc
+		if initProc, Error = handle.FindProc(dll.initProc); Error != nil {
+			return
+		}
+
+		r, _, _ := initProc.Call(interp)
+		if r != tcl_ok {
+			Error = fmt.Errorf("failed to initialize %s: %s", dll.dll, tclResult())
+			return
+		}
 	}
 }
 
@@ -273,10 +309,13 @@ func eval(code string) (r string, err error) {
 
 	defer allocator.UintptrFree(cs)
 
+	// trcw("code=%s", code)
 	switch r0, _, _ := evalExProc.Call(interp, cs, uintptr(len(code)), tcl_eval_direct); r0 {
 	case tcl_ok, tcl_return:
+		// trcw("%s->%s, nil", code, tclResult())
 		return tclResult(), nil
 	default:
+		// trcw("%s->{}, %s", code, tclResult())
 		return "", fmt.Errorf("%s", tclResult())
 	}
 }
