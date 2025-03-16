@@ -184,6 +184,9 @@ func TestExamples(t *testing.T) {
 		blacklist["dialog.go"] = struct{}{} // uses X11 specific stuff
 	}
 	switch target {
+	case "linux/s390x":
+		blacklist["font.go"] = struct{}{}          // Looks like a qemu issue.
+		blacklist["winfoChildren.go"] = struct{}{} // Looks like a qemu issue.
 	case "windows/amd64":
 		blacklist["photo_gif.go"] = struct{}{}  // See #66
 		blacklist["photo_gif2.go"] = struct{}{} // See #66
