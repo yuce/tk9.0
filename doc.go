@@ -114,6 +114,13 @@
 //     additional things the C code does not need to - with the respective
 //     performance penalties, now just in different places.
 //
+// # Change log
+//
+// Only selected releases appear here:
+//
+//   - 2025-03-16: v0.65.0 introduces support for many new image formats. See
+//     the list at [NewPhoto] but see also [issue 66].
+//
 // # Widget catalogue
 //
 //   - [ButtonWidget]
@@ -2513,6 +2520,7 @@
 // [documentation for cmd/link]: https://pkg.go.dev/cmd/link
 // [equ]: https://pkg.go.dev/modernc.org/equ
 // [issue 54]: https://gitlab.com/cznic/tk9.0/-/issues/54
+// [issue 66]: https://gitlab.com/cznic/tk9.0/-/issues/66
 // [issue tracker]: https://gitlab.com/cznic/tk9.0/-/issues
 // [jnml's LiberaPay]: https://liberapay.com/jnml/donate
 // [modern-c.appspot.com]: https://modern-c.appspot.com/-/builder/?importpath=modernc.org%2ftk9.0
