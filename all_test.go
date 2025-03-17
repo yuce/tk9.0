@@ -258,7 +258,7 @@ func testExample(t *testing.T, wd, tmpDir, bin string) (err error) {
 		t.Fatal(err)
 	}
 
-	crashCheckDuration := 10 * time.Second
+	crashCheckDuration := 20 * time.Second
 	crashCheckTimer := time.NewTimer(crashCheckDuration)
 
 	waitChan := make(chan error, 1) // Buffered channel to prevent goroutine leak
