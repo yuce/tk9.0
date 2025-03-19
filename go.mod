@@ -16,10 +16,10 @@ require (
 	modernc.org/fileutil v1.3.0
 	modernc.org/knuth v0.5.4
 	modernc.org/libc v1.61.13
-	modernc.org/libtcl9.0 v0.16.0
+	modernc.org/libtcl9.0 v0.16.2
 	modernc.org/libtk9.0 v0.16.1
 	modernc.org/mathutil v1.7.1
-	modernc.org/memory v1.8.2
+	modernc.org/memory v1.9.0
 	modernc.org/ngrab v0.1.0
 	modernc.org/opt v0.1.4
 	modernc.org/rec v0.3.3
@@ -47,7 +47,7 @@ require (
 	modernc.org/libfreetype v0.9.18 // indirect
 	modernc.org/libmd v0.12.15 // indirect
 	modernc.org/libxcb v0.11.3 // indirect
-	modernc.org/libz v0.16.14 // indirect
+	modernc.org/libz v0.16.15 // indirect
 	modernc.org/regexp v1.7.9 // indirect
 	modernc.org/sortutil v1.2.1 // indirect
 	modernc.org/strutil v1.2.1 // indirect
