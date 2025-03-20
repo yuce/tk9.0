@@ -155,7 +155,9 @@ var (
 )
 
 func commonLazyInit() {
-	eval(string(tooltip))
+	// Convert DOS line endings to Unix before evaluating.
+	// https://gitlab.com/cznic/tk9.0/-/issues/67
+	eval(string(bytes.ReplaceAll(tooltip, []byte{'\r', '\n'}, []byte{'\n'})))
 }
 
 func checkSig(dir string, sig map[string]string) (r bool) {
