@@ -19,7 +19,7 @@ require (
 	modernc.org/libtcl9.0 v0.16.2
 	modernc.org/libtk9.0 v0.16.2
 	modernc.org/mathutil v1.7.1
-	modernc.org/memory v1.9.0
+	modernc.org/memory v1.9.1
 	modernc.org/ngrab v0.1.0
 	modernc.org/opt v0.1.4
 	modernc.org/rec v0.3.3
