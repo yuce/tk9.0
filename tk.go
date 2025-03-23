@@ -7957,3 +7957,17 @@ func Values(val any) Opt {
 		return rawOption(fmt.Sprintf(`-values %s`, optionString(val)))
 	}
 }
+
+// Uniform option.
+//
+// Known uses:
+//   - [GridColumnConfigure] (command specific)
+//   - [GridRowConfigure] (command specific)
+//
+// More information might be available at the [Tcl/Tk grid] page.
+//
+// [Tcl/Tk grid]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/grid.html#M8
+func Uniform(val any) Opt {
+	// Credit: Complex_Signal2842, https://www.reddit.com/r/golang/comments/1jcpp3d/comment/mja2l9s/?context=3
+	return rawOption(fmt.Sprintf(`-uniform %s`, tclSafeString(fmt.Sprint(val))))
+}
