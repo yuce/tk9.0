@@ -2163,7 +2163,14 @@ func GridAnchor(w *Window, anchor string) string {
 // More information might be available at the [Tcl/Tk grid] page.
 //
 // [Tcl/Tk grid]: https://www.tcl.tk/man/tcl9.0/TkCmd/grid.html
-func GridRowConfigure(w Widget, index int, options ...Opt) {
+func GridRowConfigure(w Widget, index any, options ...Opt) {
+	switch x := index.(type) {
+	case []int:
+		s := fmt.Sprint(x)
+		index = "{" + s[1:len(s)-1] + "}"
+	default:
+		index = tclSafeString(fmt.Sprint(index))
+	}
 	evalErr(fmt.Sprintf("grid rowconfigure %s %v %s", w, index, collect(options...)))
 }
 
@@ -2208,7 +2215,14 @@ func Minsize(val ...any) Opt {
 // More information might be available at the [Tcl/Tk grid] page.
 //
 // [Tcl/Tk grid]: https://www.tcl.tk/man/tcl9.0/TkCmd/grid.html
-func GridColumnConfigure(w Widget, index int, options ...Opt) {
+func GridColumnConfigure(w Widget, index any, options ...Opt) {
+	switch x := index.(type) {
+	case []int:
+		s := fmt.Sprint(x)
+		index = "{" + s[1:len(s)-1] + "}"
+	default:
+		index = tclSafeString(fmt.Sprint(index))
+	}
 	evalErr(fmt.Sprintf("grid columnconfigure %s %v %s", w, index, collect(options...)))
 }
 
