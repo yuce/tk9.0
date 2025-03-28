@@ -15,7 +15,7 @@ require (
 	golang.org/x/sys v0.31.0
 	modernc.org/fileutil v1.3.0
 	modernc.org/knuth v0.5.4
-	modernc.org/libc v1.61.13
+	modernc.org/libc v1.62.0
 	modernc.org/libtcl9.0 v0.16.2
 	modernc.org/libtk9.0 v0.16.2
 	modernc.org/mathutil v1.7.1
@@ -33,7 +33,7 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/ncruces/go-strftime v0.1.9 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
-	golang.org/x/exp v0.0.0-20241217172543-b2144cdd0a67 // indirect
+	golang.org/x/exp v0.0.0-20250305212735-054e65f0b394 // indirect
 	modernc.org/fsm v1.3.2 // indirect
 	modernc.org/gc/v3 v3.0.0-20250225134559-fd9931328834 // indirect
 	modernc.org/libX11 v0.11.14 // indirect
