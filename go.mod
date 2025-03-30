@@ -15,7 +15,7 @@ require (
 	golang.org/x/sys v0.31.0
 	modernc.org/fileutil v1.3.0
 	modernc.org/knuth v0.5.4
-	modernc.org/libc v1.62.0
+	modernc.org/libc v1.62.1
 	modernc.org/libtcl9.0 v0.16.2
 	modernc.org/libtk9.0 v0.16.2
 	modernc.org/mathutil v1.7.1
