@@ -159,6 +159,7 @@ func TestExamples(t *testing.T) {
 	blacklist := map[string]struct{}{
 		"demo.go":        {}, // executes multiple other examples
 		"fontmetrics.go": {}, // non GUI example
+		"insert_ml.go":   {}, // Does not build in the test setup
 		"ring.go":        {}, // expects arguments
 	}
 
