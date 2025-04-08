@@ -22,6 +22,7 @@ import (
 	_ "github.com/adrg/xdg"       // generator.go
 	_ "github.com/expr-lang/expr" // examples
 	_ "golang.org/x/net/html"     // generator.go
+	_ "modernc.org/htmlview"      // examples
 	_ "modernc.org/ngrab/lib"     // generator.go
 	_ "modernc.org/rec/lib"       // generator.go
 )
@@ -88,18 +89,18 @@ func TestTokenizer(t *testing.T) {
 		{"a\\$\\$\\$\\$", []int{0}, []string{"a\\$\\$\\$\\$"}},
 
 		{"$a$", []int{1}, []string{"$a$"}},
-		// Not valid since 18c4e94e171d4 {"$$a$", []int{2}, []string{"$$a$"}},
 		{"$$a$$", []int{2}, []string{"$$a$$"}},
-		// Not valid since 18c4e94e171d4 {"$a$$", []int{2}, []string{"$a$$"}},
 		{"x$a$", []int{0, 1}, []string{"x", "$a$"}},
-
-		// Not valid since 18c4e94e171d4 {"x$$a$", []int{0, 2}, []string{"x", "$$a$"}},
 		{"x$$a$$", []int{0, 2}, []string{"x", "$$a$$"}},
-		// Not valid since 18c4e94e171d4 {"x$a$$", []int{0, 2}, []string{"x", "$a$$"}},
 		{"x$a$y", []int{0, 1, 0}, []string{"x", "$a$", "y"}},
-		// Not valid since 18c4e94e171d4 {"x$$a$y", []int{0, 2, 0}, []string{"x", "$$a$", "y"}},
 
 		{"x$$a$$y", []int{0, 2, 0}, []string{"x", "$$a$$", "y"}},
+
+		// Not valid since 18c4e94e171d4 {"$$a$", []int{2}, []string{"$$a$"}},
+		// Not valid since 18c4e94e171d4 {"$a$$", []int{2}, []string{"$a$$"}},
+		// Not valid since 18c4e94e171d4 {"x$$a$", []int{0, 2}, []string{"x", "$$a$"}},
+		// Not valid since 18c4e94e171d4 {"x$a$$", []int{0, 2}, []string{"x", "$a$$"}},
+		// Not valid since 18c4e94e171d4 {"x$$a$y", []int{0, 2, 0}, []string{"x", "$$a$", "y"}},
 		// Not valid since 18c4e94e171d4 {"x$a$$y", []int{0, 2, 0}, []string{"x", "$a$$", "y"}},
 		// Not valid since 18c4e94e171d4 {"x\\$0$a\\$1b$$\\$y", []int{0, 2, 0}, []string{"x\\$0", "$a\\$1b$$", "\\$y"}},
 	} {

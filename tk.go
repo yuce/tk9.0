@@ -4323,9 +4323,6 @@ func (w *TextWidget) InsertML(list ...any) {
 	walk(0, doc, func(lvl int, n *html.Node) bool {
 		switch n.Type {
 		case html.TextNode:
-			if lvl < len(tags) {
-				tags = tags[:lvl]
-			}
 			tags := tags[body+1:]
 			for _, v := range tags {
 				if v == "pre" {
@@ -4381,6 +4378,9 @@ func (w *TextWidget) InsertML(list ...any) {
 				}
 				evalErr(fmt.Sprintf("%v window create end -window %s %s", w, src, strings.Join(opts, " ")))
 			default:
+				if lvl < len(tags) {
+					tags = tags[:lvl]
+				}
 				tags = append(tags, n.Data)
 			}
 		}

@@ -15,6 +15,7 @@ require (
 	golang.org/x/sys v0.31.0
 	modernc.org/fileutil v1.3.0
 	modernc.org/knuth v0.5.4
+	modernc.org/libX11 v0.11.14
 	modernc.org/libc v1.62.1
 	modernc.org/libtcl9.0 v0.16.2
 	modernc.org/libtk9.0 v0.16.2
@@ -27,6 +28,7 @@ require (
 )
 
 require (
+	github.com/andybalholm/cascadia v1.3.2 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
@@ -34,9 +36,10 @@ require (
 	github.com/ncruces/go-strftime v0.1.9 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	golang.org/x/exp v0.0.0-20250305212735-054e65f0b394 // indirect
+	modernc.org/css v0.1.1 // indirect
 	modernc.org/fsm v1.3.2 // indirect
 	modernc.org/gc/v3 v3.0.0-20250225134559-fd9931328834 // indirect
-	modernc.org/libX11 v0.11.14 // indirect
+	modernc.org/htmlview v0.2.0 // indirect
 	modernc.org/libXau v0.9.9 // indirect
 	modernc.org/libXdmcp v0.12.9 // indirect
 	modernc.org/libXft v0.10.19 // indirect
@@ -49,6 +52,7 @@ require (
 	modernc.org/libxcb v0.11.3 // indirect
 	modernc.org/libz v0.16.15 // indirect
 	modernc.org/regexp v1.7.9 // indirect
+	modernc.org/scanner v1.1.0 // indirect
 	modernc.org/sortutil v1.2.1 // indirect
 	modernc.org/strutil v1.2.1 // indirect
 	modernc.org/token v1.1.0 // indirect
