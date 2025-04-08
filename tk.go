@@ -732,6 +732,18 @@ func hexDigit(b byte) byte {
 	return 'a' + b - 10
 }
 
+func tclBinaryString(s string) string {
+	var b strings.Builder
+	for i := 0; i < len(s); i++ {
+		v := s[i]
+		b.WriteByte('\\')
+		b.WriteByte('x')
+		b.WriteByte(hexDigit(v >> 4))
+		b.WriteByte(hexDigit(v & 15))
+	}
+	return b.String()
+}
+
 func tclBinaryBytes(s []byte) string {
 	var b strings.Builder
 	for _, v := range s {
@@ -4421,11 +4433,7 @@ func tclFromElementNode(s string) string {
 			suffix = " "
 		}
 	}
-	for i, v := range a {
-		a[i] = tclSafeInBraces(v)
-	}
-	r := fmt.Sprintf("{%s%s%s}", prefix, strings.Join(a, " "), suffix)
-	return r
+	return tclBinaryString(fmt.Sprintf("%s%s%s", prefix, strings.Join(a, " "), suffix))
 }
 
 var badMLChars = [...]bool{
