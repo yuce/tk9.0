@@ -167,6 +167,12 @@ func bindLibs(cacheDir string) {
 		return
 	}
 
+	if goos == "darwin" {
+		if _, Error := eval("set tcl_interactive 0"); Error != nil {
+			return
+		}
+	}
+
 	fn := filepath.Join(cacheDir, fmt.Sprintf("lib%s.zip", libVersion))
 	if _, Error := eval(fmt.Sprintf("zipfs mount %s /app", fn)); Error != nil {
 		return
