@@ -16,7 +16,7 @@ require (
 	modernc.org/knuth v0.5.4
 	modernc.org/libX11 v0.11.14
 	modernc.org/libc v1.62.1
-	modernc.org/libtcl9.0 v0.16.2
+	modernc.org/libtcl9.0 v0.16.3
 	modernc.org/libtk9.0 v0.16.2
 	modernc.org/mathutil v1.7.1
 	modernc.org/memory v1.9.1
