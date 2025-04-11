@@ -7899,6 +7899,26 @@ func (w *ListboxWidget) Curselection() (r []int) {
 	return indices
 }
 
+// listbox — Create and manipulate 'listbox' item list widgets
+//
+// # Description
+//
+// Deletes one or more elements of the listbox. First and last are indices
+// specifying the first and last elements in the range to delete. If last is not
+// specified it defaults to first, i.e. a single element is deleted.
+//
+// More information might be available at the [Tcl/Tk listbox] page.
+//
+// [Tcl/Tk listbox]: https://www.tcl.tk/man/tcl9.0/TkCmd/listbox.html
+func (w *ListboxWidget) Delete(first any, last ...any) {
+	switch len(last) {
+	case 0:
+		evalErr(fmt.Sprintf("%s delete %s", w, tclSafeString(fmt.Sprint(first))))
+	default:
+		evalErr(fmt.Sprintf("%s delete %s %s", w, tclSafeString(fmt.Sprint(first)), tclSafeString(fmt.Sprint(last[0]))))
+	}
+}
+
 // ttk::progressbar — Provide progress feedback
 //
 // # Description
