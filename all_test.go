@@ -189,9 +189,10 @@ func TestExamples(t *testing.T) {
 		blacklist["font.go"] = struct{}{}          // Looks like a qemu issue.
 		blacklist["winfoChildren.go"] = struct{}{} // Looks like a qemu issue.
 	case "windows/amd64":
-		blacklist["photo_gif.go"] = struct{}{}  // See #66
-		blacklist["photo_gif2.go"] = struct{}{} // See #66
-		blacklist["tablelist.go"] = struct{}{}  // See #66
+		blacklist["animated_gif.go"] = struct{}{} // See #66
+		blacklist["photo_gif.go"] = struct{}{}    // See #66
+		blacklist["photo_gif2.go"] = struct{}{}   // See #66
+		blacklist["tablelist.go"] = struct{}{}    // See #66
 	case "windows/arm64":
 		blacklist["splot.go"] = struct{}{}       // No gnuplot on this builder.
 		blacklist["tori.go"] = struct{}{}        // No gnuplot on this builder.
