@@ -1973,6 +1973,44 @@ func (w *Window) Center() *Window {
 //
 // # Description
 //
+// If no options are supplied, a list of all of the content in window is
+// returned, most recently managed first. Option can be either -row or -column
+// which causes only the content in the row (or column) specified by value to
+// be returned.
+//
+// More information might be available at the [Tcl/Tk grid] page.
+//
+// [Tcl/Tk grid]: https://www.tcl.tk/man/tcl9.0/TkCmd/grid.html
+func GridContent(w *Window, opts ...Opt) (r []*Window) {
+	var s string
+	if len(opts) != 0 {
+		s = collect(opts...)
+	}
+	for _, v := range parseList(evalErr(fmt.Sprintf("grid content %s %s", w, s))) {
+		if w := windowIndex[v]; w != nil {
+			r = append(r, w)
+		}
+	}
+	return r
+}
+
+// Grid — Geometry manager that arranges widgets in a grid
+//
+// # Description
+//
+// Synonym for [GridContent].
+//
+// More information might be available at the [Tcl/Tk grid] page.
+//
+// [Tcl/Tk grid]: https://www.tcl.tk/man/tcl9.0/TkCmd/grid.html
+func GridSlaves(w *Window, opts ...Opt) (r []*Window) {
+	return GridContent(w, opts...)
+}
+
+// Grid — Geometry manager that arranges widgets in a grid
+//
+// # Description
+//
 // Removes each of the windows from grid for its container and unmaps their
 // windows. The content will no longer be managed by the grid geometry manager.
 // The configuration options for that window are forgotten, so that if the
