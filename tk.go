@@ -25,7 +25,7 @@ import (
 	"unsafe"
 
 	"golang.org/x/net/html"
-	"modernc.org/libtk9.0"
+	libtk9_0 "modernc.org/libtk9.0"
 )
 
 const (
@@ -7884,37 +7884,16 @@ func (w *TEntryWidget) Icursor(index any) (r string) {
 //
 // # Description
 //
-// If last is omitted, returns the contents of the listbox element indicated by
-// first, or an empty string if first refers to a non-existent element. If last
-// is specified, the command returns a list whose elements are all of the
-// listbox elements between first and last, inclusive. Both first and last may
-// have any of the standard forms for indices.
+// Sets the active element to the one indicated by index. If index is outside
+// the range of elements in the listbox then the closest element is activated.
+// The active element is drawn as specified by -activestyle when the widget has
+// the input focus, and its index may be retrieved with the index active.
 //
 // More information might be available at the [Tcl/Tk listbox] page.
 //
 // [Tcl/Tk listbox]: https://www.tcl.tk/man/tcl9.0/TkCmd/listbox.html
-func (w *ListboxWidget) Get(first any, last ...any) (r []string) {
-	switch len(last) {
-	case 0:
-		return []string{evalErr(fmt.Sprintf("%s get %s", w, tclSafeString(fmt.Sprint(first))))}
-	default:
-		return parseList(evalErr(fmt.Sprintf("%s get %s %s", w, tclSafeString(fmt.Sprint(first)), tclSafeString(fmt.Sprint(last[0])))))
-	}
-}
-
-// listbox — Create and manipulate 'listbox' item list widgets
-//
-// # Description
-//
-// Inserts zero or more new elements in the list just before the element given
-// by index. If index is specified as end then the new elements are added to
-// the end of the list.
-//
-// More information might be available at the [Tcl/Tk listbox] page.
-//
-// [Tcl/Tk listbox]: https://www.tcl.tk/man/tcl9.0/TkCmd/listbox.html
-func (w *ListboxWidget) Insert(index any, elements ...any) {
-	evalErr(fmt.Sprintf("%s insert %s %s", w, tclSafeString(fmt.Sprint(index)), tclSafeList(elements...)))
+func (w *ListboxWidget) Activate(index any) {
+	evalErr(fmt.Sprintf("%s activate %s", w, tclSafeString(fmt.Sprint(index))))
 }
 
 // listbox — Create and manipulate 'listbox' item list widgets
@@ -7955,6 +7934,169 @@ func (w *ListboxWidget) Delete(first any, last ...any) {
 	default:
 		evalErr(fmt.Sprintf("%s delete %s %s", w, tclSafeString(fmt.Sprint(first)), tclSafeString(fmt.Sprint(last[0]))))
 	}
+}
+
+// listbox — Create and manipulate 'listbox' item list widgets
+//
+// # Description
+//
+// If last is omitted, returns the contents of the listbox element indicated by
+// first, or an empty string if first refers to a non-existent element. If last
+// is specified, the command returns a list whose elements are all of the
+// listbox elements between first and last, inclusive. Both first and last may
+// have any of the standard forms for indices.
+//
+// More information might be available at the [Tcl/Tk listbox] page.
+//
+// [Tcl/Tk listbox]: https://www.tcl.tk/man/tcl9.0/TkCmd/listbox.html
+func (w *ListboxWidget) Get(first any, last ...any) (r []string) {
+	switch len(last) {
+	case 0:
+		return []string{evalErr(fmt.Sprintf("%s get %s", w, tclSafeString(fmt.Sprint(first))))}
+	default:
+		return parseList(evalErr(fmt.Sprintf("%s get %s %s", w, tclSafeString(fmt.Sprint(first)), tclSafeString(fmt.Sprint(last[0])))))
+	}
+}
+
+// listbox — Create and manipulate 'listbox' item list widgets
+//
+// # Description
+//
+// Returns the integer index value that corresponds to index. If index is end
+// the return value is a count of the number of elements in the listbox
+// (not the index of the last element).
+//
+// More information might be available at the [Tcl/Tk listbox] page.
+//
+// [Tcl/Tk listbox]: https://www.tcl.tk/man/tcl9.0/TkCmd/listbox.html
+func (w *ListboxWidget) Index(index any) {
+	evalErr(fmt.Sprintf("%s index %s", w, tclSafeString(fmt.Sprint(index))))
+}
+
+// listbox — Create and manipulate 'listbox' item list widgets
+//
+// # Description
+//
+// Inserts zero or more new elements in the list just before the element given
+// by index. If index is specified as end then the new elements are added to
+// the end of the list.
+//
+// More information might be available at the [Tcl/Tk listbox] page.
+//
+// [Tcl/Tk listbox]: https://www.tcl.tk/man/tcl9.0/TkCmd/listbox.html
+func (w *ListboxWidget) Insert(index any, elements ...any) {
+	evalErr(fmt.Sprintf("%s insert %s %s", w, tclSafeString(fmt.Sprint(index)), tclSafeList(elements...)))
+}
+
+// listbox — Create and manipulate 'listbox' item list widgets
+//
+// # Description
+//
+// Given a y-coordinate within the listbox window, this command returns the index
+// of the (visible) listbox element nearest to that y-coordinate.
+//
+// More information might be available at the [Tcl/Tk listbox] page.
+//
+// [Tcl/Tk listbox]: https://www.tcl.tk/man/tcl9.0/TkCmd/listbox.html
+func (w *ListboxWidget) Nearest(y any) int {
+	return atoi(evalErr(fmt.Sprintf("%s nearest %s", w, tclSafeString(fmt.Sprint(y)))))
+}
+
+// listbox — Create and manipulate 'listbox' item list widgets
+//
+// # Description
+//
+// Adjust the view in the listbox so that the element given by index is visible.
+// If the element is already visible then the command has no effect; if the
+// element is near one edge of the window then the listbox scrolls to bring
+// the element into view at the edge; otherwise the listbox scrolls to center
+// the element.
+//
+// More information might be available at the [Tcl/Tk listbox] page.
+//
+// [Tcl/Tk listbox]: https://www.tcl.tk/man/tcl9.0/TkCmd/listbox.html
+func (w *ListboxWidget) See(index any) {
+	evalErr(fmt.Sprintf("%s see %s", w, tclSafeString(fmt.Sprint(index))))
+}
+
+// listbox — Create and manipulate 'listbox' item list widgets
+//
+// # Description
+//
+// Sets the selection anchor to the element given by index. If index refers
+// to a non-existent element, then the closest element is used. The selection
+// anchor is the end of the selection that is fixed while dragging out a selection
+// with the mouse. The index anchor may be used to refer to the anchor element.
+//
+// More information might be available at the [Tcl/Tk listbox] page.
+//
+// [Tcl/Tk listbox]: https://www.tcl.tk/man/tcl9.0/TkCmd/listbox.html
+func (w *ListboxWidget) SelectionAnchor(index any) {
+	evalErr(fmt.Sprintf("%s selection anchor %s", w, tclSafeString(fmt.Sprint(index))))
+}
+
+// listbox — Create and manipulate 'listbox' item list widgets
+//
+// # Description
+//
+// Selects all of the elements in the range between first and last, inclusive,
+// without affecting the selection state of elements outside that range.
+//
+// More information might be available at the [Tcl/Tk listbox] page.
+//
+// [Tcl/Tk listbox]: https://www.tcl.tk/man/tcl9.0/TkCmd/listbox.html
+func (w *ListboxWidget) SelectionSet(first any, last ...any) {
+	switch len(last) {
+	case 0:
+		evalErr(fmt.Sprintf("%s selection set %s", w, tclSafeString(fmt.Sprint(first))))
+	default:
+		evalErr(fmt.Sprintf("%s selection set %s %s", w, tclSafeString(fmt.Sprint(first)), tclSafeString(fmt.Sprint(last[0]))))
+	}
+}
+
+// listbox — Create and manipulate 'listbox' item list widgets
+//
+// # Description
+//
+// Returns 1 if the element indicated by index is currently selected, 0 if it is not.
+//
+// More information might be available at the [Tcl/Tk listbox] page.
+//
+// [Tcl/Tk listbox]: https://www.tcl.tk/man/tcl9.0/TkCmd/listbox.html
+func (w *ListboxWidget) SelectionIncludes(index any) bool {
+	return evalErr(fmt.Sprintf("%s selection includes %s", w, tclSafeString(fmt.Sprint(index)))) == "1"
+}
+
+// listbox — Create and manipulate 'listbox' item list widgets
+//
+// # Description
+//
+// If any of the elements between first and last (inclusive) are selected, they
+// are deselected. The selection state is not changed for elements outside this range.
+//
+// More information might be available at the [Tcl/Tk listbox] page.
+//
+// [Tcl/Tk listbox]: https://www.tcl.tk/man/tcl9.0/TkCmd/listbox.html
+func (w *ListboxWidget) SelectionClear(first any, last ...any) {
+	switch len(last) {
+	case 0:
+		evalErr(fmt.Sprintf("%s selection clear %s", w, tclSafeString(fmt.Sprint(first))))
+	default:
+		evalErr(fmt.Sprintf("%s selection clear %s %s", w, tclSafeString(fmt.Sprint(first)), tclSafeString(fmt.Sprint(last[0]))))
+	}
+}
+
+// listbox — Create and manipulate 'listbox' item list widgets
+//
+// # Description
+//
+// Returns a decimal string indicating the total number of elements in the listbox.
+//
+// More information might be available at the [Tcl/Tk listbox] page.
+//
+// [Tcl/Tk listbox]: https://www.tcl.tk/man/tcl9.0/TkCmd/listbox.html
+func (w *ListboxWidget) Size() int {
+	return atoi(evalErr(fmt.Sprintf("%s size", w)))
 }
 
 // ttk::progressbar — Provide progress feedback
