@@ -1109,7 +1109,7 @@ func (j *job) pageLink(page string) {
 
 	page = page[:len(page)-len(".html")]
 	j.w("\n//\n// More information might be available at the [Tcl/Tk %s] page.", page)
-	j.w("\n//\n// [Tcl/Tk %s]: https://www.tcl.tk/man/tcl9.0/TkCmd/%[1]s.html", page)
+	j.w("\n//\n// [Tcl/Tk %s]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/%[1]s.html", page)
 }
 
 func (j *job) manual(fn string, doc *document, nfo *pageInfo) {
