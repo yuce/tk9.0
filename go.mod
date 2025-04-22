@@ -14,7 +14,7 @@ require (
 	golang.org/x/sys v0.32.0
 	modernc.org/fileutil v1.3.0
 	modernc.org/knuth v0.5.4
-	modernc.org/libX11 v0.11.14
+	modernc.org/libX11 v0.11.15
 	modernc.org/libc v1.63.0
 	modernc.org/libtcl9.0 v0.16.4
 	modernc.org/libtk9.0 v0.16.3
@@ -36,16 +36,16 @@ require (
 	golang.org/x/exp v0.0.0-20250408133849-7e4ce0ab07d0 // indirect
 	modernc.org/fsm v1.3.2 // indirect
 	modernc.org/gc/v3 v3.0.0-20250225134559-fd9931328834 // indirect
-	modernc.org/libXau v0.9.9 // indirect
-	modernc.org/libXdmcp v0.12.9 // indirect
+	modernc.org/libXau v0.9.14 // indirect
+	modernc.org/libXdmcp v0.12.13 // indirect
 	modernc.org/libXft v0.10.19 // indirect
 	modernc.org/libXrender v0.9.13 // indirect
-	modernc.org/libbsd v0.11.8 // indirect
+	modernc.org/libbsd v0.11.9 // indirect
 	modernc.org/libexpat v0.10.12 // indirect
 	modernc.org/libfontconfig v0.8.11 // indirect
 	modernc.org/libfreetype v0.9.18 // indirect
-	modernc.org/libmd v0.12.15 // indirect
-	modernc.org/libxcb v0.11.3 // indirect
+	modernc.org/libmd v0.12.16 // indirect
+	modernc.org/libxcb v0.12.0 // indirect
 	modernc.org/libz v0.16.15 // indirect
 	modernc.org/regexp v1.7.9 // indirect
 	modernc.org/sortutil v1.2.1 // indirect
