@@ -5069,8 +5069,46 @@ func (w *MenuWidget) Invoke(index uint) {
 // Additional information might be available at the [Tcl/Tk menu] page.
 //
 // [Tcl/Tk menu]: https://www.tcl.tk/man/tk9.0/TkCmd/menu.htm
-func (w *MenuWidget) EntryConfigure(index uint, options ...Opt) {
-	evalErr(fmt.Sprintf("%s entryconfigure %d %s", w, index, winCollect(w.Window, options...)))
+func (w *MenuWidget) EntryConfigure(index any, options ...Opt) {
+	index = tclSafeString(fmt.Sprint(index))
+	options, tvs, vs := w.split(options)
+	if len(options) != 0 {
+		evalErr(fmt.Sprintf("%s entryconfigure %s %s", w, index, collect(options...)))
+	}
+	if len(tvs) != 0 {
+		tvo := tvs[len(tvs)-1]
+		tclVar := textVariables[w.Window]
+		if tclVar == "" {
+			tclVar = fmt.Sprintf("textVar%d", id.Add(1))
+			textVariables[w.Window] = tclVar
+			evalErr(fmt.Sprintf("%s entryconfigure %s -textvariable %s", w, index, tclVar))
+		}
+		evalErr(fmt.Sprintf("set %s %s", tclVar, tclSafeString(string(tvo))))
+	}
+	if len(vs) != 0 {
+		vo := vs[len(vs)-1]
+		variables[w.Window] = vo
+		if vo.tclName == "" {
+			vo.tclName = fmt.Sprintf("goVar%d", id.Add(1))
+		}
+		evalErr(fmt.Sprintf("%s entryconfigure %s -variable %s", w, index, vo.tclName))
+		evalErr(fmt.Sprintf("set %s %s", vo.tclName, tclSafeString(fmt.Sprint(vo.val))))
+	}
+}
+
+// Menu — Create and manipulate 'menu' widgets and menubars
+//
+// # Description
+//
+// Returns the current value of a configuration option for the entry given by
+// index. Option may have any of the names described in the MENU ENTRY OPTIONS
+// section below.
+//
+// Additional information might be available at the [Tcl/Tk menu] page.
+//
+// [Tcl/Tk menu]: https://www.tcl.tk/man/tk9.0/TkCmd/menu.htm
+func (w *MenuWidget) EntryCget(index, option any) (r string) {
+	return evalErr(fmt.Sprintf("%s entrycget %s %s", w, tclSafeString(fmt.Sprint(index)), funcToTclOption(option)))
 }
 
 // Menu — Create and manipulate 'menu' widgets and menubars
