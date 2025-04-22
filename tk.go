@@ -6055,8 +6055,8 @@ func (w *PanedwindowWidget) Paneconfigure(subwindow *Window, options ...Opt) str
 // always, first, last, middle, and never. The panedwindow will calculate the
 // required size of all its panes. Any remaining (or deficit) space will be
 // distributed to those panes marked for stretching. The space will be
-// distributed based on each panes current ratio of the whole. The when values
-// have the following definition:
+// distributed based on each panes current ratio of the whole. For the PanedwindowWidget
+// the value should be a string with one of the following definition:
 //
 //   - always: This pane will always stretch.
 //   - first: Only if this pane is the first pane (left-most or top-most) will it stretch.
@@ -6064,10 +6064,16 @@ func (w *PanedwindowWidget) Paneconfigure(subwindow *Window, options ...Opt) str
 //   - middle: Only if this pane is not the first or last pane will it stretch.
 //   - never: This pane will never stretch.
 //
+// For the TTreeviewWidget the value should be a boolean with the following results:
+//
+//   - true: This enables stretching for the specified column.
+//   - false: This disables stretching for the specified column.
+//
 // Known uses:
 //   - [PanedwindowWidget] (command specific)
-func Stretch(when string) Opt {
-	return rawOption(fmt.Sprintf(`-stretch %s`, tclSafeString(when)))
+//   - [TTreeviewWidget] (command specific)
+func Stretch(val any) Opt {
+	return rawOption(fmt.Sprintf(`-stretch %s`, optionString(val)))
 }
 
 // panedwindow — Create and manipulate 'panedwindow' split container widgets
@@ -7438,6 +7444,18 @@ func (w *TTreeviewWidget) Parent(item any) (r string) {
 // [Tcl/Tk treeview]: https://tcl.tk/man/tcl9.0/TkCmd/ttk_treeview.html
 func (w *TTreeviewWidget) Column(column any, options ...Opt) (r string) {
 	return evalErr(fmt.Sprintf("%s column %s %s", w, tclSafeString(fmt.Sprint(column)), collect(options...)))
+}
+
+// Separator option.
+//
+// Known uses:
+//   - [TTreeviewWidget] (command specific)
+//
+// More information might be available at the [Tcl/Tk treeview] page.
+//
+// [Tcl/Tk treeview]: https://tcl.tk/man/tcl9.0/TkCmd/ttk_treeview.html
+func Separator(val any) Opt {
+	return rawOption(fmt.Sprintf(`-separator %v`, optionString(val)))
 }
 
 // ttk::treeview — hierarchical multicolumn data display widget
