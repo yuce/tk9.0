@@ -113,7 +113,6 @@ lib_win64: download
 	mv $(WIN64)/lib.zip.tmp $(WIN64)/lib.zip
 	rm -rf tcl9.0.1/ tk9.0.1/ Img-2.0.1/
 	GOOS=windows GOARCH=amd64 go build -v
-	GOOS=windows GOARCH=amd64 ./unconvert.sh
 	git status
 
 lib_win32: download
@@ -141,7 +140,6 @@ lib_win32: download
 	mv $(WIN32)/lib.zip.tmp $(WIN32)/lib.zip
 	rm -rf tcl9.0.1/ tk9.0.1/ Img-2.0.1/
 	GOOS=windows GOARCH=386 go build -v
-	GOOS=windows GOARCH=386 ./unconvert.sh
 	git status
 
 lib_winarm64: download
@@ -170,7 +168,6 @@ lib_winarm64: download
 	mv $(WINARM64)/lib.zip.tmp $(WINARM64)/lib.zip
 	rm -rf tcl9.0.1/ tk9.0.1/ Img-2.0.1/
 	GOOS=windows GOARCH=arm64 go build -v
-	GOOS=windows GOARCH=arm64 ./unconvert.sh
 	git status
 
 lib_linux_ccgo: download
@@ -190,7 +187,6 @@ lib_linux_ccgo: download
 	./img_ccgo.sh
 	rm -rf Img-2.0.1/
 	go build -v
-	./unconvert.sh
 	git status
 
 lib_linux_purego: download
@@ -216,7 +212,6 @@ lib_linux_purego: download
 	mv embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/lib.zip
 	rm -rf tcl9.0.1/ tk9.0.1/ Img-2.0.1/
 	go build -v
-	./unconvert.sh
 	git status
 
 lib_darwin: download
@@ -242,7 +237,6 @@ lib_darwin: download
 	mv embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/lib.zip
 	rm -rf tcl9.0.1/ tk9.0.1/ Img-2.0.1/
 	go build -v
-	./unconvert.sh
 	git status
 
 # use gmake
@@ -269,7 +263,6 @@ lib_freebsd: download
 	mv embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/lib.zip
 	rm -rf tcl9.0.1/ tk9.0.1/ Img-2.0.1/
 	go build -v
-	./unconvert.sh
 	git status
 
 demo:
