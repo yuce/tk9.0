@@ -128,7 +128,7 @@ import "fmt"
 // If this option is not specified, the button's desired width is computed
 // from the size of the image or bitmap or text being displayed in it.
 //
-// [Tcl/Tk button]: https://www.tcl.tk/man/tcl9.0/TkCmd/button.html
+// [Tcl/Tk button]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/button.html
 func Button(options ...Opt) *ButtonWidget {
 	return App.Button(options...)
 }
@@ -247,7 +247,7 @@ type ButtonWidget struct {
 // this option is negative or zero, then vertical scrolling
 // is unconstrained.
 //
-// [Tcl/Tk canvas]: https://www.tcl.tk/man/tcl9.0/TkCmd/canvas.html
+// [Tcl/Tk canvas]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/canvas.html
 func Canvas(options ...Opt) *CanvasWidget {
 	return App.Canvas(options...)
 }
@@ -482,7 +482,7 @@ type CanvasWidget struct {
 // If this option is not specified, the button's desired width is computed
 // from the size of the image or bitmap or text being displayed in it.
 //
-// [Tcl/Tk checkbutton]: https://www.tcl.tk/man/tcl9.0/TkCmd/checkbutton.html
+// [Tcl/Tk checkbutton]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/checkbutton.html
 func Checkbutton(options ...Opt) *CheckbuttonWidget {
 	return App.Checkbutton(options...)
 }
@@ -638,7 +638,7 @@ type CheckbuttonWidget struct {
 // If the value is negative or zero, the widget picks a
 // size just large enough to hold its current text.
 //
-// [Tcl/Tk entry]: https://www.tcl.tk/man/tcl9.0/TkCmd/entry.html
+// [Tcl/Tk entry]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/entry.html
 func Entry(options ...Opt) *EntryWidget {
 	return App.Entry(options...)
 }
@@ -784,7 +784,7 @@ type EntryWidget struct {
 // geometry manager, such as grid or pack, is used within the
 // frame since the geometry manager will override the width of the frame.
 //
-// [Tcl/Tk frame]: https://www.tcl.tk/man/tcl9.0/TkCmd/frame.html
+// [Tcl/Tk frame]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/frame.html
 func Frame(options ...Opt) *FrameWidget {
 	return App.Frame(options...)
 }
@@ -886,7 +886,7 @@ type FrameWidget struct {
 // If this option is not specified, the label's desired width is computed
 // from the size of the image or bitmap or text being displayed in it.
 //
-// [Tcl/Tk label]: https://www.tcl.tk/man/tcl9.0/TkCmd/label.html
+// [Tcl/Tk label]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/label.html
 func Label(options ...Opt) *LabelWidget {
 	return App.Label(options...)
 }
@@ -1011,7 +1011,7 @@ type LabelWidget struct {
 // If this option is negative or zero then the window will
 // not request any size at all.
 //
-// [Tcl/Tk labelframe]: https://www.tcl.tk/man/tcl9.0/TkCmd/labelframe.html
+// [Tcl/Tk labelframe]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/labelframe.html
 func Labelframe(options ...Opt) *LabelframeWidget {
 	return App.Labelframe(options...)
 }
@@ -1136,7 +1136,7 @@ type LabelframeWidget struct {
 // If zero or less, then the desired width for the window is made just
 // large enough to hold all the elements in the listbox.
 //
-// [Tcl/Tk listbox]: https://www.tcl.tk/man/tcl9.0/TkCmd/listbox.html
+// [Tcl/Tk listbox]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/listbox.html
 func Listbox(options ...Opt) *ListboxWidget {
 	return App.Listbox(options...)
 }
@@ -1233,7 +1233,7 @@ type ListboxWidget struct {
 // by the cloning mechanism and is not normally set outside of the Tk
 // library.
 //
-// [Tcl/Tk menu]: https://www.tcl.tk/man/tcl9.0/TkCmd/menu.html
+// [Tcl/Tk menu]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/menu.html
 func Menu(options ...Opt) *MenuWidget {
 	return App.Menu(options...)
 }
@@ -1340,7 +1340,7 @@ type MenuWidget struct {
 // If this option is not specified, the menubutton's desired width is computed
 // from the size of the image or bitmap or text being displayed in it.
 //
-// [Tcl/Tk menubutton]: https://www.tcl.tk/man/tcl9.0/TkCmd/menubutton.html
+// [Tcl/Tk menubutton]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/menubutton.html
 func Menubutton(options ...Opt) *MenubuttonWidget {
 	return App.Menubutton(options...)
 }
@@ -1468,7 +1468,7 @@ type MenubuttonWidget struct {
 // If this option value is negative or zero, then
 // the -aspect option determines the line length.
 //
-// [Tcl/Tk message]: https://www.tcl.tk/man/tcl9.0/TkCmd/message.html
+// [Tcl/Tk message]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/message.html
 func Message(options ...Opt) *MessageWidget {
 	return App.Message(options...)
 }
@@ -1593,7 +1593,7 @@ type MessageWidget struct {
 // value accepted by Tk_GetPixels. If an empty string, the widget will be
 // made wide enough to allow all contained widgets to have their natural width.
 //
-// [Tcl/Tk panedwindow]: https://www.tcl.tk/man/tcl9.0/TkCmd/panedwindow.html
+// [Tcl/Tk panedwindow]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/panedwindow.html
 func Panedwindow(options ...Opt) *PanedwindowWidget {
 	return App.Panedwindow(options...)
 }
@@ -1812,7 +1812,7 @@ type PanedwindowWidget struct {
 // If this option is not specified, the button's desired width is computed
 // from the size of the image or bitmap or text being displayed in it.
 //
-// [Tcl/Tk radiobutton]: https://www.tcl.tk/man/tcl9.0/TkCmd/radiobutton.html
+// [Tcl/Tk radiobutton]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/radiobutton.html
 func Radiobutton(options ...Opt) *RadiobuttonWidget {
 	return App.Radiobutton(options...)
 }
@@ -1996,7 +1996,7 @@ type RadiobuttonWidget struct {
 // For vertical scales this is the scale's width;  for horizontal scales
 // this is the scale's height.
 //
-// [Tcl/Tk scale]: https://www.tcl.tk/man/tcl9.0/TkCmd/scale.html
+// [Tcl/Tk scale]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/scale.html
 func Scale(options ...Opt) *ScaleWidget {
 	return App.Scale(options...)
 }
@@ -2104,7 +2104,7 @@ type ScaleWidget struct {
 // this will be the height.
 // The value may have any of the forms acceptable to Tk_GetPixels.
 //
-// [Tcl/Tk scrollbar]: https://www.tcl.tk/man/tcl9.0/TkCmd/scrollbar.html
+// [Tcl/Tk scrollbar]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/scrollbar.html
 func Scrollbar(options ...Opt) *ScrollbarWidget {
 	return App.Scrollbar(options...)
 }
@@ -2319,7 +2319,7 @@ type ScrollbarWidget struct {
 // Must be a proper boolean value.  If on, the spinbox will wrap around the
 // values of data in the widget.
 //
-// [Tcl/Tk spinbox]: https://www.tcl.tk/man/tcl9.0/TkCmd/spinbox.html
+// [Tcl/Tk spinbox]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/spinbox.html
 func Spinbox(options ...Opt) *SpinboxWidget {
 	return App.Spinbox(options...)
 }
@@ -2543,7 +2543,7 @@ type SpinboxWidget struct {
 // In char mode a screen line break may occur after any character; in
 // word mode a line break will only be made at word boundaries.
 //
-// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
+// [Tcl/Tk text]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/text.html
 func Text(options ...Opt) *TextWidget {
 	return App.Text(options...)
 }
@@ -2716,7 +2716,7 @@ type TextWidget struct {
 // If this option is negative or zero then the window will
 // not request any size at all.
 //
-// [Tcl/Tk toplevel]: https://www.tcl.tk/man/tcl9.0/TkCmd/toplevel.html
+// [Tcl/Tk toplevel]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/toplevel.html
 func Toplevel(options ...Opt) *ToplevelWidget {
 	return App.Toplevel(options...)
 }
@@ -2817,7 +2817,7 @@ type ToplevelWidget struct {
 // See the ttk::style manual page for information on how to configure
 // ttk styles.
 //
-// [Tcl/Tk ttk_button]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_button.html
+// [Tcl/Tk ttk_button]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/ttk_button.html
 func TButton(options ...Opt) *TButtonWidget {
 	return App.TButton(options...)
 }
@@ -2911,7 +2911,7 @@ type TButtonWidget struct {
 // See the ttk::style manual page for information on how to configure
 // ttk styles.
 //
-// [Tcl/Tk ttk_checkbutton]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_checkbutton.html
+// [Tcl/Tk ttk_checkbutton]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/ttk_checkbutton.html
 func TCheckbutton(options ...Opt) *TCheckbuttonWidget {
 	return App.TCheckbutton(options...)
 }
@@ -3050,7 +3050,7 @@ type TCheckbuttonWidget struct {
 // See the ttk::style manual page for information on how to configure
 // ttk styles.
 //
-// [Tcl/Tk ttk_combobox]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_combobox.html
+// [Tcl/Tk ttk_combobox]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/ttk_combobox.html
 func TCombobox(options ...Opt) *TComboboxWidget {
 	return App.TCombobox(options...)
 }
@@ -3188,7 +3188,7 @@ type TComboboxWidget struct {
 // See the ttk::style manual page for information on how to configure
 // ttk styles.
 //
-// [Tcl/Tk ttk_entry]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_entry.html
+// [Tcl/Tk ttk_entry]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/ttk_entry.html
 func TEntry(options ...Opt) *TEntryWidget {
 	return App.TEntry(options...)
 }
@@ -3262,7 +3262,7 @@ type TEntryWidget struct {
 // See the ttk::style manual page for information on how to configure
 // ttk styles.
 //
-// [Tcl/Tk ttk_frame]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_frame.html
+// [Tcl/Tk ttk_frame]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/ttk_frame.html
 func TFrame(options ...Opt) *TFrameWidget {
 	return App.TFrame(options...)
 }
@@ -3352,7 +3352,7 @@ type TFrameWidget struct {
 // See the ttk::style manual page for information on how to configure
 // ttk styles.
 //
-// [Tcl/Tk ttk_label]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_label.html
+// [Tcl/Tk ttk_label]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/ttk_label.html
 func TLabel(options ...Opt) *TLabelWidget {
 	return App.TLabel(options...)
 }
@@ -3461,7 +3461,7 @@ type TLabelWidget struct {
 // See the ttk::style manual page for information on how to configure
 // ttk styles.
 //
-// [Tcl/Tk ttk_labelframe]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_labelframe.html
+// [Tcl/Tk ttk_labelframe]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/ttk_labelframe.html
 func TLabelframe(options ...Opt) *TLabelframeWidget {
 	return App.TLabelframe(options...)
 }
@@ -3548,7 +3548,7 @@ type TLabelframeWidget struct {
 // See the ttk::style manual page for information on how to configure
 // ttk styles.
 //
-// [Tcl/Tk ttk_menubutton]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_menubutton.html
+// [Tcl/Tk ttk_menubutton]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/ttk_menubutton.html
 func TMenubutton(options ...Opt) *TMenubuttonWidget {
 	return App.TMenubutton(options...)
 }
@@ -3650,7 +3650,7 @@ type TMenubuttonWidget struct {
 // See the ttk::style manual page for information on how to configure
 // ttk styles.
 //
-// [Tcl/Tk ttk_notebook]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_notebook.html
+// [Tcl/Tk ttk_notebook]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/ttk_notebook.html
 func TNotebook(options ...Opt) *TNotebookWidget {
 	return App.TNotebook(options...)
 }
@@ -3737,7 +3737,7 @@ type TNotebookWidget struct {
 // See the ttk::style manual page for information on how to configure
 // ttk styles.
 //
-// [Tcl/Tk ttk_panedwindow]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_panedwindow.html
+// [Tcl/Tk ttk_panedwindow]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/ttk_panedwindow.html
 func TPanedwindow(options ...Opt) *TPanedwindowWidget {
 	return App.TPanedwindow(options...)
 }
@@ -3854,7 +3854,7 @@ type TPanedwindowWidget struct {
 // See the ttk::style manual page for information on how to configure
 // ttk styles.
 //
-// [Tcl/Tk ttk_progressbar]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_progressbar.html
+// [Tcl/Tk ttk_progressbar]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/ttk_progressbar.html
 func TProgressbar(options ...Opt) *TProgressbarWidget {
 	return App.TProgressbar(options...)
 }
@@ -3945,7 +3945,7 @@ type TProgressbarWidget struct {
 // See the ttk::style manual page for information on how to configure
 // ttk styles.
 //
-// [Tcl/Tk ttk_radiobutton]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_radiobutton.html
+// [Tcl/Tk ttk_radiobutton]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/ttk_radiobutton.html
 func TRadiobutton(options ...Opt) *TRadiobuttonWidget {
 	return App.TRadiobutton(options...)
 }
@@ -4048,7 +4048,7 @@ type TRadiobuttonWidget struct {
 // See the ttk::style manual page for information on how to configure
 // ttk styles.
 //
-// [Tcl/Tk ttk_scale]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_scale.html
+// [Tcl/Tk ttk_scale]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/ttk_scale.html
 func TScale(options ...Opt) *TScaleWidget {
 	return App.TScale(options...)
 }
@@ -4131,7 +4131,7 @@ type TScaleWidget struct {
 // See the ttk::style manual page for information on how to configure
 // ttk styles.
 //
-// [Tcl/Tk ttk_scrollbar]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_scrollbar.html
+// [Tcl/Tk ttk_scrollbar]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/ttk_scrollbar.html
 func TScrollbar(options ...Opt) *TScrollbarWidget {
 	return App.TScrollbar(options...)
 }
@@ -4188,7 +4188,7 @@ type TScrollbarWidget struct {
 // See the ttk::style manual page for information on how to configure
 // ttk styles.
 //
-// [Tcl/Tk ttk_separator]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_separator.html
+// [Tcl/Tk ttk_separator]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/ttk_separator.html
 func TSeparator(options ...Opt) *TSeparatorWidget {
 	return App.TSeparator(options...)
 }
@@ -4239,7 +4239,7 @@ type TSeparatorWidget struct {
 // See the ttk::style manual page for information on how to configure
 // ttk styles.
 //
-// [Tcl/Tk ttk_sizegrip]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_sizegrip.html
+// [Tcl/Tk ttk_sizegrip]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/ttk_sizegrip.html
 func TSizegrip(options ...Opt) *TSizegripWidget {
 	return App.TSizegrip(options...)
 }
@@ -4356,7 +4356,7 @@ type TSizegripWidget struct {
 // See the ttk::style manual page for information on how to configure
 // ttk styles.
 //
-// [Tcl/Tk ttk_spinbox]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_spinbox.html
+// [Tcl/Tk ttk_spinbox]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/ttk_spinbox.html
 func TSpinbox(options ...Opt) *TSpinboxWidget {
 	return App.TSpinbox(options...)
 }
@@ -4517,7 +4517,7 @@ type TSpinboxWidget struct {
 // See the ttk::style manual page for information on how to configure
 // ttk styles.
 //
-// [Tcl/Tk ttk_treeview]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_treeview.html
+// [Tcl/Tk ttk_treeview]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/ttk_treeview.html
 func TTreeview(options ...Opt) *TTreeviewWidget {
 	return App.TTreeview(options...)
 }
