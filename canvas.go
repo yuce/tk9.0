@@ -149,7 +149,7 @@ func (w *CanvasWidget) create(typ string, args ...any) string {
 //
 // More information might be available at the [Tcl/Tk canvas] page.
 //
-// [Tcl/Tk canvas]: https://www.tcl.tk/man/tcl9.0/TkCmd/canvas.html
+// [Tcl/Tk canvas]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/canvas.html
 func (w *CanvasWidget) CreateArc(x1, y1, x2, y2 any, options ...any) (r string) {
 	return w.create("arc", append([]any{x1, y1, x2, y2}, options...)...)
 }
@@ -528,7 +528,7 @@ func Start(degrees any) Opt {
 //
 // More information might be available at the [Tcl/Tk canvas] page.
 //
-// [Tcl/Tk canvas]: https://www.tcl.tk/man/tcl9.0/TkCmd/canvas.html
+// [Tcl/Tk canvas]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/canvas.html
 func (w *CanvasWidget) CreateBitmap(x, y any, options ...any) (r string) {
 	return w.create("bitmap", append([]any{x, y}, options...)...)
 }
@@ -592,7 +592,7 @@ func Disabledbitmap(bitmap any) Opt {
 //
 // More information might be available at the [Tcl/Tk canvas] page.
 //
-// [Tcl/Tk canvas]: https://www.tcl.tk/man/tcl9.0/TkCmd/canvas.html
+// [Tcl/Tk canvas]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/canvas.html
 func (w *CanvasWidget) CreateImage(x, y any, options ...any) (r string) {
 	return w.create("image", append([]any{x, y}, options...)...)
 }
@@ -659,7 +659,7 @@ func Disabledimage(val any) Opt {
 //
 // More information might be available at the [Tcl/Tk canvas] page.
 //
-// [Tcl/Tk canvas]: https://www.tcl.tk/man/tcl9.0/TkCmd/canvas.html
+// [Tcl/Tk canvas]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/canvas.html
 func (w *CanvasWidget) CreateLine(x1, y1 any, options ...any) (r string) {
 	return w.create("line", append([]any{x1, y1}, options...)...)
 }
@@ -807,7 +807,7 @@ func Splinesteps(number any) Opt {
 //
 // More information might be available at the [Tcl/Tk canvas] page.
 //
-// [Tcl/Tk canvas]: https://www.tcl.tk/man/tcl9.0/TkCmd/canvas.html
+// [Tcl/Tk canvas]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/canvas.html
 func (w *CanvasWidget) CreateOval(x1, y1, x2, y2 any, options ...any) (r string) {
 	return w.create("oval", append([]any{x1, y1, x2, y2}, options...)...)
 }
@@ -905,7 +905,7 @@ func (w *CanvasWidget) CreateOval(x1, y1, x2, y2 any, options ...any) (r string)
 //
 // More information might be available at the [Tcl/Tk canvas] page.
 //
-// [Tcl/Tk canvas]: https://www.tcl.tk/man/tcl9.0/TkCmd/canvas.html
+// [Tcl/Tk canvas]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/canvas.html
 func (w *CanvasWidget) CreatePolygon(x1, y1 any, options ...any) (r string) {
 	return w.create("polygon", append([]any{x1, y1}, options...)...)
 }
@@ -961,7 +961,7 @@ func (w *CanvasWidget) CreatePolygon(x1, y1 any, options ...any) (r string) {
 //
 // More information might be available at the [Tcl/Tk canvas] page.
 //
-// [Tcl/Tk canvas]: https://www.tcl.tk/man/tcl9.0/TkCmd/canvas.html
+// [Tcl/Tk canvas]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/canvas.html
 func (w *CanvasWidget) CreateRectangle(x1, y1, x2, y2 any, options ...any) (r string) {
 	return w.create("rectangle", append([]any{x1, y1, x2, y2}, options...)...)
 }
@@ -1049,7 +1049,7 @@ func (w *CanvasWidget) CreateRectangle(x1, y1, x2, y2 any, options ...any) (r st
 //
 // More information might be available at the [Tcl/Tk canvas] page.
 //
-// [Tcl/Tk canvas]: https://www.tcl.tk/man/tcl9.0/TkCmd/canvas.html
+// [Tcl/Tk canvas]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/canvas.html
 func (w *CanvasWidget) CreateText(x, y any, options ...any) (r string) {
 	return w.create("text", append([]any{x, y}, options...)...)
 }
@@ -1128,7 +1128,7 @@ func Angle(rotationDegrees any) Opt {
 //
 // More information might be available at the [Tcl/Tk canvas] page.
 //
-// [Tcl/Tk canvas]: https://www.tcl.tk/man/tcl9.0/TkCmd/canvas.html
+// [Tcl/Tk canvas]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/canvas.html
 func (w *CanvasWidget) CreateWindow(x, y any, options ...any) (r string) {
 	return w.create("window", append([]any{x, y}, options...)...)
 }
@@ -1151,7 +1151,7 @@ func ItemWindow(w *Window) Opt {
 //
 // More information might be available at the [Tcl/Tk canvas] page.
 //
-// [Tcl/Tk canvas]: https://www.tcl.tk/man/tcl9.0/TkCmd/canvas.html
+// [Tcl/Tk canvas]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/canvas.html
 func (w *CanvasWidget) Delete(tagOrId ...any) (r string) {
 	return evalErr(fmt.Sprintf("%s delete {%s}", w, tclSafeList(tagOrId...)))
 }
@@ -1170,7 +1170,7 @@ func (w *CanvasWidget) Delete(tagOrId ...any) (r string) {
 //
 // More information might be available at the [Tcl/Tk canvas] page.
 //
-// [Tcl/Tk canvas]: https://www.tcl.tk/man/tcl9.0/TkCmd/canvas.html
+// [Tcl/Tk canvas]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/canvas.html
 func (w *CanvasWidget) Bbox(tagIds ...string) []string {
 	return parseList(evalErr(fmt.Sprintf("%s bbox %s", w, tclSafeStrings(tagIds...))))
 }

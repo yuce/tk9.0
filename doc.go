@@ -2527,7 +2527,7 @@
 // [purego]: https://github.com/ebitengine/purego
 // [secure-files-go-gui]: https://github.com/darshanags/secure-files-go-gui
 // [secure-files-go]: https://github.com/darshanags/secure-files-go
-// [tcl.tk site]: https://www.tcl.tk/man/tcl9.0/TkCmd/index.html
+// [tcl.tk site]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/index.html
 // [tk9.0/vnc package]: https://pkg.go.dev/modernc.org/tk9.0/vnc
 // [tkinter.ttk site]: https://docs.python.org/3/library/tkinter.ttk.html
 // [tutorialspoint]: https://www.tutorialspoint.com/tcl-tk/tk_overview.htm
