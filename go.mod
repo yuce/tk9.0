@@ -13,7 +13,7 @@ require (
 	golang.org/x/net v0.39.0
 	golang.org/x/sys v0.32.0
 	modernc.org/fileutil v1.3.0
-	modernc.org/knuth v0.5.4
+	modernc.org/knuth v0.5.5
 	modernc.org/libX11 v0.11.15
 	modernc.org/libc v1.63.0
 	modernc.org/libtcl9.0 v0.16.4
@@ -23,7 +23,7 @@ require (
 	modernc.org/ngrab v0.1.0
 	modernc.org/opt v0.1.4
 	modernc.org/rec v0.3.3
-	modernc.org/tcl9.0 v0.16.1
+	modernc.org/tcl9.0 v0.16.2
 )
 
 require (
