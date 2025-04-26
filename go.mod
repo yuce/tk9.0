@@ -22,7 +22,7 @@ require (
 	modernc.org/memory v1.10.0
 	modernc.org/ngrab v0.1.0
 	modernc.org/opt v0.1.4
-	modernc.org/rec v0.3.3
+	modernc.org/rec v0.3.4
 	modernc.org/tcl9.0 v0.16.2
 )
 
@@ -35,7 +35,7 @@ require (
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	golang.org/x/exp v0.0.0-20250408133849-7e4ce0ab07d0 // indirect
 	modernc.org/fsm v1.3.2 // indirect
-	modernc.org/gc/v3 v3.0.0-20250225134559-fd9931328834 // indirect
+	modernc.org/gc/v3 v3.1.0 // indirect
 	modernc.org/libXau v0.9.14 // indirect
 	modernc.org/libXdmcp v0.12.13 // indirect
 	modernc.org/libXft v0.10.19 // indirect
