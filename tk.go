@@ -8252,3 +8252,119 @@ func Uniform(val any) Opt {
 	// Credit: Complex_Signal2842, https://www.reddit.com/r/golang/comments/1jcpp3d/comment/mja2l9s/?context=3
 	return rawOption(fmt.Sprintf(`-uniform %s`, tclSafeString(fmt.Sprint(val))))
 }
+
+// ::tk::mac::OpenApplication
+//
+// # Description
+//
+// If a proc of this name is defined, this proc fill fire when your application is
+// initially opened. It is the default Apple Event handler for kAEOpenApplication, “oapp”.
+//
+// More information might be available at the [Tcl/Tk mac] page.
+//
+// [Tcl/Tk mac]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/tk_mac.html#M8
+func MacOpenApplication(f func()) error {
+	r := newEventHandler("", f)
+	if _, err := eval(fmt.Sprintf(`proc ::tk::mac::OpenApplication {} {eventDispatcher %v}`, r.id)); err != nil {
+		return err
+	}
+	return nil
+}
+
+// ::tk::mac::ReopenApplication
+//
+// # Description
+//
+// If a proc of this name is defined it is the default Apple Event handler for kAEReopenApplication, “rapp”,
+// the Apple Event sent when your application is opened when it is already running (e.g. by clicking its icon
+// in the Dock).
+//
+// More information might be available at the [Tcl/Tk mac] page.
+//
+// [Tcl/Tk mac]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/tk_mac.html#M9
+func MacReopenApplication(f func()) error {
+	r := newEventHandler("", f)
+	if _, err := eval(fmt.Sprintf(`proc ::tk::mac::ReopenApplication {} {eventDispatcher %v}`, r.id)); err != nil {
+		return err
+	}
+	return nil
+}
+
+// ::tk::mac::OpenDocument
+//
+// # Description
+//
+// If a proc of this name is defined it is the default Apple Event handler for
+// kAEOpenDocuments, “odoc”, the Apple Event sent when your application is asked to
+// open one or more documents (e.g., by drag & drop onto the app or by opening a document
+// of a type associated to the app).
+//
+// More information might be available at the [Tcl/Tk mac] page.
+//
+// [Tcl/Tk mac]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/tk_mac.html#M10
+func MacOpenDocument(f func(string)) error {
+	r := newEventHandler("", func(e *Event) { f(e.args[0]) })
+	if _, err := eval(fmt.Sprintf(`proc ::tk::mac::OpenDocument {args} {
+		foreach f $args {eventDispatcher %v $f}
+	}`, r.id)); err != nil {
+		return err
+	}
+	return nil
+}
+
+// ::tk::mac::Quit
+//
+// # Description
+//
+// If a proc of this name is defined it is the default Apple Event handler for kAEQuitApplication,
+// “quit”, the Apple Event sent when your application is asked to be quit, e.g. via the quit menu
+// item in the application menu, the quit menu item in the Dock menu, or during a
+// logout/restart/shutdown etc. If this is not defined, [exit] is called instead.
+//
+// More information might be available at the [Tcl/Tk mac] page.
+//
+// [exit]: https://www.tcl-lang.org/man/tcl9.0/TclCmd/exit.html
+// [Tcl/Tk mac]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/tk_mac.html#M12
+func MacQuit(f func()) error {
+	r := newEventHandler("", f)
+	if _, err := eval(fmt.Sprintf(`proc ::tk::mac::Quit {} {eventDispatcher %v}`, r.id)); err != nil {
+		return err
+	}
+	return nil
+}
+
+// ::tk::mac::OnHide
+//
+// # Description
+//
+// If defined, this is called when your application receives a kEventAppHidden event,
+// e.g. via the hide menu item in the application or Dock menus.
+//
+// More information might be available at the [Tcl/Tk mac] page.
+//
+// [Tcl/Tk mac]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/tk_mac.html#M13
+func MacOnHide(f func()) error {
+	r := newEventHandler("", f)
+	if _, err := eval(fmt.Sprintf(`proc ::tk::mac::OnHide {} {eventDispatcher %v}`, r.id)); err != nil {
+		return err
+	}
+	return nil
+}
+
+// ::tk::mac::OnShow
+//
+// # Description
+//
+// If defined, this is called when your application receives a kEventAppShown event,
+// e.g. via the show all menu item in the application menu, or by clicking the Dock icon of a hidden application.
+//
+// More information might be available at the [Tcl/Tk mac] page.
+//
+// [Tcl/Tk mac]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/tk_mac.html#M14
+func MacOnShow(f func()) error {
+	r := newEventHandler("", f)
+	if _, err := eval(fmt.Sprintf(`proc ::tk::mac::OnShow {} {eventDispatcher %v}`, r.id)); err != nil {
+		return err
+	}
+	return nil
+}
