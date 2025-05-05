@@ -14,10 +14,10 @@ require (
 	golang.org/x/sys v0.32.0
 	modernc.org/fileutil v1.3.1
 	modernc.org/knuth v0.5.5
-	modernc.org/libX11 v0.11.17
+	modernc.org/libX11 v0.11.18
 	modernc.org/libc v1.65.0
 	modernc.org/libtcl9.0 v0.16.5
-	modernc.org/libtk9.0 v0.16.5
+	modernc.org/libtk9.0 v0.16.6
 	modernc.org/mathutil v1.7.1
 	modernc.org/memory v1.10.0
 	modernc.org/ngrab v0.1.0
