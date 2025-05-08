@@ -98,6 +98,7 @@ var (
 	tooltip []byte
 
 	appDeiconified     bool
+	appIconPhotoDone   bool // Whether user code performed App.IconPhoto
 	appIconified       bool
 	appWithdrawn       bool
 	autocenterDisabled bool
@@ -303,7 +304,6 @@ func setDefaults() {
 	if nm := os.Getenv(ThemeEnvVar); nm != "" {
 		StyleThemeUse(nm)
 	}
-	App.IconPhoto(NewPhoto(Data(icon)))
 	wmTitle = filepath.Base(os.Args[0])
 	wmTitle = strings.TrimSuffix(wmTitle, ".exe")
 	App.WmTitle(wmTitle)
@@ -1875,6 +1875,9 @@ func (w *Window) Wait() {
 				w.Center()
 			}
 		}
+		if !appIconPhotoDone {
+			App.IconPhoto(NewPhoto(Data(icon)))
+		}
 	}
 	evalErr(fmt.Sprintf("tkwait window %s", w))
 }
@@ -1930,6 +1933,9 @@ func (w *Window) WaitVisibility() {
 // [Tcl/Tk wm]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/wm.html
 func (w *Window) IconPhoto(options ...Opt) {
 	evalErr(fmt.Sprintf("wm iconphoto %s %s", w, collect(options...)))
+	if w == App {
+		appIconPhotoDone = true
+	}
 }
 
 // DefaultIcon option.
