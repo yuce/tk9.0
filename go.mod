@@ -16,7 +16,7 @@ require (
 	modernc.org/knuth v0.5.5
 	modernc.org/libX11 v0.11.19
 	modernc.org/libc v1.65.7
-	modernc.org/libtcl9.0 v0.16.6
+	modernc.org/libtcl9.0 v0.16.7
 	modernc.org/libtk9.0 v0.16.7
 	modernc.org/mathutil v1.7.1
 	modernc.org/memory v1.11.0
@@ -46,7 +46,7 @@ require (
 	modernc.org/libfreetype v0.9.18 // indirect
 	modernc.org/libmd v0.12.17 // indirect
 	modernc.org/libxcb v0.12.2 // indirect
-	modernc.org/libz v0.16.16 // indirect
+	modernc.org/libz v0.16.18 // indirect
 	modernc.org/regexp v1.7.9 // indirect
 	modernc.org/sortutil v1.2.1 // indirect
 	modernc.org/strutil v1.2.1 // indirect
