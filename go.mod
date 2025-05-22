@@ -23,7 +23,7 @@ require (
 	modernc.org/ngrab v0.1.0
 	modernc.org/opt v0.1.4
 	modernc.org/rec v0.3.4
-	modernc.org/tcl9.0 v0.16.7
+	modernc.org/tcl9.0 v0.16.8
 )
 
 require (
