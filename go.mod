@@ -17,7 +17,7 @@ require (
 	modernc.org/libX11 v0.11.20
 	modernc.org/libc v1.65.8
 	modernc.org/libtcl9.0 v0.16.8
-	modernc.org/libtk9.0 v0.16.7
+	modernc.org/libtk9.0 v0.16.8
 	modernc.org/mathutil v1.7.1
 	modernc.org/memory v1.11.0
 	modernc.org/ngrab v0.1.0
@@ -38,12 +38,12 @@ require (
 	modernc.org/gc/v3 v3.1.0 // indirect
 	modernc.org/libXau v0.9.15 // indirect
 	modernc.org/libXdmcp v0.12.14 // indirect
-	modernc.org/libXft v0.10.19 // indirect
-	modernc.org/libXrender v0.9.13 // indirect
+	modernc.org/libXft v0.10.20 // indirect
+	modernc.org/libXrender v0.9.19 // indirect
 	modernc.org/libbsd v0.11.10 // indirect
 	modernc.org/libexpat v0.10.12 // indirect
 	modernc.org/libfontconfig v0.8.11 // indirect
-	modernc.org/libfreetype v0.9.18 // indirect
+	modernc.org/libfreetype v0.9.21 // indirect
 	modernc.org/libmd v0.12.17 // indirect
 	modernc.org/libxcb v0.12.2 // indirect
 	modernc.org/libz v0.16.18 // indirect
