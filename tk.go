@@ -734,12 +734,8 @@ func hexDigit(b byte) byte {
 
 func tclBinaryString(s string) string {
 	var b strings.Builder
-	for i := 0; i < len(s); i++ {
-		v := s[i]
-		b.WriteByte('\\')
-		b.WriteByte('x')
-		b.WriteByte(hexDigit(v >> 4))
-		b.WriteByte(hexDigit(v & 15))
+	for _, v := range s {
+		b.WriteString(fmt.Sprintf("\\u%04X", v))
 	}
 	return b.String()
 }
