@@ -735,7 +735,7 @@ func hexDigit(b byte) byte {
 func tclBinaryString(s string) string {
 	var b strings.Builder
 	for _, v := range s {
-		b.WriteString(fmt.Sprintf("\\u%04X", v))
+		b.WriteString(fmt.Sprintf("\\U%06X", v))
 	}
 	return b.String()
 }
