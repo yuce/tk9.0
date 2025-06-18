@@ -53,4 +53,4 @@ require (
 	modernc.org/token v1.1.0 // indirect
 )
 
-replace github.com/ebitengine/purego v0.8.2 => github.com/yuce/purego v0.0.0-20250618161412-f7235666f8fe
+replace github.com/ebitengine/purego v0.8.2 => github.com/yuce/purego v0.0.0-20250618165431-44dbd26d2f90
