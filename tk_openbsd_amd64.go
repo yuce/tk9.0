@@ -20,7 +20,7 @@ var moreDLLs = []*dllInfo{
 	{"libtcl9tkimgpcx201.so", "Tkimgpcx_Init"},
 	{"libtcl9tkimgxpm201.so", "Tkimgxpm_Init"},
 	{"libtcl9zlibtcl131.so", "Zlibtcl_Init"},
-	{"libtcl9pngtcl1644so", "Pngtcl_Init"},
+	{"libtcl9pngtcl1644.so", "Pngtcl_Init"},
 	{"libtcl9tkimgpng201.so", "Tkimgpng_Init"},
 	{"libtcl9tkimgppm201.so", "Tkimgppm_Init"},
 	{"libtcl9tkimgtga201.so", "Tkimgtga_Init"},
@@ -34,11 +34,11 @@ var libZip []byte
 
 // Keep last for internal/shasig.go to update.
 var shasig = map[string]string{
-	"libtcl90.so.1.0":          "b7990b901c8dd609edaab5e90980bd1a5ef41d8bb7088109f759f7377d721d20",
+	"libtcl90.so.1.0":          "24aee56736f8b1f98dead6b48f7601a7d64a3a3e75784b19ee9b1b78c3fd6ee8",
 	"libtcl9jpegtcl960.so":     "e652c9ab4c265766fbcc01e0274cbc1f6ac269800ac5c91e4980e132b33654d3",
 	"libtcl9pngtcl1644.so":     "3f649554f49f7ec9df7eedccbb10d4fdb62919775489d051d979e9e3ead65302",
 	"libtcl9tifftcl470.so":     "b5b8d77d61a1bf068b14c9685190403b0752cff5e98a1ca61f71317deabb53fa",
-	"libtcl9tk90.so.1.0":       "f398047e3cff5a650128aa16ed0b58b03d15c31dbde3040f93bdf0b7b056522d",
+	"libtcl9tk90.so.1.0":       "4d9388f56c4053a9e0fd82ffec1a386146d242e097a4f90f8398a7755ea07edd",
 	"libtcl9tkimg201.so":       "a23d041e5ff55ffe05c0143aee641f61b0430490b21a1a3cfe199608bce9f481",
 	"libtcl9tkimgbmp201.so":    "b887e1aa163ccb77a2ab7977cb7df59403e27095bbde4f655cf138fd9397a90a",
 	"libtcl9tkimgdted201.so":   "437af1d919d0c43d5a7e9d4dbc0464de195cee4742c0b13e8608f9ec39ae9a16",
@@ -60,5 +60,5 @@ var shasig = map[string]string{
 	"libtcl9tkimgxbm201.so":    "fd2447646d4bb8dd5951615c7cf092679de9bf99fa711efbccdb8c8e39921190",
 	"libtcl9tkimgxpm201.so":    "689be5106397a478d10c76569d865fb6a3b27e5e67a352136a73716c4f40f446",
 	"libtcl9zlibtcl131.so":     "ae9695311027c61b33934dad2f39e7d0d41c8d9a96c629be76c8cf59c45fe508",
-	"libtk9.0.1.zip":           "3a82ad0a534b61e9de9968315e2c55b320b9551c35608095a16015584a71738b",
+	"libtk9.0.1.zip":           "b08e595fb3fdfdcbbb78800bfe50727ff963e84d577d48d0dc33c8e4634a7014",
 }
