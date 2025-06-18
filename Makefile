@@ -3,7 +3,7 @@
 # license that can be found in the LICENSE file.
 
 .PHONY:	all clean edit editor test work w65 lib_win lib_linux_ccgo lib_linux_purego \
-	lib_darwin lib_freebsd build_all_targets demo examples xvfb
+	lib_darwin lib_freebsd lib_openbsd build_all_targets demo examples xvfb
 
 TCL_TAR = tcl-core9.0.1-src.tar.gz
 TCL_TAR_URL = http://prdownloads.sourceforge.net/tcl/$(TCL_TAR)
@@ -260,6 +260,32 @@ lib_freebsd: download
 	gofmt -l -s -w tk_$(GOOS)_$(GOARCH).go
 	zip -j embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/*
 	rm -f embed/$(GOOS)/$(GOARCH)/*.so embed/$(GOOS)/$(GOARCH)/*.zip
+	mv embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/lib.zip
+	rm -rf tcl9.0.1/ tk9.0.1/ Img-2.0.1/
+	go build -v
+	git status
+
+# use gmake
+lib_openbsd: download
+	if [ "$(GOOS)" != "openbsd" ]; then exit 1 ; fi
+	rm -rf tcl9.0.1/ tk9.0.1/ Img-2.0.1/ embed/$(GOOS)/$(GOARCH)
+	mkdir -p embed/$(GOOS)/$(GOARCH)
+	tar xfz $(TCL_TAR)
+	tar xfz $(TK_TAR)
+	tar xfz $(TK_IMG_TAR)
+	sh -c "cd tcl9.0.1/unix ; ./configure --disable-dll-unloading --disable-rpath"
+	gmake -C tcl9.0.1/unix -j$(GOMAXPROCS)
+	cp -v tcl9.0.1/unix/*.so* embed/$(GOOS)/$(GOARCH)
+	sh -c "cd tk9.0.1/unix ; ./configure --with-tcl=$(PWD)/tcl9.0.1/unix"
+	gmake -C tk9.0.1/unix -j$(GOMAXPROCS)
+	cp -v tk9.0.1/unix/*.so* tk9.0.1/unix/libtk9.0.1.zip embed/$(GOOS)/$(GOARCH)
+	sh -c "cd Img-2.0.1 ; ./configure --with-tcl=$(PWD)/tcl9.0.1/unix  --with-tk=$(PWD)/tk9.0.1/unix"
+	gmake -C Img-2.0.1 -j$(GOMAXPROCS)
+	find Img-2.0.1 -name \*.so\* -exec cp {} embed/$(GOOS)/$(GOARCH) \;
+	go run internal/shasig.go - tk_$(GOOS)_$(GOARCH).go
+	gofmt -l -s -w tk_$(GOOS)_$(GOARCH).go
+	zip -j embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/*
+	rm -f embed/$(GOOS)/$(GOARCH)/*.so* embed/$(GOOS)/$(GOARCH)/*.zip
 	mv embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/lib.zip
 	rm -rf tcl9.0.1/ tk9.0.1/ Img-2.0.1/
 	go build -v

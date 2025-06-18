@@ -42,8 +42,12 @@ func main() {
 	b := bytes.NewBuffer(src)
 	b.WriteString("var shasig = map[string]string{\n")
 	sort.Strings(m)
+	shaCmd := "sha256sum"
+	if runtime.GOOS == "openbsd" {
+		shaCmd = "sha256"
+	}
 	for _, v := range m {
-		out, err := exec.Command("sha256sum", v).CombinedOutput()
+		out, err := exec.Command(shaCmd, "-q", v).CombinedOutput()
 		if err != nil {
 			panic(err.Error())
 		}
