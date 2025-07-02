@@ -4658,7 +4658,21 @@ func FontchooserHide() {
 //
 // [Tcl/Tk getopenfile]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/getOpenFile.html
 func GetOpenFile(options ...Opt) (r []string) {
-	return parseList(evalErr(fmt.Sprintf("tk_getOpenFile %s", collect(options...))))
+	for _, v := range options {
+		switch x := v.(type) {
+		case rawOption:
+			s := string(x)
+			if strings.HasPrefix(s, "-multiple") {
+				a := strings.SplitN(s, " ", 2)
+				switch strings.TrimSpace(a[1]) {
+				case "true", "1":
+					return parseList(evalErr(fmt.Sprintf("tk_getOpenFile %s", collect(options...))))
+				}
+			}
+		}
+	}
+
+	return []string{evalErr(fmt.Sprintf("tk_getOpenFile %s", collect(options...)))}
 }
 
 // FileType specifies a single file type for the [Filetypes] option.
