@@ -15,7 +15,7 @@ require (
 	modernc.org/fileutil v1.3.8
 	modernc.org/knuth v0.5.5
 	modernc.org/libX11 v0.11.20
-	modernc.org/libc v1.66.3
+	modernc.org/libc v1.66.4
 	modernc.org/libtcl9.0 v0.16.9
 	modernc.org/libtk9.0 v0.16.8
 	modernc.org/mathutil v1.7.1
