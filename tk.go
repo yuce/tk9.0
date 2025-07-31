@@ -3217,6 +3217,26 @@ func (f *FontFace) Delete() {
 	evalErr(fmt.Sprintf("font delete %s", f))
 }
 
+// Measure - get text size information.
+//
+// # Description
+//
+// Measures the amount of space the string text would use in the given font
+// when displayed in window. font is a font description; see FONT DESCRIPTIONS
+// below. If the window argument is omitted, it defaults to the main window.
+// The return value is the total width in pixels of text, not including the
+// extra pixels used by highly exaggerated characters such as cursive “f”. If
+// the string contains newlines or tabs, those characters are not expanded or
+// treated specially when measuring the string.
+//
+// Additional information might be available at the [Tcl/Tk font] page.
+//
+// [Tcl/Tk font]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/font.html
+func (f *FontFace) Measure(window *Window, text string) int {
+	size := evalErr(fmt.Sprintf("font measure %s -displayof %s %s", f.name, window, tclSafeString(text)))
+	return atoi(size)
+}
+
 // Text — Create and manipulate 'text' hypertext editing widgets
 //
 // # Description
