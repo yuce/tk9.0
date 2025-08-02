@@ -12,7 +12,7 @@ require (
 	golang.org/x/image v0.26.0
 	golang.org/x/net v0.39.0
 	golang.org/x/sys v0.33.0
-	modernc.org/fileutil v1.3.10
+	modernc.org/fileutil v1.3.12
 	modernc.org/knuth v0.5.5
 	modernc.org/libX11 v0.11.20
 	modernc.org/libc v1.66.6
