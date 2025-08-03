@@ -3217,6 +3217,26 @@ func (f *FontFace) Delete() {
 	evalErr(fmt.Sprintf("font delete %s", f))
 }
 
+// Measure - get text size information.
+//
+// # Description
+//
+// Measures the amount of space the string text would use in the given font
+// when displayed in window. font is a font description; see FONT DESCRIPTIONS
+// below. If the window argument is omitted, it defaults to the main window.
+// The return value is the total width in pixels of text, not including the
+// extra pixels used by highly exaggerated characters such as cursive “f”. If
+// the string contains newlines or tabs, those characters are not expanded or
+// treated specially when measuring the string.
+//
+// Additional information might be available at the [Tcl/Tk font] page.
+//
+// [Tcl/Tk font]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/font.html
+func (f *FontFace) Measure(window *Window, text string) int {
+	size := evalErr(fmt.Sprintf("font measure %s -displayof %s %s", f.name, window, tclSafeString(text)))
+	return atoi(size)
+}
+
 // Text — Create and manipulate 'text' hypertext editing widgets
 //
 // # Description
@@ -4658,7 +4678,21 @@ func FontchooserHide() {
 //
 // [Tcl/Tk getopenfile]: https://www.tcl-lang.org/man/tcl9.0/TkCmd/getOpenFile.html
 func GetOpenFile(options ...Opt) (r []string) {
-	return parseList(evalErr(fmt.Sprintf("tk_getOpenFile %s", collect(options...))))
+	for _, v := range options {
+		switch x := v.(type) {
+		case rawOption:
+			s := string(x)
+			if strings.HasPrefix(s, "-multiple") {
+				a := strings.SplitN(s, " ", 2)
+				switch strings.TrimSpace(a[1]) {
+				case "true", "1":
+					return parseList(evalErr(fmt.Sprintf("tk_getOpenFile %s", collect(options...))))
+				}
+			}
+		}
+	}
+
+	return []string{evalErr(fmt.Sprintf("tk_getOpenFile %s", collect(options...)))}
 }
 
 // FileType specifies a single file type for the [Filetypes] option.
