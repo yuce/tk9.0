@@ -23,6 +23,14 @@ var (
 	goarch = runtime.GOARCH
 )
 
+func execSha256Cmd(path string) ([]byte, error) {
+	// using GOOS directly from runtime, since sha256 utility may not exist on the host
+	if runtime.GOOS == "openbsd" {
+		return exec.Command("sha256", "-q", path).CombinedOutput()
+	}
+	return exec.Command("sha256sum", path).CombinedOutput()
+}
+
 func main() {
 	flag.StringVar(&goos, "goos", runtime.GOOS, "")
 	flag.StringVar(&goarch, "goarch", runtime.GOARCH, "")
@@ -42,12 +50,8 @@ func main() {
 	b := bytes.NewBuffer(src)
 	b.WriteString("var shasig = map[string]string{\n")
 	sort.Strings(m)
-	shaCmd := "sha256sum"
-	if runtime.GOOS == "openbsd" {
-		shaCmd = "sha256"
-	}
 	for _, v := range m {
-		out, err := exec.Command(shaCmd, "-q", v).CombinedOutput()
+		out, err := execSha256Cmd(v)
 		if err != nil {
 			panic(err.Error())
 		}
